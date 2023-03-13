@@ -36,16 +36,138 @@ Se respetan siempre las siguientes reglas básicas:
 
 ## Trello.
 
-# Tablero al inicio.
+### Tablero al inicio.
 Para la realización de la práctica se van a intentar realizar 2 incrementos, por lo que inicialmente se describen 6 HU, que se pueden ver en la siguiente imagen.
 <img src='./assets/img/Inicio-Trello.png'>
 
-# Ejemplo descripción de como se han realizado las HU.
+### Ejemplo descripción de como se han realizado las HU.
 <img src='./assets/img/Ejemplo-descripcion-HU.png'>
 
 ## Fauna.
 
-Añadir al fichero README.md las capturas de pantalla de: tu home en Fauna, de la página en la que aparece la base de datos y de la página en la que aparece la colección. Copia y pega también todos los documentos que has creado en la colección en formato JSON.
+### Home de fauna
+<img src='./assets/img/Home-fauna.png'>
+
+### Página donde aparece la base de datos
+<img src='./assets/img/BBDD.png'>
+
+### Página donde aparece la colección
+<img src='./assets/img/Coleccion.png'>
+
+### Los campos a tener en cuenta para realizar la base de datos son:
+- **Nombre** (cadena de texto)
+- **Fecha de nacimiento** (campo compuesto formado por día, mes y año)
+- **Nacionalidad** (cadena de texto)
+- **Edad** (número entero)
+- **Disciplinas** (vector de disciplinas en las que participa el jinete)
+- **Caballos** (vector de caballos que monta el jinete)
+- **Años de participación en juegos olímpicos** (vector de años en los que el jinete ha participado en los juegos olímpicos)
+
+### Documentos de la colección en formato JSON
+{
+"Nombre": "Juan Pérez",
+"Fecha de nacimiento": {"Día": 1, "Mes": 1, "Año": 1990},
+"Nacionalidad": "Española",
+"Edad": 33,
+"Disciplinas": ["Salto", "Doma", "Concurso completo"],
+"Caballos": ["Alazán", "Capricho", "Milagrosa"],
+"Años de participación en juegos olímpicos": [2012, 2016]
+}
+
+{
+"Nombre": "Julia García",
+"Fecha de nacimiento": {"Día": 15, "Mes": 7, "Año": 1985},
+"Nacionalidad": "Española",
+"Edad": 38,
+"Disciplinas": ["Doma", "Vaquera"],
+"Caballos": ["Negro", "Estrella"],
+"Años de participación en juegos olímpicos": [2008, 2012, 2016]
+}
+
+{
+"Nombre": "Ana González",
+"Fecha de nacimiento": {"Día": 30, "Mes": 4, "Año": 1995},
+"Nacionalidad": "Argentina",
+"Edad": 29,
+"Disciplinas": ["Salto", "Doma"],
+"Caballos": ["Rubio", "Canela", "Palomo"],
+"Años de participación en juegos olímpicos": [2020]
+}
+
+{
+"Nombre": "Daniel Torres",
+"Fecha de nacimiento": {"Día": 25, "Mes": 9, "Año": 1980},
+"Nacionalidad": "Colombiana",
+"Edad": 43,
+"Disciplinas": ["Concurso completo", "Vaquera"],
+"Caballos": ["Blanco", "Marrón"],
+"Años de participación en juegos olímpicos": [2004, 2008, 2012, 2016]
+}
+
+{
+"Nombre": "Sophie Martin",
+"Fecha de nacimiento": {"Día": 3, "Mes": 12, "Año": 1998},
+"Nacionalidad": "Francesa",
+"Edad": 25,
+"Disciplinas": ["Doma", "Salto"],
+"Caballos": ["Mistral", "Mocca"],
+"Años de participación en juegos olímpicos": []
+}
+
+{
+"Nombre": "Alexis Johnson",
+"Fecha de nacimiento": {"Día": 11, "Mes": 6, "Año": 1989},
+"Nacionalidad": "Estadounidense",
+"Edad": 34,
+"Disciplinas": ["Salto", "Concurso completo"],
+"Caballos": ["Rocinante", "Don Quijote", "Sancho Panza"],
+"Años de participación en juegos olímpicos": [2012, 2016, 2020]
+}
+
+{
+"Nombre": "María Fernández",
+"Fecha de nacimiento": {"Día": 20, "Mes": 2, "Año": 1992},
+"Nacionalidad": "Española",
+"Edad": 31,
+"Disciplinas": ["Vaquera", "Doma"],
+"Caballos": ["Fuego", "Relámpago", "Trueno"],
+"Años de participación en juegos olímpicos": []
+}
+
+{
+"Nombre": "Joaquín Rodríguez",
+"Fecha de nacimiento": {"Día": 18, "Mes": 10, "Año": 1993},
+"Nacionalidad": "Mexicana",
+"Edad": 28,
+"Disciplinas": ["Doma", "Salto"],
+"Caballos": ["Golondrina", "Azul", "Verde"],
+"Años de participación en juegos olímpicos": [2016, 2020]
+}
+
+{
+"Nombre": "Anna Schmidt",
+"Fecha de nacimiento": {"Día": 7, "Mes": 8, "Año": 1996},
+"Nacionalidad": "Alemana",
+"Edad": 27,
+"Disciplinas": ["Salto", "Concurso completo"],
+"Caballos": ["Lucky", "Star"],
+"Años de participación en juegos olímpicos": [2016, 2020]
+}
+
+{
+"Nombre": "Luis García",
+"Fecha de nacimiento": {"Día": 1, "Mes": 5, "Año": 1985},
+"Nacionalidad": "Española",
+"Edad": 38,
+"Disciplinas": ["Vaquera", "Doma"],
+"Caballos": ["Caballo 1", "Caballo 2", "Caballo 3"],
+"Años de participación en juegos olímpicos": []
+}
+
+
+### Contraseña secreta
+
+fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx
 
 ## Primera Historia de Ususario.
 Ir implementando cada una de las HU seleccionadas hasta que todas estén en la lista DONE. 

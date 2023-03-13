@@ -14,7 +14,7 @@ const faunadb = require('faunadb'),
     q = faunadb.query;
 
 const client = new faunadb.Client({
-    secret: '¿¿¿ CLAVE SECRETA EN FAUNA PARA ESTA BBDD???',
+    secret: 'fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx',
 });
 
 const COLLECTION = "¿¿¿ COLECCION ???"
