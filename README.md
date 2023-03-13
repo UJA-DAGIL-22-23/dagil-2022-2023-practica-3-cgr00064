@@ -170,7 +170,7 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Nacionalidad": "Española",
 "Edad": 38,
 "Disciplinas": ["Vaquera", "Doma"],
-"Caballos": ["Caballo 1", "Caballo 2", "Caballo 3"],
+"Caballos": ["Cruzcampo", "Alcazar"],
 "Años de participación en juegos olímpicos": []
 }
 ```
