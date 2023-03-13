@@ -64,6 +64,7 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 - **Años de participación en juegos olímpicos** (vector de años en los que el jinete ha participado en los juegos olímpicos)
 
 ### Documentos de la colección en formato JSON
+```
 {
 "Nombre": "Juan Pérez",
 "Fecha de nacimiento": {"Día": 1, "Mes": 1, "Año": 1990},
@@ -73,7 +74,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Alazán", "Capricho", "Milagrosa"],
 "Años de participación en juegos olímpicos": [2012, 2016]
 }
-
+```
+```
 {
 "Nombre": "Julia García",
 "Fecha de nacimiento": {"Día": 15, "Mes": 7, "Año": 1985},
@@ -83,7 +85,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Negro", "Estrella"],
 "Años de participación en juegos olímpicos": [2008, 2012, 2016]
 }
-
+```
+```
 {
 "Nombre": "Ana González",
 "Fecha de nacimiento": {"Día": 30, "Mes": 4, "Año": 1995},
@@ -93,7 +96,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Rubio", "Canela", "Palomo"],
 "Años de participación en juegos olímpicos": [2020]
 }
-
+```
+```
 {
 "Nombre": "Daniel Torres",
 "Fecha de nacimiento": {"Día": 25, "Mes": 9, "Año": 1980},
@@ -103,7 +107,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Blanco", "Marrón"],
 "Años de participación en juegos olímpicos": [2004, 2008, 2012, 2016]
 }
-
+```
+```
 {
 "Nombre": "Sophie Martin",
 "Fecha de nacimiento": {"Día": 3, "Mes": 12, "Año": 1998},
@@ -113,7 +118,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Mistral", "Mocca"],
 "Años de participación en juegos olímpicos": []
 }
-
+```
+```
 {
 "Nombre": "Alexis Johnson",
 "Fecha de nacimiento": {"Día": 11, "Mes": 6, "Año": 1989},
@@ -123,7 +129,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Rocinante", "Don Quijote", "Sancho Panza"],
 "Años de participación en juegos olímpicos": [2012, 2016, 2020]
 }
-
+```
+```
 {
 "Nombre": "María Fernández",
 "Fecha de nacimiento": {"Día": 20, "Mes": 2, "Año": 1992},
@@ -133,7 +140,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Fuego", "Relámpago", "Trueno"],
 "Años de participación en juegos olímpicos": []
 }
-
+```
+```
 {
 "Nombre": "Joaquín Rodríguez",
 "Fecha de nacimiento": {"Día": 18, "Mes": 10, "Año": 1993},
@@ -143,7 +151,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Golondrina", "Azul", "Verde"],
 "Años de participación en juegos olímpicos": [2016, 2020]
 }
-
+```
+```
 {
 "Nombre": "Anna Schmidt",
 "Fecha de nacimiento": {"Día": 7, "Mes": 8, "Año": 1996},
@@ -153,7 +162,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Lucky", "Star"],
 "Años de participación en juegos olímpicos": [2016, 2020]
 }
-
+```
+```
 {
 "Nombre": "Luis García",
 "Fecha de nacimiento": {"Día": 1, "Mes": 5, "Año": 1985},
@@ -163,7 +173,7 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Caballos": ["Caballo 1", "Caballo 2", "Caballo 3"],
 "Años de participación en juegos olímpicos": []
 }
-
+```
 
 ### Contraseña secreta
 
