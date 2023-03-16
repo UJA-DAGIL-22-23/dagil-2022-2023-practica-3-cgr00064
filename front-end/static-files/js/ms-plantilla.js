@@ -22,7 +22,7 @@ Plantilla.datosDescargadosNulos = {
  * Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla
  * @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
  */
- Plantilla.recupera = async function (callBackFn) {
+Plantilla.recupera = async function (callBackFn) {
     let response = null
 
     // Intento conectar con el microservicio personas
@@ -192,6 +192,9 @@ Plantilla.procesarAcercaDe = function () {
     this.descargarRuta("/plantilla/acercade", this.mostrarAcercaDe);
 }
 
+/**
+ * Función principal para responder al evento de elegir la opción "Listar informacion completa"
+ */
 Plantilla.listar = function () {
     this.recupera(this.imprime);
 }

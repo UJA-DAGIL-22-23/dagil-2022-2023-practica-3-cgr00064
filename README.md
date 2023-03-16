@@ -180,6 +180,13 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 
 fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx
 
+Que se ha añadido en el fichero **callbacks.ks** del directorio *ms-plantilla* de la siguiente manera:
+´´´
+const client = new faunadb.Client({
+    secret: 'fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx',
+});
+´´´
+
 ## Primera Historia de Ususario.
 Ir implementando cada una de las HU seleccionadas hasta que todas estén en la lista DONE. 
 
@@ -188,4 +195,104 @@ Muy importante: cuando se pase una tarjeta a la lista DONE debes añadirle al me
 HU implementadas, captura de pantalla de Trello al comienzo y al final del incremento, y capturas de pantalla del funcionamiento de la aplicación con las funcionalidades que se han implementado.
 
 ## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
+### Para la realización de esta HU se han seguido los siguientes pasos:
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Devuelve todas las personas que hay en la BBDD
+*/
+ router.get("/getTodosInfo", async (req, res) => {
+    try {
+        await callbacks.getTodosInfo(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
 
+2. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+ * Método para obtener todos los deportistas con su información de la BBDD.
+ * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+ * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getTodosInfo: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Get(q.Var("X")))
+            )
+        )
+        console.log( deportistas ) // Para comprobar qué se ha devuelto en proyectos
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+```
+<a href="javascript:Plantilla.listar()" class="opcion-principal"
+    title="Realiza un listado con toda la información de los deportistas de equitación que hay en la BBDD">Listar informacion completa</a>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+´´´
+/**
+ * Función principal para responder al evento de elegir la opción "Listar informacion completa".
+*/
+Plantilla.listar = function () {
+    this.recupera(this.imprime);
+}
+´´´
+´´´
+/**
+ * Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla.
+ * @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera = async function (callBackFn) {
+    let response = null
+
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getTodosInfo"
+        response = await fetch(url)
+
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+
+    // Muestro todas las persoans que se han descargado
+    let vectorPlantilla = null
+    if (response) {
+        vectorPlantilla = await response.json()
+        callBackFn(vectorPlantilla.data)
+    }
+}
+´´´
+´´´
+/**
+ * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+ * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime = function (vector) {
+    //console.log( vector ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTable();
+    vector.forEach(e => msj += Plantilla.cuerpoTr(e))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
+
+}
+
+5. El resultado sería el siguiente:
+<img src='./assets/img/HU_04.png'>
