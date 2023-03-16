@@ -196,6 +196,7 @@ HU implementadas, captura de pantalla de Trello al comienzo y al final del incre
 
 ## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
 ### Para la realización de esta HU se han seguido los siguientes pasos:
+
 1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
 ```
 /**
@@ -293,6 +294,7 @@ Plantilla.imprime = function (vector) {
     Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
 
 }
+´´´
 
 5. El resultado sería el siguiente:
 <img src='./assets/img/HU_04.png'>
