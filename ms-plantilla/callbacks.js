@@ -17,7 +17,7 @@ const client = new faunadb.Client({
     secret: 'fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx',
 });
 
-const COLLECTION = "¿¿¿ COLECCION ???"
+const COLLECTION = "Equitacion_DA"
 
 // CALLBACKS DEL MODELO
 
@@ -60,6 +60,27 @@ const CB_MODEL_SELECTS = {
             res.status(500).json({ error: error.description })
         }
     },
+    /**
+     * Método para obtener todos los deportistas con su información de la BBDD.
+     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+     */
+    getTodosInfo: async (req, res) => {
+        try {
+            let deportistas = await client.query(
+                q.Map(
+                    q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                    q.Lambda("X", q.Get(q.Var("X")))
+                )
+            )
+            console.log( deportistas ) // Para comprobar qué se ha devuelto en proyectos
+            CORS(res)
+                .status(200)
+                .json(deportistas)
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+        }
+    },
 
 }
 
@@ -93,9 +114,9 @@ const CB_OTHERS = {
         try {
             CORS(res).status(200).json({
                 mensaje: "Microservicio MS Plantilla: acerca de",
-                autor: "¿¿¿ AUTOR ???",
-                email: "¿¿¿ EMAIL ???",
-                fecha: "¿¿¿ FECHA ???"
+                autor: "Carlos Garvín Rubiales",
+                email: "cgr00064@red.ujaen.es",
+                fecha: "marzo, 2023"
             });
         } catch (error) {
             CORS(res).status(500).json({ error: error.description })

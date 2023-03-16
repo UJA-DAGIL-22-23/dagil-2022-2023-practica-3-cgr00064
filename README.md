@@ -38,6 +38,7 @@ Se respetan siempre las siguientes reglas básicas:
 
 ### Tablero al inicio.
 Para la realización de la práctica se van a intentar realizar 2 incrementos, por lo que inicialmente se describen 6 HU, que se pueden ver en la siguiente imagen.
+
 <img src='./assets/img/Inicio-Trello.png'>
 
 ### Ejemplo descripción de como se han realizado las HU.
@@ -185,3 +186,6 @@ Ir implementando cada una de las HU seleccionadas hasta que todas estén en la l
 Muy importante: cuando se pase una tarjeta a la lista DONE debes añadirle al menos una captura de pantalla como evidencia de que efectivamente se ha quedado realizada la HU. Esta captura de pantalla puede ser de la interfaz de la aplicación (si es que es una funcionalidad que afecta a la interfaz), o de la interfaz de Fauna, o del IDE con el que se está programando (si es un trozo de código), etc. Es decir: una evidencia que muestre que dicha HU está realmente realizada.
 
 HU implementadas, captura de pantalla de Trello al comienzo y al final del incremento, y capturas de pantalla del funcionamiento de la aplicación con las funcionalidades que se han implementado.
+
+## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
+

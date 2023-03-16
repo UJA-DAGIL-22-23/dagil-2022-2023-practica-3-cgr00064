@@ -18,6 +18,91 @@ Plantilla.datosDescargadosNulos = {
     fecha: ""
 }
 
+/**
+ * Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla
+ * @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+ */
+ Plantilla.recupera = async function (callBackFn) {
+    let response = null
+
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getTodosInfo"
+        response = await fetch(url)
+
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+
+    // Muestro todas las persoans que se han descargado
+    let vectorPlantilla = null
+    if (response) {
+        vectorPlantilla = await response.json()
+        callBackFn(vectorPlantilla.data)
+    }
+}
+
+// Funciones para mostrar como TABLE
+
+/**
+ * Crea la cabecera para mostrar la info como tabla
+ * @returns Cabecera de la tabla
+ */
+ Plantilla.cabeceraTable = function () {
+    return `<table class="listado-plantilla">
+        <thead>
+        <th>Nombre</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos/s</th><th>Años de participación en los JJOO/s</th>
+        </thead>
+        <tbody>
+    `;
+}
+
+/**
+ * Muestra la información de cada proyecto en un elemento TR con sus correspondientes TD
+ * @param {proyecto} p Datos del proyecto a mostrar
+ * @returns Cadena conteniendo todo el elemento TR que muestra el proyecto.
+ */
+Plantilla.cuerpoTr = function (p) {
+    const d = p.data
+
+    return `<tr title="${p.ref['@ref'].id}">
+    <td>${d.nombre}</td>
+    <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
+    <td>${d.nacionalidad}</td>
+    <td>${d.edad}</td>
+    <td>${d.disciplinas}</td>
+    <td>${d.caballos}</td>
+    <td>${d.aniosParticipacionJJOO}</td>
+    </tr>
+    `;
+}
+
+/**
+ * Pie de la tabla en la que se muestran las personas
+ * @returns Cadena con el pie de la tabla
+ */
+ Plantilla.pieTable = function () {
+    return "</tbody></table>";
+}
+
+
+/**
+ * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+ * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+ */
+ Plantilla.imprime = function (vector) {
+    //console.log( vector ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTable();
+    vector.forEach(e => msj += Plantilla.cuerpoTr(e))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
+
+}
 
 /**
  * Función que descarga la info MS Plantilla al llamar a una de sus rutas
@@ -107,5 +192,7 @@ Plantilla.procesarAcercaDe = function () {
     this.descargarRuta("/plantilla/acercade", this.mostrarAcercaDe);
 }
 
-
+Plantilla.listar = function () {
+    this.recupera(this.imprime);
+}
 
