@@ -181,11 +181,11 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx
 
 Que se ha añadido en el fichero **callbacks.ks** del directorio *ms-plantilla* de la siguiente manera:
-´´´
+```
 const client = new faunadb.Client({
     secret: 'fnAE-3e0HaAAzK_zWElz_lNuFrDcFizlmo2oIetx',
 });
-´´´
+```
 
 ## Primera Historia de Ususario.
 Ir implementando cada una de las HU seleccionadas hasta que todas estén en la lista DONE. 
