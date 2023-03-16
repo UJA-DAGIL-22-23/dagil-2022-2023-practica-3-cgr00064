@@ -199,7 +199,7 @@ HU implementadas, captura de pantalla de Trello al comienzo y al final del incre
 1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
 ```
 /**
- * Devuelve todas las personas que hay en la BBDD
+*Devuelve todas las personas que hay en la BBDD
 */
  router.get("/getTodosInfo", async (req, res) => {
     try {
@@ -213,9 +213,9 @@ HU implementadas, captura de pantalla de Trello al comienzo y al final del incre
 2. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
 ```
 /**
- * Método para obtener todos los deportistas con su información de la BBDD.
- * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
- * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*Método para obtener todos los deportistas con su información de la BBDD.
+*@param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+*@param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
 */
 getTodosInfo: async (req, res) => {
     try {
@@ -244,7 +244,7 @@ getTodosInfo: async (req, res) => {
 4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
 ´´´
 /**
- * Función principal para responder al evento de elegir la opción "Listar informacion completa".
+ *Función principal para responder al evento de elegir la opción "Listar informacion completa".
 */
 Plantilla.listar = function () {
     this.recupera(this.imprime);
@@ -252,8 +252,8 @@ Plantilla.listar = function () {
 ´´´
 ´´´
 /**
- * Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla.
- * @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+ *Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla.
+ *@param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
 */
 Plantilla.recupera = async function (callBackFn) {
     let response = null
@@ -279,8 +279,8 @@ Plantilla.recupera = async function (callBackFn) {
 ´´´
 ´´´
 /**
- * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
- * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+ *Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+ *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
 Plantilla.imprime = function (vector) {
     //console.log( vector ) // Para comprobar lo que hay en vector
