@@ -60,6 +60,28 @@ const CB_MODEL_SELECTS = {
             res.status(500).json({ error: error.description })
         }
     },
+
+    /**
+     * Método para obtener solo los nombres de los deportistas de la BBDD.
+     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+     */
+    getNombres: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+            )
+        )
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+    },
+
     /**
      * Método para obtener todos los deportistas con su información de la BBDD.
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
@@ -73,7 +95,7 @@ const CB_MODEL_SELECTS = {
                     q.Lambda("X", q.Get(q.Var("X")))
                 )
             )
-            console.log( deportistas ) // Para comprobar qué se ha devuelto en proyectos
+            // console.log( deportistas ) // Para comprobar qué se ha devuelto en plantilla
             CORS(res)
                 .status(200)
                 .json(deportistas)
@@ -81,10 +103,7 @@ const CB_MODEL_SELECTS = {
             CORS(res).status(500).json({ error: error.description })
         }
     },
-
 }
-
-
 
 // CALLBACKS ADICIONALES
 

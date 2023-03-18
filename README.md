@@ -171,7 +171,7 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 "Nacionalidad": "Española",
 "Edad": 38,
 "Disciplinas": ["Vaquera", "Doma"],
-"Caballos": ["Cruzcampo", "Alcazar"],
+"Caballos": ["Cruzcampo", "Alcázar"],
 "Años de participación en juegos olímpicos": []
 }
 ```
@@ -211,7 +211,7 @@ HU implementadas, captura de pantalla de Trello al comienzo y al final del incre
 });
 ```
 
-2. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
 ```
 /**
 *Método para obtener todos los deportistas con su información de la BBDD.
