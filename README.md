@@ -234,7 +234,7 @@ getNombres: async (req, res) => {
 },
 ```
 
-3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
 ```
 <a href="javascript:Plantilla.listar_nombres()" class="opcion-principal"
     title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD">Listar nombres</a>
@@ -295,6 +295,73 @@ Plantilla.imprime_nombres = function (vector) {
 
 5. El resultado sería el siguiente:
 <img src='./assets/img/HU_02.png'>
+
+## 03. Ver un listado con todos los datos de todos los jugadores/equipos ordenados alfabeticamente. (Puntuación 0.3)
+### Como en la HU anterior ya teniamos la ruta para obtener los nombres */plantilla/getNombres* lo unico que se ha hecho ha sido:
+
+1. En el archivo **index.html** del directorio *front-end* el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+```
+<a href="javascript:Plantilla.listar_alfabeticamente()" class="opcion-principal"
+    title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD por orden alfabetico">Listar nombres alfabeticamente</a>
+```
+
+2. En el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+```
+/**
+* Función principal para responder al evento de elegir la opción "Listar nombres"
+*/
+Plantilla.listar_alfabeticamente = function () {
+    this.recupera_alfabeticamente(this.imprime_alfabeticamente);
+}
+```
+Como se puede ver a continuacion se llama a la ruta */plantilla/getNombres* creada en la HU anterior y se utiliza la funcion **sort()** para ordenar alfabeticamente.
+```
+/**
+* Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera_alfabeticamente = async function (callBackFn) {
+    let response = null
+     
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
+        response = await fetch(url)
+     
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+    
+    // Muestro todos los nombres que se han descargado
+    let vectorAlfabeticamente = null
+    if (response) {
+        vectorAlfabeticamente = await response.json()
+    callBackFn(vectorAlfabeticamente.data.sort())
+    }
+}
+```
+Aunque la siguiente funcion se podria reautilizar de la HU anterior he decidido crear una nueva para que muestre exclusivamente que estan ordenados por orden alfabetico.
+```
+/**
+* Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+* @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime_alfabeticamente = function (vector) {
+    //console.log( vector1 ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTableNombres();
+    vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion por orden alfabetico", msj )
+}
+```
+
+3. El resultado sería el siguiente:
+<img src='./assets/img/HU_03.png'>
 
 ## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
 ### Para la realización de esta HU se han seguido los siguientes pasos:
