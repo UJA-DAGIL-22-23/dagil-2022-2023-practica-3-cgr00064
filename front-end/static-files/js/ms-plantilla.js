@@ -137,11 +137,11 @@ Plantilla.recupera = async function (callBackFn) {
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
-Plantilla.imprime_nombres = function (vector1) {
-    //console.log( vector1 ) // Para comprobar lo que hay en vector
+Plantilla.imprime_nombres = function (vector) {
+    //console.log( vector ) // Para comprobar lo que hay en vector
     let msj = "";
     msj += Plantilla.cabeceraTableNombres();
-    vector1.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
+    vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
     msj += Plantilla.pieTable();
 
     // Borro toda la info de Article y la sustituyo por la que me interesa

@@ -187,12 +187,114 @@ const client = new faunadb.Client({
 });
 ```
 
-## Primera Historia de Ususario.
+# Historias de Ususario.
 Ir implementando cada una de las HU seleccionadas hasta que todas estén en la lista DONE. 
 
 Muy importante: cuando se pase una tarjeta a la lista DONE debes añadirle al menos una captura de pantalla como evidencia de que efectivamente se ha quedado realizada la HU. Esta captura de pantalla puede ser de la interfaz de la aplicación (si es que es una funcionalidad que afecta a la interfaz), o de la interfaz de Fauna, o del IDE con el que se está programando (si es un trozo de código), etc. Es decir: una evidencia que muestre que dicha HU está realmente realizada.
 
 HU implementadas, captura de pantalla de Trello al comienzo y al final del incremento, y capturas de pantalla del funcionamiento de la aplicación con las funcionalidades que se han implementado.
+
+## 02. Ver un listado solo con los nombres de todos los jugadores/equipos. (Puntuación 0.2)
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Devuelve todos los nombres de las personas que hay en la BBDD
+ */
+router.get("/getNombres", async (req, res) => {
+    try {
+        await callbacks.getNombres(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para obtener solo los nombres de los deportistas de la BBDD.
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getNombres: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+            )
+        )
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+```
+<a href="javascript:Plantilla.listar_nombres()" class="opcion-principal"
+    title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD">Listar nombres</a>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+```
+/**
+* Función principal para responder al evento de elegir la opción "Listar nombres"
+*/
+Plantilla.listar_nombres = function () {
+    this.recupera_nombres(this.imprime_nombres);
+}
+```
+```
+/**
+* Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera_nombres = async function (callBackFn) {
+    let response = null
+     
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
+        response = await fetch(url)
+     
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+    
+    // Muestro todos los nombres que se han descargado
+    let vectorNombres = null
+    if (response) {
+        vectorNombres = await response.json()
+    callBackFn(vectorNombres.data)
+    }
+}
+```
+```
+/**
+* Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+* @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime_nombres = function (vector) {
+    //console.log( vector ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTableNombres();
+    vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion", msj )
+}
+```
+
+5. El resultado sería el siguiente:
+<img src='./assets/img/HU_02.png'>
 
 ## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
 ### Para la realización de esta HU se han seguido los siguientes pasos:
