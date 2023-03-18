@@ -108,6 +108,35 @@ Plantilla.recupera_nombres = async function (callBackFn) {
 }
 
 /**
+* Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera_alfabeticamente = async function (callBackFn) {
+    let response = null
+     
+    // Intento conectar con el microservicio personas
+    try {
+    //  Si pongo
+    //  const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
+    //  Me da error de no poder acceder al API Gateway
+        const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
+        response = await fetch(url)
+     
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+    
+    // Muestro todos los nombres que se han descargado
+    let vectorAlfabeticamente = null
+    if (response) {
+        vectorAlfabeticamente = await response.json()
+    callBackFn(vectorAlfabeticamente.data.sort())//El unico cambio es .sort()
+    }
+}
+
+/**
 * Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla
 * @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
 */
@@ -146,6 +175,21 @@ Plantilla.imprime_nombres = function (vector) {
 
     // Borro toda la info de Article y la sustituyo por la que me interesa
     Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion", msj )
+}
+
+/**
+* Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+* @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime_alfabeticamente = function (vector) {
+    //console.log( vector1 ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTableNombres();
+    vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion por orden alfabetico", msj )
 }
 
 /**
@@ -270,6 +314,13 @@ Plantilla.procesarAcercaDe = function () {
 */
 Plantilla.listar_nombres = function () {
     this.recupera_nombres(this.imprime_nombres);
+}
+
+/**
+* Función principal para responder al evento de elegir la opción "Listar nombres"
+*/
+Plantilla.listar_alfabeticamente = function () {
+    this.recupera_alfabeticamente(this.imprime_alfabeticamente);
 }
 
 /**
