@@ -296,6 +296,60 @@ Plantilla.imprime_nombres = function (vector) {
 5. El resultado sería el siguiente:
 <img src='./assets/img/HU_02.png'>
 
+### Test
+Los test que se han realizado han sido los siguientes:
+
+Se comprueba que los datos no son la cadena vacía.
+```
+it ('No hay campos vacíos en los datos al consultar el test mediante getNombres', (done) =>{
+      supertest(app)
+        .get('/getNombres')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+          for (let i = 0; i < data.length; i++) {
+            assert(data[i] !== "");
+          }
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
+
+Se comprueba que el último nombre a mostrar sea Luis García.
+```
+it ('Devuelve Luis García al consultar el test mediante getNombres', (done) =>{
+      supertest(app)
+        .get('/getNombres')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+          assert(res.body.data[9] === "Luis García");
+
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 38712
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+.....
+
+
+5 specs, 0 failures
+Finished in 0.574 seconds
+Randomized with seed 38712 (jasmine --random=true --seed=38712)
+```
+
+
 ## 03. Ver un listado con todos los datos de todos los jugadores/equipos ordenados alfabeticamente. (Puntuación 0.3)
 ### Como en la HU anterior ya teniamos la ruta para obtener los nombres */plantilla/getNombres* lo unico que se ha hecho ha sido:
 

@@ -95,6 +95,7 @@ const CB_MODEL_SELECTS = {
                     q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
                 )
             )
+            deportistas.data=deportistas.data.sort()
             CORS(res)
                 .status(200)
                 .json(deportistas)
