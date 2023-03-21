@@ -116,9 +116,6 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
      
     // Intento conectar con el microservicio personas
     try {
-    //  Si pongo
-    //  const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
-    //  Me da error de no poder acceder al API Gateway
         const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
         response = await fetch(url)
      
@@ -132,7 +129,7 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     let vectorAlfabeticamente = null
     if (response) {
         vectorAlfabeticamente = await response.json()
-    callBackFn(vectorAlfabeticamente.data.sort())
+    callBackFn(vectorAlfabeticamente.data)
     }
 }
 

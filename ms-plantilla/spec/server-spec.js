@@ -93,6 +93,21 @@ describe('Servidor PLANTILLA:', () => {
         );
     });
 
+    it ('Los nombres están ordenados al obtenernlos mediante getAlfabeticamente', (done) =>{
+      supertest(app)
+        .get('/getAlfabeticamente')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+          for (let i = 1; i < data.length; i++) {
+            assert(data[i-1]<= data[i]);
+          }
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+
   })
   
 });

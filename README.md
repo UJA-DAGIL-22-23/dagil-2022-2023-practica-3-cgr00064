@@ -349,17 +349,54 @@ Finished in 0.574 seconds
 Randomized with seed 38712 (jasmine --random=true --seed=38712)
 ```
 
-
 ## 03. Ver un listado con todos los datos de todos los jugadores/equipos ordenados alfabeticamente. (Puntuación 0.3)
-### Como en la HU anterior ya teniamos la ruta para obtener los nombres */plantilla/getNombres* lo unico que se ha hecho ha sido:
+### Para la realización de esta HU se han seguido los siguientes pasos:
 
-1. En el archivo **index.html** del directorio *front-end* el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Devuelve todos los nombres de las personas que hay en la BBDD en orden alfabetico
+ */
+ router.get("/getAlfabeticamente", async (req, res) => {
+    try {
+        await callbacks.getAlfabeticamente(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para obtener solo los nombres de los deportistas de la BBDD.
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getAlfabeticamente: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+            )
+        )
+        deportistas.data=deportistas.data.sort() //Para ordenar alfabeticamente
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+    }      
+},
+```
+
+3. En el archivo **index.html** del directorio *front-end* el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
 ```
 <a href="javascript:Plantilla.listar_alfabeticamente()" class="opcion-principal"
     title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD por orden alfabetico">Listar nombres alfabeticamente</a>
 ```
 
-2. En el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+4. En el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
 ```
 /**
 * Función principal para responder al evento de elegir la opción "Listar nombres"
@@ -368,7 +405,7 @@ Plantilla.listar_alfabeticamente = function () {
     this.recupera_alfabeticamente(this.imprime_alfabeticamente);
 }
 ```
-Como se puede ver a continuacion se llama a la ruta */plantilla/getNombres* creada en la HU anterior y se utiliza la funcion **sort()** para ordenar alfabeticamente.
+Como se puede ver a continuacion se llama a la ruta */plantilla/getAlfab* creada en la HU anterior y se utiliza la funcion **sort()** para ordenar alfabeticamente.
 ```
 /**
 * Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
@@ -379,7 +416,7 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
      
     // Intento conectar con el microservicio personas
     try {
-        const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
+        const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
         response = await fetch(url)
      
     } catch (error) {
@@ -392,7 +429,7 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     let vectorAlfabeticamente = null
     if (response) {
         vectorAlfabeticamente = await response.json()
-    callBackFn(vectorAlfabeticamente.data.sort())
+    callBackFn(vectorAlfabeticamente.data)
     }
 }
 ```
@@ -414,8 +451,44 @@ Plantilla.imprime_alfabeticamente = function (vector) {
 }
 ```
 
-3. El resultado sería el siguiente:
+5. El resultado sería el siguiente:
 <img src='./assets/img/HU_03.png'>
+
+### Test
+El test que se ha realizado ha sido el siguiente:
+
+Que comprueba si realmente los nombres estan ordenados por orden alfabetico
+```
+it ('Los nombres están ordenados al obtenernlos mediante getAlfabeticamente', (done) =>{
+      supertest(app)
+        .get('/getAlfabeticamente')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+          for (let i = 1; i < data.length; i++) {
+            assert(data[i-1]<= data[i]);
+          }
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 25016
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+......
+
+
+6 specs, 0 failures
+Finished in 2.294 seconds
+Randomized with seed 25016 (jasmine --random=true --seed=25016)
+```
 
 ## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
 ### Para la realización de esta HU se han seguido los siguientes pasos:
