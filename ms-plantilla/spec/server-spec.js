@@ -49,22 +49,53 @@ describe('Servidor PLANTILLA:', () => {
    * Tests para acceso a la BBDD
    */
   describe('Acceso a BBDD:', () => {
-    it('Devuelve ¿¿¿ VALOR ESPERADO ??? al consultar mediante test_db', (done) => {
+    it('Devuelve Juan Pérez al consultar mediante test_db', (done) => {
       supertest(app)
         .get('/test_db')
         .expect(200)
         .expect('Content-Type', /json/)
         .expect(function (res) {
           //console.log( res.body ); // Para comprobar qué contiene exactamente res.body
-          assert(res.body.data[0].data.hasOwnProperty('¿¿¿ PROPIEDAD ???'));
-          assert(res.body.data[0].data.nombre === "¿¿¿ VALOR ESPERADO ???");
+          assert(res.body.data[0].data.hasOwnProperty('nombre'));
+          assert(res.body.data[0].data.nombre === "Juan Pérez");
 
         })
         .end((error) => { error ? done.fail(error) : done(); }
         );
     });
 
+    it ('Devuelve Luis García al consultar el test mediante getNombres', (done) =>{
+      supertest(app)
+        .get('/getNombres')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+          assert(res.body.data[9] === "Luis García");
+
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+
+    it ('No hay campos vacíos en los datos al consultar el test mediante getNombres', (done) =>{
+      supertest(app)
+        .get('/getNombres')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+          for (let i = 0; i < data.length; i++) {
+            assert(data[i] !== "");
+          }
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+
   })
+
+  
 });
 
 

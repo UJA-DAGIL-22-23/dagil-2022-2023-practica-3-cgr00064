@@ -101,6 +101,7 @@ const CB_MODEL_SELECTS = {
         } catch (error) {
             CORS(res).status(500).json({ error: error.description })
         }
+        
         },
 
     /**

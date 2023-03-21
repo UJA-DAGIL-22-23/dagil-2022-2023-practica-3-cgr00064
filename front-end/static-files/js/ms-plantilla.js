@@ -55,9 +55,9 @@ Plantilla.cuerpoTr = function (p) {
     <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
     <td>${d.nacionalidad}</td>
     <td>${d.edad}</td>
-    <td>${d.disciplinas}</td>
-    <td>${d.caballos}</td>
-    <td>${d.aniosParticipacionJJOO}</td>
+    <td>${d.disciplinas.join( ", ")}</td>
+    <td>${d.caballos.join( ", ")}</td>
+    <td>${d.aniosParticipacionJJOO.join( ", ")}</td>
     </tr>
     `;
 } 
@@ -119,7 +119,7 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     //  Si pongo
     //  const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
     //  Me da error de no poder acceder al API Gateway
-        const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
+        const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
         response = await fetch(url)
      
     } catch (error) {
@@ -132,7 +132,7 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     let vectorAlfabeticamente = null
     if (response) {
         vectorAlfabeticamente = await response.json()
-    callBackFn(vectorAlfabeticamente.data.sort())//El unico cambio es .sort()
+    callBackFn(vectorAlfabeticamente.data.sort())
     }
 }
 
@@ -182,7 +182,7 @@ Plantilla.imprime_nombres = function (vector) {
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
 Plantilla.imprime_alfabeticamente = function (vector) {
-    //console.log( vector1 ) // Para comprobar lo que hay en vector
+    //console.log( vector ) // Para comprobar lo que hay en vector
     let msj = "";
     msj += Plantilla.cabeceraTableNombres();
     vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
