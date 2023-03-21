@@ -594,3 +594,53 @@ Plantilla.imprime = function (vector) {
 
 5. El resultado sería el siguiente:
 <img src='./assets/img/HU_04.png'>
+
+### Test
+Los tests que se han realizado han sido los siguientes:
+
+Comprueba que se devuelve un array con los datos de todos los deportistas en la base de datos:
+```
+it ('Devuelve un array con los datos de todos los deportistas al consultar mediante getTodosInfo', (done) =>{
+    supertest(app)
+        .get('/getTodosInfo')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+            const data = res.body.data;
+                assert(Array.isArray(data));
+                assert(data.length > 0);
+            })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+});
+```
+Devuelve un vector de tamaño 10 que es el total de colecciones que hay en la BBDD
+```
+it('Devuelve un vector de tamaño 10 al consultar mediante getTodosInfo', (done) => {
+    supertest(app)
+        .get('/getTodosInfo')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+            // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+            assert(res.body.data.length === 10);
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 98836
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+........
+
+
+8 specs, 0 failures
+Finished in 1.21 seconds
+Randomized with seed 98836 (jasmine --random=true --seed=98836)
+```

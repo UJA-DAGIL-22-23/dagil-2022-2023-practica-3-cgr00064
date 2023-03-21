@@ -108,6 +108,32 @@ describe('Servidor PLANTILLA:', () => {
         );
     });
 
+    it ('Devuelve un array con los datos de todos los deportistas al consultar mediante getTodosInfo', (done) =>{
+      supertest(app)
+        .get('/getTodosInfo')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+            assert(Array.isArray(data));
+            assert(data.length > 0);
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+
+    it('Devuelve un vector de tamaño 10 al consultar mediante getTodosInfo', (done) => {
+      supertest(app)
+        .get('/getTodosInfo')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+          assert(res.body.data.length === 10);
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
   })
   
 });

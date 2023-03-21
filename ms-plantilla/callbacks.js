@@ -87,7 +87,7 @@ const CB_MODEL_SELECTS = {
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
      * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
      */
-     getAlfabeticamente: async (req, res) => {
+    getAlfabeticamente: async (req, res) => {
         try {
             let deportistas = await client.query(
                 q.Map(
@@ -103,7 +103,7 @@ const CB_MODEL_SELECTS = {
             CORS(res).status(500).json({ error: error.description })
         }
         
-        },
+    },
 
     /**
      * Método para obtener todos los deportistas con su información de la BBDD.
