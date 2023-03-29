@@ -123,7 +123,7 @@ Plantilla.formulario = function (){
             </select><br><br>
             </td>
             <td>
-            <div><a id="boton_buscar" href="javascript:Plantilla.buscar()">Buscar</a></div>
+            <div><a href="javascript:Plantilla.buscar()">Buscar</a></div>
             </td>
         </tr>
         </tbody>
@@ -395,8 +395,8 @@ Plantilla.mostrar = function () {
 }
 
 Plantilla.buscar = async function () {
+document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
     try {
-        document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
         let url = Frontend.API_GATEWAY + "/personas/getBuscar"
         const response = await fetch(url, {
             method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -416,19 +416,17 @@ Plantilla.buscar = async function () {
             }), // body data type must match "Content-Type" header
         })
         
-        //Código necesario para mostar la informacion recogida del fomulario
+        // Mostrar los resultados en una tabla
         let tabla = Plantilla.cabeceraTable();
         deportistas.forEach(deportista => {
-          tabla += Plantilla.cuerpoTr(deportista);
+        tabla += Plantilla.cuerpoTr(deportista);
         });
         tabla += Plantilla.pieTable();
-        document.getElementById('boton_buscar').innerHTML = tabla;
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway " + error)
         //console.error(error)
     }
 }
-
 
 
 
