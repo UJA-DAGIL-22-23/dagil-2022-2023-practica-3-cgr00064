@@ -8,6 +8,7 @@
 - **Para ver la implementación abrir en el navegador la URL**: http://localhost:8000
 - **Código aplicación de ejemplo**: https://github.com/UJA-Desarrollo-Agil/descripcion-proyecto-microservicios-personas-proyectos
 - **Video de la explicación**: https://youtu.be/Euh2YLOad6Q 
+- **Vídeo sobre cómo usar el depurador de código con JavaScript**: https://www.youtube.com/watch?v=qWM86MDluM4
 
 # *Plantilla Práctica Microservicios*: descripción de la aplicación.
 
