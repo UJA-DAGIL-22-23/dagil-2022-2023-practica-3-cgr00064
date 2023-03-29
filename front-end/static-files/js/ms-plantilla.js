@@ -49,7 +49,7 @@ Plantilla.cabeceraTableNombres = function () {
 Plantilla.cuerpoTr = function (p) {
     const d = p.data
 
-    return `
+    return `<tr>
     <td>${d.nombre}</td>
     <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
     <td>${d.nacionalidad}</td>
@@ -87,7 +87,7 @@ Plantilla.formulario = function (){
         <form id="forulario">
         <table class="listado-plantilla">
         <thead>
-            <th>Nombre</th><th>Nacionalidad</th><th>Edad Minima</th><th>Edad Máxima</th><th>Disciplina</th><th>Opción</th>
+            <th>Nombre</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina</th><th>Opción</th>
         </thead>
         <tbody>
         <tr>
@@ -99,35 +99,31 @@ Plantilla.formulario = function (){
             <label for="nacionalidad">Nacionalidad:</label>
             <select id="nacionalidad" name="nacionalidad">
                 <option value="">Selecciona una opción</option>
-                <option value="salto">Española</option>
-                <option value="doma">Argentina</option>
-                <option value="vaquera">Colombiana</option>
-                <option value="concurso completo">Francesa</option>
-                <option value="concurso completo">Estadounidense</option>
-                <option value="concurso completo">Mexicana</option>
-                <option value="concurso completo">Alemana</option>
+                <option value="Espñola">Española</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Colombiana">Colombiana</option>
+                <option value="Francesa">Francesa</option>
+                <option value="Estadounidense">Estadounidense</option>
+                <option value="Mexicana">Mexicana</option>
+                <option value="Alemana">Alemana</option>
             </select><br><br>
             </td>
             <td>
-            <label for="edad-min">Edad mínima:</label>
-            <input type="number" id="edad-min" name="edad-min" min="25" max="43" value="25"><br><br>
-            </td>
-            <td>
-            <label for="edad-max">Edad máxima:</label>
-            <input type="number" id="edad-max" name="edad-max" min="25" max="43" value="43"><br><br>
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" min="25" max="43" value="25-43"><br><br>
             </td>
             <td>
             <label for="disciplina">Disciplina:</label>
             <select id="disciplina" name="disciplina">
                 <option value="">Selecciona una opción</option>
-                <option value="salto">Salto</option>
-                <option value="doma">Doma</option>
-                <option value="vaquera">Vaquera</option>
-                <option value="concurso completo">Concurso completo</option>
+                <option value="Salto">Salto</option>
+                <option value="Doma">Doma</option>
+                <option value="Vaquera">Vaquera</option>
+                <option value="Concurso completo">Concurso completo</option>
             </select><br><br>
             </td>
             <td>
-            <div><a href="javascript:Plantilla.buscar()">Buscar</a></div>
+            <div><a id="boton_buscar" href="javascript:Plantilla.buscar()">Buscar</a></div>
             </td>
         </tr>
         </tbody>
@@ -135,7 +131,6 @@ Plantilla.formulario = function (){
     </form> 
     </div>
     <div id="div_resultados"></div>
-    
     `
     }
 
@@ -400,6 +395,41 @@ Plantilla.mostrar = function () {
 }
 
 Plantilla.buscar = async function () {
-    document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+    try {
+        document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+        let url = Frontend.API_GATEWAY + "/personas/getBuscar"
+        const response = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'no-cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify({
+                "nombre": document.getElementById("nombre").value,
+                "nacionalidad": document.getElementById("nacionalidad").value,
+                "edad": document.getElementById("edad").value,
+                "disciplina": document.getElementById("disciplina").value
+            }), // body data type must match "Content-Type" header
+        })
+        
+        //Código necesario para mostar la informacion recogida del fomulario
+        let tabla = Plantilla.cabeceraTable();
+        deportistas.forEach(deportista => {
+          tabla += Plantilla.cuerpoTr(deportista);
+        });
+        tabla += Plantilla.pieTable();
+        document.getElementById('boton_buscar').innerHTML = tabla;
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway " + error)
+        //console.error(error)
+    }
 }
+
+
+
+
 

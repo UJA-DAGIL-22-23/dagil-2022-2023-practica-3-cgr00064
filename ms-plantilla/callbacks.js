@@ -127,38 +127,39 @@ const CB_MODEL_SELECTS = {
         }
     },
 
-    getFiltraTresy: async (req, res) => {
+    getBuscar: async (req, res) => {
         try {
-          const nombre = req.query.nombre;
-          const nacionalidad = req.query.nacionalidad;
-          const edad_min = req.query.edad_min || 25;
-          const edad_max = req.query.edad_max || 43;
-          const disciplina = req.query.disciplina;
+          // Obtener los valores del formulario
+          let nombre = document.getElementById('nombre').value;
+          let nacionalidad = document.getElementById('nacionalidad').value;
+          let edad = document.getElementById('edad').value;
+          let disciplina = document.getElementById('disciplina').value;
       
-          let deportistas = await client.query(
-            q.Map(
-              q.Filter(
-                q.Paginate(q.Documents(q.Collection(COLLECTION))),
-                q.Lambda("X",
-                  q.And(
-                    q.Equals(q.Select(["data", "nombre"], q.Get(q.Var("X"))), nombre),
-                    q.Equals(q.Select(["data", "nacionalidad"], q.Get(q.Var("X"))), nacionalidad),
-                    q.GTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad_min),
-                    q.LTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad_max),
-                    q.Contains(disciplina, q.Select(["data", "disciplinas"], q.Get(q.Var("X"))))
-                  )
-                )
-              ),
-              q.Lambda("X", q.Get(q.Var("X")))
-            )
+          // Construir la consulta a la base de datos
+          let query = q.Map(
+            q.Paginate(
+              q.Intersection(
+                q.Match(q.Index('nombre'), nombre),
+                q.Match(q.Index('nacionalidad'), nacionalidad),
+                q.Match(q.Index('edad'), edad),
+                q.Match(q.Index('disciplinas'), disciplina)
+              )
+            ),
+            q.Lambda("X", q.Get(q.Var("X")))
           );
-          CORS(res).status(200).json(deportistas);
+      
+          // Ejecutar la consulta a la base de datos
+          let deportistas = await client.query(query);
+      
+          // Devolver los resultados
+          CORS(res)
+            .status(200)
+            .json(deportistas);
         } catch (error) {
           console.log(error);
-          CORS(res).status(500).json({ error: error.description });
+          CORS(res).status(500).json({ error: error.description })
         }
-    },
- 
+      }, 
 }
 
 // CALLBACKS ADICIONALES

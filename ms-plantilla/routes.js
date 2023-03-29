@@ -83,9 +83,9 @@ router.get("/getAlfabeticamente", async (req, res) => {
 /**
  * Devuelve todas las personas que hay en la BBDD
  */
-router.get("/getFiltraTresy", async (req, res) => {
+router.get("/getBuscar", async (req, res) => {
     try {
-        await callbacks.getFiltraTresy(req, res)
+        await callbacks.getBuscar(req, res)
     } catch (error) {
         console.log(error);
     }
