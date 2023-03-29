@@ -266,7 +266,9 @@ Plantilla.imprimeformulario = function(){
 
     Frontend.Article.actualizar( "Formulario", msj )
 }
+Plantilla.imprime = function(){
 
+}
 
 /**
 * Función que descarga la info MS Plantilla al llamar a una de sus rutas
@@ -294,7 +296,6 @@ Plantilla.descargarRuta = async function (ruta, callBackFn) {
         callBackFn(datosDescargados)
     }
 }
- 
  
 /**
 * Función principal para mostrar los datos enviados por la ruta "home" de MS Plantilla
@@ -368,7 +369,6 @@ Plantilla.procesarAcercaDe = function () {
     this.descargarRuta("/plantilla/acercade", this.mostrarAcercaDe);
 }
 
- 
 /**
 * Función principal para responder al evento de elegir la opción "Listar nombres"
 */
@@ -394,6 +394,7 @@ Plantilla.mostrar = function () {
     this.imprimeformulario();
 }
 
+
 Plantilla.buscar = async function () {
 document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
     try {
@@ -417,6 +418,7 @@ document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados 
         })
         
         // Mostrar los resultados en una tabla
+        Plantilla.listar()
 
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway " + error)
