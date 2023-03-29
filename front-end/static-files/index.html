@@ -5,14 +5,14 @@
     <title>Aplicación Microservicios Equitación. Práctica 3 Desarrollo Ágil.</title>
 
     <!-- Cargamos biblioteca Jasmine -->
-    
+<!--    
     <link rel="stylesheet" href="lib/jasmine-4.5.0/jasmine.css">
     <script src="lib/jasmine-4.5.0/jasmine.js"></script>
     <script src="lib/jasmine-4.5.0/jasmine-html.js"></script>
     <script src="lib/jasmine-4.5.0/boot0.js"></script>
     <script src="lib/jasmine-4.5.0/boot1.js"></script>
     
-
+-->
     <!-- Cargamos nuestros CSS -->
     <link rel="stylesheet" href="css/front-end.css">
 
@@ -33,7 +33,8 @@
             title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD por orden alfabetico">Listar nombres alfabeticamente</a>
 		<a href="javascript:Plantilla.listar()" class="opcion-principal"
             title="Realiza un listado con toda la información de los deportistas de equitación que hay en la BBDD">Listar informacion completa</a>
-        
+        <a href="javascript:Plantilla.mostrar()" class="opcion-principal"
+            title="Elije tres campos a demas del nombre, para ver que deportistas cumplen los requisitos">Listar segun se filtre</a>       
     </nav>
 
     <!-- 
@@ -45,7 +46,10 @@
         <h2 id="seccion-principal-titulo"></h2>
         <!-- Contenido del article -->
         <div id="seccion-principal-contenido">
+            <div id="formulario" class="ocultar"></div>
         </div>
+        <div id="espaciotabla" class="ocultar"></div>
+
     </article>
 
 
@@ -62,10 +66,10 @@
 
 
     <!-- Cargamos ficheros spec con los tests -->
-    
+<!--    
     <script src="js/front-end-spec.js"></script>
     <script src="js/ms-plantilla-spec.js"></script>
-    
+-->    
 
 </body>
 

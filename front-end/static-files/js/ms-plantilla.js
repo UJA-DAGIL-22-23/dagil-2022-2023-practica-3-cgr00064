@@ -5,20 +5,19 @@
  * @date 03-feb-2023
  */
 
- "use strict";
+"use strict";
 
- /// Creo el espacio de nombres
- let Plantilla = {};
+/// Creo el espacio de nombres
+let Plantilla = {};
  
- // Plantilla de datosDescargados vacíos
- Plantilla.datosDescargadosNulos = {
+// Plantilla de datosDescargados vacíos
+Plantilla.datosDescargadosNulos = {
     mensaje: "Datos Descargados No válidos",
     autor: "",
     email: "",
     fecha: ""
 }
 // Funciones para mostrar como TABLE
-
 /**
 * Crea la cabecera para mostrar la info como tabla
 * @returns Cabecera de la tabla
@@ -50,7 +49,7 @@ Plantilla.cabeceraTableNombres = function () {
 Plantilla.cuerpoTr = function (p) {
     const d = p.data
 
-    return `<tr title="${p.ref['@ref'].id}">
+    return `
     <td>${d.nombre}</td>
     <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
     <td>${d.nacionalidad}</td>
@@ -71,7 +70,7 @@ Plantilla.cuerpoTrNombres = function (nombre) {
     <td>${nombre}</td>
     </tr>
     `;
-} 
+}
 
 /**
 * Pie de la tabla en la que se muestran las personas
@@ -80,6 +79,65 @@ Plantilla.cuerpoTrNombres = function (nombre) {
 Plantilla.pieTable = function () {
     return "</tbody></table>";
 }
+
+//Funciones para mostrar el formulario.
+Plantilla.formulario = function (){
+    return`
+    <div id="div_formulario">
+        <form id="forulario">
+        <table class="listado-plantilla">
+        <thead>
+            <th>Nombre</th><th>Nacionalidad</th><th>Edad Minima</th><th>Edad Máxima</th><th>Disciplina</th><th>Opción</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"><br><br>
+            </td> 
+            <td>
+            <label for="nacionalidad">Nacionalidad:</label>
+            <select id="nacionalidad" name="nacionalidad">
+                <option value="">Selecciona una opción</option>
+                <option value="salto">Española</option>
+                <option value="doma">Argentina</option>
+                <option value="vaquera">Colombiana</option>
+                <option value="concurso completo">Francesa</option>
+                <option value="concurso completo">Estadounidense</option>
+                <option value="concurso completo">Mexicana</option>
+                <option value="concurso completo">Alemana</option>
+            </select><br><br>
+            </td>
+            <td>
+            <label for="edad-min">Edad mínima:</label>
+            <input type="number" id="edad-min" name="edad-min" min="25" max="43" value="25"><br><br>
+            </td>
+            <td>
+            <label for="edad-max">Edad máxima:</label>
+            <input type="number" id="edad-max" name="edad-max" min="25" max="43" value="43"><br><br>
+            </td>
+            <td>
+            <label for="disciplina">Disciplina:</label>
+            <select id="disciplina" name="disciplina">
+                <option value="">Selecciona una opción</option>
+                <option value="salto">Salto</option>
+                <option value="doma">Doma</option>
+                <option value="vaquera">Vaquera</option>
+                <option value="concurso completo">Concurso completo</option>
+            </select><br><br>
+            </td>
+            <td>
+            <div><a href="javascript:Plantilla.buscar()">Buscar</a></div>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </form> 
+    </div>
+    <div id="div_resultados"></div>
+    
+    `
+    }
 
 /**
 * Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
@@ -159,6 +217,7 @@ Plantilla.recupera = async function (callBackFn) {
     }
 }
 
+
 /**
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
@@ -202,6 +261,15 @@ Plantilla.imprime = function (vector) {
 
     // Borro toda la info de Article y la sustituyo por la que me interesa
     Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
+}
+/**
+* Función para mostrar el formulario con el que se le pedira información al usuario.
+*/
+Plantilla.imprimeformulario = function(){
+    let msj ="";
+    msj += Plantilla.formulario();
+
+    Frontend.Article.actualizar( "Formulario", msj )
 }
 
 
@@ -326,3 +394,12 @@ Plantilla.listar_alfabeticamente = function () {
 Plantilla.listar = function () {
     this.recupera(this.imprime);
 }
+
+Plantilla.mostrar = function () {
+    this.imprimeformulario();
+}
+
+Plantilla.buscar = async function () {
+    document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+}
+

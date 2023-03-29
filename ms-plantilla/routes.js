@@ -60,7 +60,7 @@ router.get("/getNombres", async (req, res) => {
 /**
  * Devuelve todos los nombres de las personas que hay en la BBDD en orden alfabetico
  */
- router.get("/getAlfabeticamente", async (req, res) => {
+router.get("/getAlfabeticamente", async (req, res) => {
     try {
         await callbacks.getAlfabeticamente(req, res)
     } catch (error) {
@@ -75,6 +75,17 @@ router.get("/getNombres", async (req, res) => {
  router.get("/getTodosInfo", async (req, res) => {
     try {
         await callbacks.getTodosInfo(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+/**
+ * Devuelve todas las personas que hay en la BBDD
+ */
+router.get("/getFiltraTresy", async (req, res) => {
+    try {
+        await callbacks.getFiltraTresy(req, res)
     } catch (error) {
         console.log(error);
     }

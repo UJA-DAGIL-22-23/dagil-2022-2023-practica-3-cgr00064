@@ -19,8 +19,6 @@
     display: inline-block;
 }
 
-
-
 .opcion-principal {
     border: 2px solid rgba(100, 100, 100, 0.5);
     border-radius: .5em 0 .5em 0;
@@ -32,5 +30,9 @@
 
 .opcion-principal:hover  {
     background-color: rgba(100, 100, 100, 0.3);
+}
+
+.ocultar {
+    display: none;
 }
 

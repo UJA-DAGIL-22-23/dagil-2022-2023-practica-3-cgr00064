@@ -126,6 +126,39 @@ const CB_MODEL_SELECTS = {
             CORS(res).status(500).json({ error: error.description })
         }
     },
+
+    getFiltraTresy: async (req, res) => {
+        try {
+          const nombre = req.query.nombre;
+          const nacionalidad = req.query.nacionalidad;
+          const edad_min = req.query.edad_min || 25;
+          const edad_max = req.query.edad_max || 43;
+          const disciplina = req.query.disciplina;
+      
+          let deportistas = await client.query(
+            q.Map(
+              q.Filter(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X",
+                  q.And(
+                    q.Equals(q.Select(["data", "nombre"], q.Get(q.Var("X"))), nombre),
+                    q.Equals(q.Select(["data", "nacionalidad"], q.Get(q.Var("X"))), nacionalidad),
+                    q.GTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad_min),
+                    q.LTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad_max),
+                    q.Contains(disciplina, q.Select(["data", "disciplinas"], q.Get(q.Var("X"))))
+                  )
+                )
+              ),
+              q.Lambda("X", q.Get(q.Var("X")))
+            )
+          );
+          CORS(res).status(200).json(deportistas);
+        } catch (error) {
+          console.log(error);
+          CORS(res).status(500).json({ error: error.description });
+        }
+    },
+ 
 }
 
 // CALLBACKS ADICIONALES
@@ -155,7 +188,7 @@ const CB_OTHERS = {
     acercaDe: async (req, res) => {
         try {
             CORS(res).status(200).json({
-                mensaje: "Microservicio MS Plantilla: acerca de",
+                mensaje: "Microservicio Equitacion: acerca de",
                 autor: "Carlos Garvín Rubiales",
                 email: "cgr00064@red.ujaen.es",
                 fecha: "marzo, 2023"
