@@ -397,7 +397,7 @@ Plantilla.mostrar = function () {
 Plantilla.buscar = async function () {
 document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
     try {
-        let url = Frontend.API_GATEWAY + "/personas/getBuscar"
+        let url = Frontend.API_GATEWAY + "/plantilla/getBuscar"
         const response = await fetch(url, {
             method: 'GET', // *GET, POST, PUT, DELETE, etc.
             mode: 'no-cors', // no-cors, cors, *same-origin
@@ -417,11 +417,7 @@ document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados 
         })
         
         // Mostrar los resultados en una tabla
-        let tabla = Plantilla.cabeceraTable();
-        deportistas.forEach(deportista => {
-        tabla += Plantilla.cuerpoTr(deportista);
-        });
-        tabla += Plantilla.pieTable();
+
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway " + error)
         //console.error(error)
