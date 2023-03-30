@@ -402,6 +402,9 @@ document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados 
         let url = new URL( Frontend.API_GATEWAY + "/plantilla/getBuscar") 
         const params = {}
         if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
+        // Otra opción: 
+        //         params.nombre = document.getElementById("nombre").value?document.getElementById("nombre").value:"*"
+
         if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
         if( document.getElementById("edad").value ) params.edad = document.getElementById("edad").value
         if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
