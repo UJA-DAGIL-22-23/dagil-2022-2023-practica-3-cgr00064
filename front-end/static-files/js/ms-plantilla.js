@@ -398,7 +398,21 @@ Plantilla.mostrar = function () {
 Plantilla.buscar = async function () {
 document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
     try {
-        let url = Frontend.API_GATEWAY + "/plantilla/getBuscar"
+        // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
+        let url = new URL( Frontend.API_GATEWAY + "/plantilla/getBuscar") 
+        const params = {
+            "nombre": document.getElementById("nombre").value,
+            "nacionalidad": document.getElementById("nacionalidad").value,
+            "edad": document.getElementById("edad").value,
+            "disciplina": document.getElementById("disciplina").value
+        }
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        const dataRequest = {
+           method: 'GET'
+        };
+        let response = await fetch(url, dataRequest);
+
+        /*let url = Frontend.API_GATEWAY + "/plantilla/getBuscar"
         const response = await fetch(url, {
             method: 'GET', // *GET, POST, PUT, DELETE, etc.
             mode: 'no-cors', // no-cors, cors, *same-origin
@@ -416,6 +430,7 @@ document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados 
                 "disciplina": document.getElementById("disciplina").value
             }), // body data type must match "Content-Type" header
         })
+        */
         
         // Mostrar los resultados en una tabla
         Plantilla.listar()
