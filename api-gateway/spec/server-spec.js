@@ -34,7 +34,7 @@ describe('API Gateway: rutas estáticas', () => {
         .expect(function (res) {
           //console.log( "BODY ACERCA DE ", res.body ); // Para comprobar qué contiene exactamente res.body
           assert(res.body.hasOwnProperty('mensaje'));
-          assert(res.body.mensaje === "Microservicio MS Plantilla: acerca de");
+          assert(res.body.mensaje === "Microservicio Equitacion: acerca de");
 
         })
         .end((error) => { error ? done.fail(error) : done() })
