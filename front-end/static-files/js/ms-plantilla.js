@@ -86,7 +86,7 @@ Plantilla.pieTable = function () {
 Plantilla.formulario = function (){
     return`
     <div id="div_formulario">
-        <form id="forulario">
+        <form method='get' id="forulario">
         <table class="listado-plantilla">
         <thead>
             <th>Nombre</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina</th><th>Opción</th>
@@ -125,7 +125,7 @@ Plantilla.formulario = function (){
             </select><br><br>
             </td>
             <td>
-            <div><a href="javascript:Plantilla.buscar()">Buscar</a></div>
+            <div><a href="javascript:Plantilla.buscar()" class="boton_buscar">Buscar</a></div>
             </td>
         </tr>
         </tbody>
@@ -393,13 +393,8 @@ Plantilla.mostrar = function () {
     this.imprimeformulario();
 }
 
-function mostrarResultados(deportistas) {
-    const resultadosContainer = document.getElementById("div-resultados");
-    resultadosContainer.innerHTML = Plantilla.cabeceraTable();
-    deportistas.forEach((deportista) => {
-        resultadosContainer.innerHTML += Plantilla.cuerpoTr(deportista);
-    });
-    resultadosContainer.innerHTML += Plantilla.pieTable();
+Plantilla.mostrarResultadosFormulario = function(nombre, nacionalidad, edad, disciplina) {
+
 }
 
 Plantilla.buscar = async function () {
@@ -411,7 +406,6 @@ Plantilla.buscar = async function () {
             if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
             // Otra opción: 
             //         params.nombre = document.getElementById("nombre").value?document.getElementById("nombre").value:"*"
-    
             if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
             if( document.getElementById("edad").value ) params.edad = document.getElementById("edad").value
             if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
@@ -422,7 +416,9 @@ Plantilla.buscar = async function () {
             };
             let response = await fetch(url, dataRequest);
 
-            // Mostrar los resultados
+            // Mostrar los resultados dado el id
+            //Como llego de los datos del formulario que son nombre nacionalidad edad y disciplina a ese id???
+            Plantilla.mostrarResultadosFormulario(params.nombre, params.nacionalidad, params.edad, params.disciplina)
             
 
         } catch (error) {

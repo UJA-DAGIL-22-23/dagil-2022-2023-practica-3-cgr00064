@@ -128,29 +128,35 @@ const CB_MODEL_SELECTS = {
     },
 
     getBuscar: async (req, res) => {
-        const { nombre, nacionalidad, edad, disciplina } = req.query;
-      
-        try {
-          let deportistas = await client.query(
+        const nombre = req.query.nombre;
+        const nacionalidad = req.query.nacionalidad;
+        const edad = req.query.edad;
+        const disciplina = req.query.disciplina;
+    try {
+        let deportistas = await client.query(
             q.Map(
-              q.Filter(
-                q.Paginate(q.Documents(q.Collection(COLLECTION))),
-                q.Lambda(
-                  "X",
-                  q.ContainsStr(
-                    q.LowerCase(q.Select(["data", "nombre"], q.Get(q.Var("X")))),
-                    q.LowerCase(nombre)
-                  )
-                )
-              ),
-              q.Lambda("X", q.Get(q.Var("X")))
+                q.Filter(
+                    q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                    q.Lambda("X",
+                        q.And(
+                            q.ContainsStr(q.LowerCase(q.Select(["data", "nombre"], q.Get(q.Var("X")))), q.LowerCase(nombre)),
+                            q.ContainsStr(q.LowerCase(q.Select(["data", "nacionalidad"], q.Get(q.Var("X")))), q.LowerCase(nacionalidad)),
+                            q.GTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad[0]),
+                            q.LTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad[1]),
+                            q.Contains(q.Select(["data", "disciplinas"], q.Get(q.Var("X"))), disciplina)
+                        )
+                    )
+                ),
+                q.Lambda("X", q.Get(q.Var("X")))
             )
-          );
-          CORS(res).status(200).json(deportistas);
-        } catch (error) {
-          CORS(res).status(500).json({ error: error.description });
-        }
-      },
+        );
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+    },
 
 }
 
