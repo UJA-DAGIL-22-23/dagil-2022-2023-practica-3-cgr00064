@@ -400,12 +400,12 @@ document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados 
     try {
         // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
         let url = new URL( Frontend.API_GATEWAY + "/plantilla/getBuscar") 
-        const params = {
-            "nombre": document.getElementById("nombre").value,
-            "nacionalidad": document.getElementById("nacionalidad").value,
-            "edad": document.getElementById("edad").value,
-            "disciplina": document.getElementById("disciplina").value
-        }
+        const params = {}
+        if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
+        if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
+        if( document.getElementById("edad").value ) params.edad = document.getElementById("edad").value
+        if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
+        
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
         const dataRequest = {
            method: 'GET'
