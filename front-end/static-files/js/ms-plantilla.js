@@ -25,7 +25,7 @@ Plantilla.datosDescargadosNulos = {
 Plantilla.cabeceraTable = function () {
     return `<table class="listado-plantilla">
         <thead>
-        <th>Nombre</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th>
+        <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th>
         </thead>
         <tbody>
     `;
@@ -35,9 +35,9 @@ Plantilla.cabeceraTable = function () {
 * @returns Cabecera de la tabla
 */
 Plantilla.cabeceraTableNombres = function () {
-    return `<table class="listado-plantilla">
+    return `<table width="100%" class="listado-plantilla">
         <thead>
-        <th>Nombre</th></thead>
+        <th width="20%">Nombre</th></thead>
         <tbody>
     `;
 }
@@ -50,7 +50,9 @@ Plantilla.cuerpoTr = function (p) {
     const d = p.data
 
     return `<tr>
+    <td>${p.ref['@ref'].id}</td>
     <td>${d.nombre}</td>
+    <td>${d.apellido}</td>
     <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
     <td>${d.nacionalidad}</td>
     <td>${d.edad}</td>
@@ -66,7 +68,7 @@ Plantilla.cuerpoTr = function (p) {
 * @returns Cadena conteniendo todo el elemento TR que muestra el proyecto.
 */
 Plantilla.cuerpoTrNombres = function (nombre) {
-    return `
+    return `<tr>
     <td>${nombre}</td>
     </tr>
     `;
@@ -99,7 +101,7 @@ Plantilla.formulario = function (){
             <label for="nacionalidad">Nacionalidad:</label>
             <select id="nacionalidad" name="nacionalidad">
                 <option value="">Selecciona una opción</option>
-                <option value="Espñola">Española</option>
+                <option value="Española">Española</option>
                 <option value="Argentina">Argentina</option>
                 <option value="Colombiana">Colombiana</option>
                 <option value="Francesa">Francesa</option>
@@ -212,7 +214,6 @@ Plantilla.recupera = async function (callBackFn) {
     }
 }
 
-
 /**
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
@@ -266,9 +267,7 @@ Plantilla.imprimeformulario = function(){
 
     Frontend.Article.actualizar( "Formulario", msj )
 }
-Plantilla.imprime = function(){
 
-}
 
 /**
 * Función que descarga la info MS Plantilla al llamar a una de sus rutas
@@ -394,54 +393,42 @@ Plantilla.mostrar = function () {
     this.imprimeformulario();
 }
 
+function mostrarResultados(deportistas) {
+    const resultadosContainer = document.getElementById("div-resultados");
+    resultadosContainer.innerHTML = Plantilla.cabeceraTable();
+    deportistas.forEach((deportista) => {
+        resultadosContainer.innerHTML += Plantilla.cuerpoTr(deportista);
+    });
+    resultadosContainer.innerHTML += Plantilla.pieTable();
+}
 
 Plantilla.buscar = async function () {
-document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
-    try {
-        // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
-        let url = new URL( Frontend.API_GATEWAY + "/plantilla/getBuscar") 
-        const params = {}
-        if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
-        // Otra opción: 
-        //         params.nombre = document.getElementById("nombre").value?document.getElementById("nombre").value:"*"
+    document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+        try {
+            // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
+            let url = new URL( Frontend.API_GATEWAY + "/plantilla/getBuscar") 
+            const params = {}
+            if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
+            // Otra opción: 
+            //         params.nombre = document.getElementById("nombre").value?document.getElementById("nombre").value:"*"
+    
+            if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
+            if( document.getElementById("edad").value ) params.edad = document.getElementById("edad").value
+            if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
+            
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+            const dataRequest = {
+               method: 'GET'
+            };
+            let response = await fetch(url, dataRequest);
 
-        if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
-        if( document.getElementById("edad").value ) params.edad = document.getElementById("edad").value
-        if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
-        
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-        const dataRequest = {
-           method: 'GET'
-        };
-        let response = await fetch(url, dataRequest);
+            // Mostrar los resultados
+            
 
-        /*let url = Frontend.API_GATEWAY + "/plantilla/getBuscar"
-        const response = await fetch(url, {
-            method: 'GET', // *GET, POST, PUT, DELETE, etc.
-            mode: 'no-cors', // no-cors, cors, *same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'omit', // include, *same-origin, omit
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            redirect: 'follow', // manual, *follow, error
-            referrer: 'no-referrer', // no-referrer, *client
-            body: JSON.stringify({
-                "nombre": document.getElementById("nombre").value,
-                "nacionalidad": document.getElementById("nacionalidad").value,
-                "edad": document.getElementById("edad").value,
-                "disciplina": document.getElementById("disciplina").value
-            }), // body data type must match "Content-Type" header
-        })
-        */
-        
-        // Mostrar los resultados en una tabla
-        Plantilla.listar()
-
-    } catch (error) {
-        alert("Error: No se han podido acceder al API Gateway " + error)
-        //console.error(error)
-    }
+        } catch (error) {
+            alert("Error: No se han podido acceder al API Gateway " + error)
+            //console.error(error)
+        }
 }
 
 

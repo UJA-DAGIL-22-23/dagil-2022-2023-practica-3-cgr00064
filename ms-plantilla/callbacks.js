@@ -128,38 +128,30 @@ const CB_MODEL_SELECTS = {
     },
 
     getBuscar: async (req, res) => {
+        const { nombre, nacionalidad, edad, disciplina } = req.query;
+      
         try {
-          // Obtener los valores del formulario
-          let nombre = document.getElementById('nombre').value;
-          let nacionalidad = document.getElementById('nacionalidad').value;
-          let edad = document.getElementById('edad').value;
-          let disciplina = document.getElementById('disciplina').value;
-      
-          // Construir la consulta a la base de datos
-          let query = q.Map(
-            q.Paginate(
-              q.Intersection(
-                q.Match(q.Index('nombre'), nombre),
-                q.Match(q.Index('nacionalidad'), nacionalidad),
-                q.Match(q.Index('edad'), edad),
-                q.Match(q.Index('disciplinas'), disciplina)
-              )
-            ),
-            q.Lambda("X", q.Get(q.Var("X")))
+          let deportistas = await client.query(
+            q.Map(
+              q.Filter(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda(
+                  "X",
+                  q.ContainsStr(
+                    q.LowerCase(q.Select(["data", "nombre"], q.Get(q.Var("X")))),
+                    q.LowerCase(nombre)
+                  )
+                )
+              ),
+              q.Lambda("X", q.Get(q.Var("X")))
+            )
           );
-      
-          // Ejecutar la consulta a la base de datos
-          let deportistas = await client.query(query);
-      
-          // Devolver los resultados
-          CORS(res)
-            .status(200)
-            .json(deportistas);
+          CORS(res).status(200).json(deportistas);
         } catch (error) {
-          console.log(error);
-          CORS(res).status(500).json({ error: error.description })
+          CORS(res).status(500).json({ error: error.description });
         }
-      }, 
+      },
+
 }
 
 // CALLBACKS ADICIONALES

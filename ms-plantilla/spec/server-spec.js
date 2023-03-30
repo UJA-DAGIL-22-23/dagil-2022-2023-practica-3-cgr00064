@@ -49,7 +49,7 @@ describe('Servidor PLANTILLA:', () => {
    * Tests para acceso a la BBDD
    */
   describe('Acceso a BBDD:', () => {
-    it('Devuelve Juan Pérez al consultar mediante test_db', (done) => {
+    it('Devuelve Juan al consultar mediante test_db', (done) => {
       supertest(app)
         .get('/test_db')
         .expect(200)
@@ -57,21 +57,21 @@ describe('Servidor PLANTILLA:', () => {
         .expect(function (res) {
           //console.log( res.body ); // Para comprobar qué contiene exactamente res.body
           assert(res.body.data[0].data.hasOwnProperty('nombre'));
-          assert(res.body.data[0].data.nombre === "Juan Pérez");
+          assert(res.body.data[0].data.nombre === "Juan");
 
         })
         .end((error) => { error ? done.fail(error) : done(); }
         );
     });
 
-    it ('Devuelve Luis García al consultar el test mediante getNombres', (done) =>{
+    it ('Devuelve Luis al consultar el test mediante getNombres', (done) =>{
       supertest(app)
         .get('/getNombres')
         .expect(200)
         .expect('Content-Type', /json/)
         .expect(function (res) {
           // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
-          assert(res.body.data[9] === "Luis García");
+          assert(res.body.data[9] === "Luis");
 
         })
         .end((error) => { error ? done.fail(error) : done(); }

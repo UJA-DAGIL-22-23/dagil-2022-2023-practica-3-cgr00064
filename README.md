@@ -68,7 +68,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ### Documentos de la colección en formato JSON
 ```
 {
-"Nombre": "Juan Pérez",
+"Nombre": "Juan",
+"Apellido": "Pérez",
 "Fecha de nacimiento": {"Día": 1, "Mes": 1, "Año": 1990},
 "Nacionalidad": "Española",
 "Edad": 33,
@@ -79,7 +80,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Julia García",
+"Nombre": "Julia",
+"Apellido": "García",
 "Fecha de nacimiento": {"Día": 15, "Mes": 7, "Año": 1985},
 "Nacionalidad": "Española",
 "Edad": 38,
@@ -90,7 +92,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Ana González",
+"Nombre": "Ana",
+"Apellido": "González",
 "Fecha de nacimiento": {"Día": 30, "Mes": 4, "Año": 1995},
 "Nacionalidad": "Argentina",
 "Edad": 29,
@@ -101,7 +104,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Daniel Torres",
+"Nombre": "Daniel",
+"Apellido": "Torres",
 "Fecha de nacimiento": {"Día": 25, "Mes": 9, "Año": 1980},
 "Nacionalidad": "Colombiana",
 "Edad": 43,
@@ -112,7 +116,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Sophie Martin",
+"Nombre": "Sophie",
+"Apellido": "Martin",
 "Fecha de nacimiento": {"Día": 3, "Mes": 12, "Año": 1998},
 "Nacionalidad": "Francesa",
 "Edad": 25,
@@ -123,7 +128,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Alexis Johnson",
+"Nombre": "Alexis",
+"Apellido": "Johnson",
 "Fecha de nacimiento": {"Día": 11, "Mes": 6, "Año": 1989},
 "Nacionalidad": "Estadounidense",
 "Edad": 34,
@@ -134,7 +140,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "María Fernández",
+"Nombre": "María",
+"Apellido": "Fernández",
 "Fecha de nacimiento": {"Día": 20, "Mes": 2, "Año": 1992},
 "Nacionalidad": "Española",
 "Edad": 31,
@@ -145,7 +152,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Joaquín Rodríguez",
+"Nombre": "Joaquín",
+"Apellido": "Rodríguez",
 "Fecha de nacimiento": {"Día": 18, "Mes": 10, "Año": 1993},
 "Nacionalidad": "Mexicana",
 "Edad": 28,
@@ -156,7 +164,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Anna Schmidt",
+"Nombre": "Anna",
+"Apellido": "Schmidt",
 "Fecha de nacimiento": {"Día": 7, "Mes": 8, "Año": 1996},
 "Nacionalidad": "Alemana",
 "Edad": 27,
@@ -167,7 +176,8 @@ Para la realización de la práctica se van a intentar realizar 2 incrementos, p
 ```
 ```
 {
-"Nombre": "Luis García",
+"Nombre": "Luis",
+"Apellido": "García",
 "Fecha de nacimiento": {"Día": 1, "Mes": 5, "Año": 1985},
 "Nacionalidad": "Española",
 "Edad": 38,
@@ -320,14 +330,14 @@ it ('No hay campos vacíos en los datos al consultar el test mediante getNombres
 
 Se comprueba que el último nombre a mostrar sea Luis García.
 ```
-it ('Devuelve Luis García al consultar el test mediante getNombres', (done) =>{
+it ('Devuelve Luis al consultar el test mediante getNombres', (done) =>{
       supertest(app)
         .get('/getNombres')
         .expect(200)
         .expect('Content-Type', /json/)
         .expect(function (res) {
           // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
-          assert(res.body.data[9] === "Luis García");
+          assert(res.body.data[9] === "Luis");
 
         })
         .end((error) => { error ? done.fail(error) : done(); }
