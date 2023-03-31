@@ -749,3 +749,149 @@ Randomized with seed 98836 (jasmine --random=true --seed=98836)
 <img src='./assets/img/Inicio-H6.png'>
 
 ### Para la realización de esta HU se han seguido los siguientes pasos:
+
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+router.param("idDeportista", (req, res, next, id) => {
+    next();
+});
+  
+/**
+ * Devuelve los datos del deportista con el id pasado
+ */
+router.get("/getPorId/:idDeportista", async (req, res) => {
+    try {
+        await callbacks.getPorId(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para obtener una persona de la BBDD a partir de su ID
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getPorId: async (req, res) => {
+    try {
+        // console.log( "getPorId req", req.params.idPersona ) // req.params contiene todos los parámetros de la llamada
+        let deportista = await client.query(
+            q.Get(q.Ref(q.Collection((COLLECTION)), req.params.idDeportista))
+        )
+        // console.log( persona ) // Para comprobar qué se ha devuelto en persona
+        CORS(res)
+            .status(200)
+            .json(deportista)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*, en este caso muestra la persona con Id = *359074418347999438*:
+```
+<a href="javascript:Plantilla.mostrarDeportista('359074418347999438')" class="opcion-principal mostrar"
+    title="Muestra los datos de un deportista como ejemplo">Mostrar una persona de ejemplo</a>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+```
+/**
+ *Función principal para responder al evento de elegir la opción "Mostrar una persona de ejemplo".
+*/
+Plantilla.mostrarDeportista = function (idDeportista) {
+    this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
+}
+```
+```
+/**
+ *Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla dado un Id.
+ *@param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getPorId/" + idDeportista
+        const response = await fetch(url);
+        if (response) {
+            const deportista = await response.json()
+            callBackFn(deportista)
+        }
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+    }
+}
+```
+Para imprimir un deportista lo que se ha hecho ha sido crear un formulario como tabla, para poder mostrarlo e implementar la funcion de editar en la HU siguiente.
+```
+/**
+ *Función para mostrar en pantalla un deportista de equitacion con su info que se ha recuperado de la BBDD.
+ *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprimeUnDeportista = function (deportista){
+    let msj = Plantilla.deportistaComoFormulario(deportista);
+
+    Frontend.Article.actualizar("Mostrar una persona", msj)
+
+    Plantilla.almacenaDatos(deportista)
+}
+```
+Tambien se ha añadido un boton a la tabla de la Historia de Ususario 4, para mostar la informacion del deportista que se desee. Se ha hecho añadiendo la siguiente informacion a la tabla: 
+```
+<td>
+    <div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')>Mostrar</a></div>
+</td>
+```
+
+### Test
+<img src='./assets/img/Test-H6.png'>
+
+El test que se ha realizado ha sido el siguiente:
+
+Devuelve la nacionalidad Española al recuperar los datos de la Persona con id 359074418347999438 mediante getPorId
+```
+it('Devuelve la nacionalidad Española al recuperar los datos de la Persona con id 359074418347999438 mediante getPorId', (done) => {
+    supertest(app)
+        .get('/getPorId/359074418347999438')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          //console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+          assert(res.body.data.hasOwnProperty('nacionalidad'));
+          assert(res.body.data.nacionalidad === "Española");
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+    );
+});
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 50511
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+.........
+
+
+9 specs, 0 failures
+Finished in 0.745 seconds
+Randomized with seed 50511 (jasmine --random=true --seed=50511)
+```
+
+<img src='./assets/img/Readme-H6.png'>
+
+### El resultado sería el siguiente:
+<img src='./assets/img/HU_06-1.png'>
+Aqui se puede ver como en la tabla que muestra toda la informacion se ha añadido el boton de Mostrar:
+<img src='./assets/img/HU_06-2.png'>
+Y al pulsar por ejemplo en el último de la tabla nos redirecciona a:
+<img src='./assets/img/HU_06-3.png'>
+
+### Fin tablero de Trello:
+<img src='./assets/img/Final-H6.png'>
