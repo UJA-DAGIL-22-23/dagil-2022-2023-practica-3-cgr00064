@@ -749,4 +749,3 @@ Randomized with seed 98836 (jasmine --random=true --seed=98836)
 <img src='./assets/img/Inicio-H6.png'>
 
 ### Para la realización de esta HU se han seguido los siguientes pasos:
-

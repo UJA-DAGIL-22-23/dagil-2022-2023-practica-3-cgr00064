@@ -134,6 +134,20 @@ describe('Servidor PLANTILLA:', () => {
         .end((error) => { error ? done.fail(error) : done(); }
         );
     });
+
+    it('Devuelve la nacionalidad Española al recuperar los datos de la Persona con id 359074418347999438 mediante getPorId', (done) => {
+      supertest(app)
+        .get('/getPorId/359074418347999438')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          //console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+          assert(res.body.data.hasOwnProperty('nacionalidad'));
+          assert(res.body.data.nacionalidad === "Española");
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
   })
   
 });
