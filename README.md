@@ -205,7 +205,7 @@ Muy importante: cuando se pase una tarjeta a la lista DONE debes añadirle al me
 
 HU implementadas, captura de pantalla de Trello al comienzo y al final del incremento, y capturas de pantalla del funcionamiento de la aplicación con las funcionalidades que se han implementado.
 
-## 01. 01. Ver la información del autor/autora de la aplicación al pulsar en el botón “Acerca de” (Puntuación 0.1)
+## 01. Ver la información del autor/autora de la aplicación al pulsar en el botón “Acerca de” (Puntuación 0.1)
 ### Inicio tablero de Trello:
 <img src='./assets/img/Inicio-H1.png'>
 
@@ -254,3 +254,169 @@ El resultado sería el siguiente:
 <img src='./assets/img/HU_01.png'>
 
 <img src='./assets/img/Final-H1.png'>
+
+
+## 02. Ver un listado solo con los nombres de todos los jugadores/equipos. (Puntuación 0.2)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H2.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Devuelve todos los nombres de las personas que hay en la BBDD
+ */
+router.get("/getNombres", async (req, res) => {
+    try {
+        await callbacks.getNombres(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para obtener solo los nombres de los deportistas de la BBDD.
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getNombres: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+            )
+        )
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+```
+<a href="javascript:Plantilla.listar_nombres()" class="opcion-principal"
+    title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD">Listar nombres</a>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+```
+/**
+* Función principal para responder al evento de elegir la opción "Listar nombres"
+*/
+Plantilla.listar_nombres = function () {
+    this.recupera_nombres(this.imprime_nombres);
+}
+```
+```
+/**
+* Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera_nombres = async function (callBackFn) {
+    let response = null
+     
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
+        response = await fetch(url)
+     
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+    
+    // Muestro todos los nombres que se han descargado
+    let vectorNombres = null
+    if (response) {
+        vectorNombres = await response.json()
+    callBackFn(vectorNombres.data)
+    }
+}
+```
+```
+/**
+* Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+* @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime_nombres = function (vector) {
+    //console.log( vector ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTableNombres();
+    vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion", msj )
+}
+```
+
+### Test
+<img src='./assets/img/Test-H2.png'>
+
+Los test que se han realizado han sido los siguientes:
+
+Se comprueba que los datos no son la cadena vacía.
+```
+it ('No hay campos vacíos en los datos al consultar el test mediante getNombres', (done) =>{
+      supertest(app)
+        .get('/getNombres')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+          for (let i = 0; i < data.length; i++) {
+            assert(data[i] !== "");
+          }
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
+
+Se comprueba que el último nombre a mostrar sea Luis García.
+```
+it ('Devuelve Luis al consultar el test mediante getNombres', (done) =>{
+      supertest(app)
+        .get('/getNombres')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+          assert(res.body.data[9] === "Luis");
+
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 38712
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+.....
+
+
+5 specs, 0 failures
+Finished in 0.574 seconds
+Randomized with seed 38712 (jasmine --random=true --seed=38712)
+```
+
+<img src='./assets/img/Readme-H2.png'>
+
+El resultado sería el siguiente:
+<img src='./assets/img/HU_02.png'>
+
+<img src='./assets/img/Final-H2.png'>
