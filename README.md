@@ -232,6 +232,7 @@ acercaDe: async (req, res) => {
 ```
 ### Test
 <img src='./assets/img/Test-H1.png'>
+
 ```
 it('Devuelve MS Plantilla Acerca De', (done) => {
     supertest(app)
@@ -246,6 +247,7 @@ it('Devuelve MS Plantilla Acerca De', (done) => {
         .end((error) => { error ? done.fail(error) : done() })
 });
 ```
+
 <img src='./assets/img/Readme-H1.png'>
 
 El resultado sería el siguiente:
