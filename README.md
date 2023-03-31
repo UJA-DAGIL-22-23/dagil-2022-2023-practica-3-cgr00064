@@ -250,9 +250,10 @@ it('Devuelve MS Plantilla Acerca De', (done) => {
 
 <img src='./assets/img/Readme-H1.png'>
 
-El resultado sería el siguiente:
+### El resultado sería el siguiente:
 <img src='./assets/img/HU_01.png'>
 
+### Fin tablero de Trello
 <img src='./assets/img/Final-H1.png'>
 
 
@@ -416,7 +417,159 @@ Randomized with seed 38712 (jasmine --random=true --seed=38712)
 
 <img src='./assets/img/Readme-H2.png'>
 
-El resultado sería el siguiente:
+### El resultado sería el siguiente:
 <img src='./assets/img/HU_02.png'>
 
+### Fin tablero de Trello:
 <img src='./assets/img/Final-H2.png'>
+
+
+## 03. Ver un listado con todos los datos de todos los jugadores/equipos ordenados alfabeticamente. (Puntuación 0.3)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H3.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Devuelve todos los nombres de las personas que hay en la BBDD en orden alfabetico
+ */
+ router.get("/getAlfabeticamente", async (req, res) => {
+    try {
+        await callbacks.getAlfabeticamente(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para obtener solo los nombres de los deportistas de la BBDD.
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getAlfabeticamente: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+            )
+        )
+        deportistas.data=deportistas.data.sort() //Para ordenar alfabeticamente
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+    }      
+},
+```
+
+3. En el archivo **index.html** del directorio *front-end* el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+```
+<a href="javascript:Plantilla.listar_alfabeticamente()" class="opcion-principal"
+    title="Realiza un listado con los nombres de los deportistas de equitación que hay en la BBDD por orden alfabetico">Listar nombres alfabeticamente</a>
+```
+
+4. En el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+```
+/**
+* Función principal para responder al evento de elegir la opción "Listar nombres"
+*/
+Plantilla.listar_alfabeticamente = function () {
+    this.recupera_alfabeticamente(this.imprime_alfabeticamente);
+}
+```
+Como se puede ver a continuacion se llama a la ruta */plantilla/getAlfab* creada en la HU anterior y se utiliza la funcion **sort()** para ordenar alfabeticamente.
+```
+/**
+* Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera_alfabeticamente = async function (callBackFn) {
+    let response = null
+     
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
+        response = await fetch(url)
+     
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+    
+    // Muestro todos los nombres que se han descargado
+    let vectorAlfabeticamente = null
+    if (response) {
+        vectorAlfabeticamente = await response.json()
+    callBackFn(vectorAlfabeticamente.data)
+    }
+}
+```
+Aunque la siguiente funcion se podria reautilizar de la HU anterior he decidido crear una nueva para que muestre exclusivamente que estan ordenados por orden alfabetico.
+```
+/**
+* Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+* @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime_alfabeticamente = function (vector) {
+    //console.log( vector1 ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTableNombres();
+    vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion por orden alfabetico", msj )
+}
+```
+
+### Test
+<img src='./assets/img/Test-H3.png'>
+El test que se ha realizado ha sido el siguiente:
+
+Que comprueba si realmente los nombres estan ordenados por orden alfabetico
+```
+it ('Los nombres están ordenados al obtenernlos mediante getAlfabeticamente', (done) =>{
+      supertest(app)
+        .get('/getAlfabeticamente')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          const data = res.body.data;
+          for (let i = 1; i < data.length; i++) {
+            assert(data[i-1]<= data[i]);
+          }
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 25016
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+......
+
+
+6 specs, 0 failures
+Finished in 2.294 seconds
+Randomized with seed 25016 (jasmine --random=true --seed=25016)
+```
+
+<img src='./assets/img/Readme-H3.png'>
+
+### El resultado sería el siguiente:
+<img src='./assets/img/HU_03.png'>
+
+### Fin tablero de Trello:
+<img src='./assets/img/Final-H3.png'>
