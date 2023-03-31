@@ -574,6 +574,7 @@ Randomized with seed 25016 (jasmine --random=true --seed=25016)
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H3.png'>
 
+
 ## Primer incremento realizado, para el siguiente incremento se van a realizar las siguientes HU 
 <img src='./assets/img/Inicio2-Trello.png'>
 
@@ -742,3 +743,10 @@ Randomized with seed 98836 (jasmine --random=true --seed=98836)
 
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H4.png'>
+
+## 06. Ver todos los datos de un determinado jugador/equipo. (Puntuación 0,2)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H6.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+

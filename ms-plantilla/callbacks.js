@@ -127,35 +127,28 @@ const CB_MODEL_SELECTS = {
         }
     },
 
-    getBuscar: async (req, res) => {
-        const nombre = req.query.nombre;
-        const nacionalidad = req.query.nacionalidad;
-        const edad = req.query.edad;
-        const disciplina = req.query.disciplina;
-    try {
-        let deportistas = await client.query(
-            q.Map(
-                q.Filter(
-                    q.Paginate(q.Documents(q.Collection(COLLECTION))),
-                    q.Lambda("X",
-                        q.And(
-                            q.ContainsStr(q.LowerCase(q.Select(["data", "nombre"], q.Get(q.Var("X")))), q.LowerCase(nombre)),
-                            q.ContainsStr(q.LowerCase(q.Select(["data", "nacionalidad"], q.Get(q.Var("X")))), q.LowerCase(nacionalidad)),
-                            q.GTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad[0]),
-                            q.LTE(q.Select(["data", "edad"], q.Get(q.Var("X"))), edad[1]),
-                            q.Contains(q.Select(["data", "disciplinas"], q.Get(q.Var("X"))), disciplina)
-                        )
-                    )
-                ),
-                q.Lambda("X", q.Get(q.Var("X")))
+    /**
+    * Método para obtener una persona de la BBDD a partir de su ID
+    * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+    * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+    */
+     getPorId: async (req, res) => {
+        try {
+            // console.log( "getPorId req", req.params.idPersona ) // req.params contiene todos los parámetros de la llamada
+            let deportista = await client.query(
+                q.Get(q.Ref(q.Collection((COLLECTION)), req.params.idDeportista))
             )
-        );
-        CORS(res)
-            .status(200)
-            .json(deportistas)
-    } catch (error) {
-        CORS(res).status(500).json({ error: error.description })
-    }
+            // console.log( persona ) // Para comprobar qué se ha devuelto en persona
+            CORS(res)
+                .status(200)
+                .json(deportista)
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+        }
+    },
+
+    getBuscar: async (req, res) => {
+    
     },
 
 }

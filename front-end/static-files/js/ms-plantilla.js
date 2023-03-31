@@ -17,6 +17,104 @@ Plantilla.datosDescargadosNulos = {
     email: "",
     fecha: ""
 }
+
+/// Nombre de los campos del formulario para editar un deportista
+Plantilla.form = {
+    NOMBRE: "form-deportista-nombre",
+    APELLIDO: "form-deportista-apellido",
+    FECHANACIMIENTO: "form-deportista-fechanac",
+    NACIONALIDAD: "form-deportista-nacionalidad",
+    EDAD: "form-deportista-edad",
+    DISCIPLINAS: "form-deportista-disciplinas",
+    CABALLOS: "form-deportista-caballos",
+    ANIOSPARTICPACIONJJOO: "form-deportista-JJOO"
+}
+
+Plantilla.deportistaMostrado = null
+
+Plantilla.plantillaTags = {
+    ID: "### ID ###",
+    NOMBRE: "### NOMBRE ###",
+    APELLIDO: "### APELLIDO ###",
+    FECHANACIMIENTODia: "### FECHA DE NACIMIENTO Día ###",
+    FECHANACIMIENTOMes: "### FECHA DE NACIMIENTO Mes ###",
+    FECHANACIMIENTOAnio: "### FECHA DE NACIMIENTO Anio ###",
+    NACIONALIDAD: "### NACIONALIDAD ###",
+    EDAD: "### EDAD ###",
+    DISCIPLINAS: "### DISCIPLINAS ###",
+    CABALLOS: "### CABALLOS ###",
+    ANIOSPARTICPACIONJJOO: "### AÑOS DE PARTICIPACION EN LOS JJOO ###"
+}
+
+// Funciones para mostrar una persona como formulario.
+Plantilla.plantillaFormularioDeportista = {}
+
+//Cabecera del formulario.
+Plantilla.plantillaFormularioDeportista.formulario = `
+<form method='post' action=''>
+    <table width="100%" class="listado-plantilla">
+        <thead>
+            <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
+            <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
+            <th>Años de participación en los JJOO</th>
+        </thead>
+        <tbody>
+            <tr title ="${Plantilla.plantillaTags.ID}">
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-id"
+                        value="${Plantilla.plantillaTags.ID}" name="id_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nombre"
+                        value="${Plantilla.plantillaTags.NOMBRE}" name="nombre_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-apellido"
+                        value="${Plantilla.plantillaTags.APELLIDO}" name="apellido_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-fechanac"
+                        value="${Plantilla.plantillaTags.FECHANACIMIENTODia}/${Plantilla.plantillaTags.FECHANACIMIENTOMes}/${Plantilla.plantillaTags.FECHANACIMIENTOAnio}" name="fechaNac_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nacionalidad"
+                        value="${Plantilla.plantillaTags.NACIONALIDAD}" name="nacionalidad_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-edad"
+                        value="${Plantilla.plantillaTags.EDAD}" name="edad_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nombre"
+                        value="${Plantilla.plantillaTags.DISCIPLINAS}" name="diciplinas_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nombre"
+                        value="${Plantilla.plantillaTags.CABALLOS}" name="caballos_deportista"/>
+                </td>
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nombre"
+                        value="${Plantilla.plantillaTags.ANIOSPARTICPACIONJJOO}" name="JJOO_deportista"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+`;
+
+Plantilla.sustituyeTags = function (plantilla, deportista) {
+    return plantilla
+        .replace(new RegExp(Plantilla.plantillaTags.ID, 'g'), deportista.ref['@ref'].id)
+        .replace(new RegExp(Plantilla.plantillaTags.NOMBRE, 'g'), deportista.data.nombre)
+        .replace(new RegExp(Plantilla.plantillaTags.APELLIDO, 'g'), deportista.data.apellido)
+        .replace(new RegExp(Plantilla.plantillaTags.FECHANACIMIENTODia, 'g'), deportista.data.fechaNacimiento.dia)
+        .replace(new RegExp(Plantilla.plantillaTags.FECHANACIMIENTOMes, 'g'), deportista.data.fechaNacimiento.mes)
+        .replace(new RegExp(Plantilla.plantillaTags.FECHANACIMIENTOAnio, 'g'), deportista.data.fechaNacimiento.anio)
+        .replace(new RegExp(Plantilla.plantillaTags.NACIONALIDAD, 'g'), deportista.data.nacionalidad)
+        .replace(new RegExp(Plantilla.plantillaTags.EDAD, 'g'), deportista.data.edad)
+        .replace(new RegExp(Plantilla.plantillaTags.DISCIPLINAS, 'g'), deportista.data.disciplinas)
+        .replace(new RegExp(Plantilla.plantillaTags.CABALLOS, 'g'), deportista.data.caballos)
+        .replace(new RegExp(Plantilla.plantillaTags.ANIOSPARTICPACIONJJOO, 'g'), deportista.data.aniosParticipacionJJOO)
+}
+
+Plantilla.plantillaFormularioDeportista.actualiza = function (deportista){
+    return Plantilla.sustituyeTags(this.formulario, deportista)
+}
+
+Plantilla.deportistaComoFormulario = function (deportista){
+    return Plantilla.plantillaFormularioDeportista.actualiza (deportista)
+}
 // Funciones para mostrar como TABLE
 /**
 * Crea la cabecera para mostrar la info como tabla
@@ -25,7 +123,9 @@ Plantilla.datosDescargadosNulos = {
 Plantilla.cabeceraTable = function () {
     return `<table class="listado-plantilla">
         <thead>
-        <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th>
+        <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
+        <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
+        <th>Años de participación en los JJOO</th><th>Opcion</th>
         </thead>
         <tbody>
     `;
@@ -59,6 +159,9 @@ Plantilla.cuerpoTr = function (p) {
     <td>${d.disciplinas.join( ", ")}</td>
     <td>${d.caballos.join( ", ")}</td>
     <td>${d.aniosParticipacionJJOO.join( ", ")}</td>
+    <td>
+    <div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div>
+    </td>
     </tr>
     `;
 } 
@@ -82,7 +185,7 @@ Plantilla.pieTable = function () {
     return "</tbody></table>";
 }
 
-//Funciones para mostrar el formulario.
+//Funciones para mostrar el formulario para preguntar al cliente.
 Plantilla.formulario = function (){
     return`
     <div id="div_formulario">
@@ -215,6 +318,29 @@ Plantilla.recupera = async function (callBackFn) {
 }
 
 /**
+ *Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla dado un Id.
+ *@param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getPorId/" + idDeportista
+        const response = await fetch(url);
+        if (response) {
+            const deportista = await response.json()
+            callBackFn(deportista)
+        }
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+    }
+}
+
+Plantilla.deportistaComoFormulario = function (deportista) {
+    return Plantilla.plantillaFormularioDeportista.actualiza( deportista );
+}
+
+
+/**
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
@@ -258,6 +384,23 @@ Plantilla.imprime = function (vector) {
     // Borro toda la info de Article y la sustituyo por la que me interesa
     Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
 }
+
+/**
+ *Función para mostrar en pantalla un deportista de equitacion con su info que se ha recuperado de la BBDD.
+ *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprimeUnDeportista = function (deportista){
+    let msj = Plantilla.deportistaComoFormulario(deportista);
+
+    Frontend.Article.actualizar("Mostrar una persona", msj)
+
+    Plantilla.almacenaDatos(deportista)
+}
+
+Plantilla.almacenaDatos = function (deportista) {
+    Plantilla.deportistaMostrado = deportista
+}
+
 /**
 * Función para mostrar el formulario con el que se le pedira información al usuario.
 */
@@ -388,6 +531,24 @@ Plantilla.listar_alfabeticamente = function () {
 Plantilla.listar = function () {
     this.recupera(this.imprime);
 }
+
+/**
+ *Función principal para responder al evento de elegir la opción "Mostrar una persona de ejemplo".
+*/
+Plantilla.mostrarDeportista = function (idDeportista) {
+    this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
+}
+
+
+
+
+
+
+
+
+
+
+
 
 Plantilla.mostrar = function () {
     this.imprimeformulario();
