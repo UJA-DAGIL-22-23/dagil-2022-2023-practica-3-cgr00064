@@ -573,3 +573,172 @@ Randomized with seed 25016 (jasmine --random=true --seed=25016)
 
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H3.png'>
+
+## Primer incremento realizado, para el siguiente incremento se van a realizar las siguientes HU 
+<img src='./assets/img/Inicio2-Trello.png'>
+
+
+## 04. Ver un listado con todos los datos de todos los jugadores/equipos. (Puntuación 0.4)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H4.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+*Devuelve todas las personas que hay en la BBDD
+*/
+ router.get("/getTodosInfo", async (req, res) => {
+    try {
+        await callbacks.getTodosInfo(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+*Método para obtener todos los deportistas con su información de la BBDD.
+*@param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+*@param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+getTodosInfo: async (req, res) => {
+    try {
+        let deportistas = await client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                q.Lambda("X", q.Get(q.Var("X")))
+            )
+        )
+        console.log( deportistas ) // Para comprobar qué se ha devuelto en proyectos
+        CORS(res)
+            .status(200)
+            .json(deportistas)
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*:
+```
+<a href="javascript:Plantilla.listar()" class="opcion-principal"
+    title="Realiza un listado con toda la información de los deportistas de equitación que hay en la BBDD">Listar informacion completa</a>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
+```
+/**
+ *Función principal para responder al evento de elegir la opción "Listar informacion completa".
+*/
+Plantilla.listar = function () {
+    this.recupera(this.imprime);
+}
+```
+```
+/**
+ *Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla.
+ *@param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.recupera = async function (callBackFn) {
+    let response = null
+
+    // Intento conectar con el microservicio personas
+    try {
+        const url = Frontend.API_GATEWAY + "/plantilla/getTodosInfo"
+        response = await fetch(url)
+
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway")
+        console.error(error)
+        //throw error
+    }
+
+    // Muestro todas las persoans que se han descargado
+    let vectorPlantilla = null
+    if (response) {
+        vectorPlantilla = await response.json()
+        callBackFn(vectorPlantilla.data)
+    }
+}
+```
+```
+/**
+ *Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
+ *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
+*/
+Plantilla.imprime = function (vector) {
+    //console.log( vector ) // Para comprobar lo que hay en vector
+    let msj = "";
+    msj += Plantilla.cabeceraTable();
+    vector.forEach(e => msj += Plantilla.cuerpoTr(e))
+    msj += Plantilla.pieTable();
+
+    // Borro toda la info de Article y la sustituyo por la que me interesa
+    Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
+
+}
+```
+
+### Test
+<img src='./assets/img/Test-H4.png'>
+
+Los tests que se han realizado han sido los siguientes:
+
+Comprueba que se devuelve un array con los datos de todos los deportistas en la base de datos:
+```
+it ('Devuelve un array con los datos de todos los deportistas al consultar mediante getTodosInfo', (done) =>{
+    supertest(app)
+        .get('/getTodosInfo')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+            const data = res.body.data;
+                assert(Array.isArray(data));
+                assert(data.length > 0);
+            })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+});
+```
+Devuelve un vector de tamaño 10 que es el total de colecciones que hay en la BBDD
+```
+it('Devuelve un vector de tamaño 10 al consultar mediante getTodosInfo', (done) => {
+    supertest(app)
+        .get('/getTodosInfo')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+            // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
+            assert(res.body.data.length === 10);
+        })
+        .end((error) => { error ? done.fail(error) : done(); }
+        );
+    });
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 98836
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+........
+
+
+8 specs, 0 failures
+Finished in 1.21 seconds
+Randomized with seed 98836 (jasmine --random=true --seed=98836)
+```
+
+<img src='./assets/img/Readme-H4.png'>
+
+### El resultado sería el siguiente:
+<img src='./assets/img/HU_04.png'>
+
+### Fin tablero de Trello:
+<img src='./assets/img/Final-H4.png'>
