@@ -7,7 +7,7 @@
 - **Trello**: https://trello.com/b/OLkFbBiE/pr%C3%A1ctica-3-d%C3%A1gil
 - **Para ver la implementación abrir en el navegador la URL**: http://localhost:8000
 - **Código aplicación de ejemplo**: https://github.com/UJA-Desarrollo-Agil/descripcion-proyecto-microservicios-personas-proyectos
-- **Video de la explicación**: https://youtu.be/Euh2YLOad6Q 
+- **Video de la explicación**: https://youtu.be/idHg-dnImWM?t=2586 
 - **Vídeo sobre cómo usar el depurador de código con JavaScript**: https://www.youtube.com/watch?v=qWM86MDluM4
 
 # *Plantilla Práctica Microservicios*: descripción de la aplicación.
@@ -895,3 +895,217 @@ Y al pulsar por ejemplo en el último de la tabla nos redirecciona a:
 
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H6.png'>
+
+## 12. Modificar el nombre de un jugador/equipo. (Puntuación 0,2)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H12.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Modifica el nombre de la persona con el id pasado
+ */
+ router.post("/setNombre", async (req, res) => {
+    try {
+        await callbacks.setNombre(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para ocambiar los datos de una persona
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+setNombre: async (req, res) => {
+    //console.log("setTodo req.body", req)
+    try {
+        let valorDevuelto = {}
+        let data = (Object.values(req.body)[0] === '') ? JSON.parse(Object.keys(req.body)[0]) : req.body
+        let deportista = await client.query(
+            q.Update(
+                q.Ref(q.Collection(COLLECTION), data.id_deportista),
+                {
+                    data: {
+                        nombre: data.nombre_deportista,
+                    },
+                },
+            )
+        )
+            .then((ret) => {
+                valorDevuelto = ret
+                CORS(res)
+                    .status(200)
+                    .header( 'Content-Type', 'application/json' )
+                    .json(valorDevuelto)
+            })
+
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+3. El siguiente paso ha sido añadir al formulario de mostrar una persona dado su id, 3 botones para editar, guardar los cambios y cancelar.
+```
+<td>
+    <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
+</td>
+<td>
+    <div><a href="javascript:Plantilla.guardar()">Guardar</a></div>
+</td>    
+<td>    
+    <div><a href="javascript:Plantilla.cancelar()">Cancelar</a></div>
+</td>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder editar, cancelar y guardar la modificacion del nombre:
+
+EDITAR lo que hace es habilitar el campo del nombre para que se pueda escribir en el, para ello se ha hecho lo siguiente: 
+
+```
+/**
+ * Establece disable = habilitando en los campos editables
+ * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+ Plantilla.habilitarDeshabilitarCamposEditablesNombre = function (deshabilitando) {
+    deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
+    document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+ Plantilla.deshabilitarCamposEditablesNombre = function () {
+    Plantilla.habilitarDeshabilitarCamposEditablesNombre(true)
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+Plantilla.habilitarCamposEditablesNombre = function () {
+    Plantilla.habilitarDeshabilitarCamposEditablesNombre(false)
+    return this
+}
+/**
+ * Función que permite modificar los datos de una persona
+ */
+Plantilla.editarNombre = function () {
+    this.habilitarCamposEditablesNombre()   
+}
+```
+
+CANCELAR lo que hace es volver al inicio de la funcion Plantilla.imprimeUnDeportista() y abortar la operacion.
+
+```
+/**
+ * Función que permite cancelar la acción sobre los datos de una persona
+*/
+Plantilla.cancelar = function () {
+    this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
+    this.deshabilitarCamposEditablesNombre()
+}
+```
+
+GUARDAR lo que hace es actualizar el campo en la BBDD
+
+```
+/**
+ * Función para guardar los nuevos datos de una persona
+ */
+ Plantilla.guardar = async function () {
+    try {
+        let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"
+        let id_deportista = document.getElementById("form-deportista-id").value
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'no-cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify({
+                "id_deportista": id_deportista,
+                "nombre_deportista": document.getElementById("form-deportista-nombre").value,
+            }), // body data type must match "Content-Type" header
+        })
+        Plantilla.mostrarDeportista(id_deportista)
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway " + error)
+        //console.error(error)
+    }
+}
+```
+
+### Test
+<img src='./assets/img/Test-H12.png'>
+
+El test que se ha realizado ha sido el siguiente:
+
+```
+  it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setTodo', (done) => {
+    const NOMBRE_TEST= 'NOMBRE CAMBIADO'
+    const deportista = {
+      id_deportista: '359074418347999438',
+      nombre_deportista: NOMBRE_TEST
+      
+    };
+    supertest(app)
+    .post('/setNombre')
+    .send(deportista)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .expect(function (res) {
+      assert(res.body.data.nombre === NOMBRE_TEST);
+    })
+    .end((error) => { error ? done.fail(error) : done(); }
+    );
+});
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 14351
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+..........
+
+
+10 specs, 0 failures
+Finished in 0.956 seconds
+Randomized with seed 14351 (jasmine --random=true --seed=14351)
+```
+
+<img src='./assets/img/Readme-H12.png'>
+
+### El resultado sería el siguiente:
+Al hacer click sobre el boton *Editar Nombre* se habilita el campo nombre para ser modificado.
+<img src='./assets/img/HU_12-1.png'>
+
+Al hacer click sobre el boton *Cancelar* se quita el campo nombre como editable.
+<img src='./assets/img/HU_12-2.png'>
+
+Clicamos de nuevo sobre *Editar Nombre* y modificamos el nombre a Luis Carlos.
+<img src='./assets/img/HU_12-3.png'>
+
+Al hacer click en *Guardar* se modifica la información.
+<img src='./assets/img/HU_12-4.png'>
+
+Se puede observar en la tabla de todos los deportistas que efecticamente el nombre ha sido cambiado.
+<img src='./assets/img/HU_12-5.png'>
+
+### Fin tablero de Trello:
+<img src='./assets/img/Final-H12.png'>
