@@ -155,7 +155,6 @@ describe('Servidor PLANTILLA:', () => {
     const deportista = {
       id_deportista: '359074418347999438',
       nombre_deportista: NOMBRE_TEST
-      
     };
     supertest(app)
     .post('/setNombre')
@@ -163,6 +162,7 @@ describe('Servidor PLANTILLA:', () => {
     .expect(200)
     .expect('Content-Type', /json/)
     .expect(function (res) {
+      assert(res.body.data.hasOwnProperty('nombre'));
       assert(res.body.data.nombre === NOMBRE_TEST);
     })
     .end((error) => { error ? done.fail(error) : done(); }

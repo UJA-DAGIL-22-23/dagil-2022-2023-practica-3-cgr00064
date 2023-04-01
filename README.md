@@ -230,7 +230,7 @@ acercaDe: async (req, res) => {
     }
 },
 ```
-### Test
+### Test en el SERVIDOR
 <img src='./assets/img/Test-H1.png'>
 
 ```
@@ -360,7 +360,7 @@ Plantilla.imprime_nombres = function (vector) {
 }
 ```
 
-### Test
+### Test en el SERVIDOR
 <img src='./assets/img/Test-H2.png'>
 
 Los test que se han realizado han sido los siguientes:
@@ -529,7 +529,7 @@ Plantilla.imprime_alfabeticamente = function (vector) {
 }
 ```
 
-### Test
+### Test en el SERVIDOR
 <img src='./assets/img/Test-H3.png'>
 El test que se ha realizado ha sido el siguiente:
 
@@ -684,7 +684,7 @@ Plantilla.imprime = function (vector) {
 }
 ```
 
-### Test
+### Test en el SERVIDOR
 <img src='./assets/img/Test-H4.png'>
 
 Los tests que se han realizado han sido los siguientes:
@@ -847,7 +847,7 @@ Tambien se ha añadido un boton a la tabla de la Historia de Ususario 4, para mo
 </td>
 ```
 
-### Test
+### Test en el SERVIDOR
 <img src='./assets/img/Test-H6.png'>
 
 El test que se ha realizado ha sido el siguiente:
@@ -1048,7 +1048,7 @@ GUARDAR lo que hace es actualizar el campo en la BBDD
 }
 ```
 
-### Test
+### Test en el SERVIDOR
 <img src='./assets/img/Test-H12.png'>
 
 El test que se ha realizado ha sido el siguiente:
@@ -1057,8 +1057,8 @@ El test que se ha realizado ha sido el siguiente:
   it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setTodo', (done) => {
     const NOMBRE_TEST= 'NOMBRE CAMBIADO'
     const deportista = {
-      id_deportista: '359074418347999438',
-      nombre_deportista: NOMBRE_TEST
+        id_deportista: '359074418347999438',
+        nombre_deportista: NOMBRE_TEST
       
     };
     supertest(app)
@@ -1067,7 +1067,8 @@ El test que se ha realizado ha sido el siguiente:
     .expect(200)
     .expect('Content-Type', /json/)
     .expect(function (res) {
-      assert(res.body.data.nombre === NOMBRE_TEST);
+        assert(res.body.data.hasOwnProperty('nombre'));
+        assert(res.body.data.nombre === NOMBRE_TEST);
     })
     .end((error) => { error ? done.fail(error) : done(); }
     );
@@ -1109,3 +1110,6 @@ Se puede observar en la tabla de todos los deportistas que efecticamente el nomb
 
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H12.png'>
+
+
+
