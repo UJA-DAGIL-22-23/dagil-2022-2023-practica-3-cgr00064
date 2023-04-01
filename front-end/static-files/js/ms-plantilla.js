@@ -535,7 +535,7 @@ Plantilla.mostrarDeportista = function (idDeportista) {
 /**
  * Establece disable = habilitando en los campos editables
  * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
- * @returns El propio objeto Personas, para concatenar llamadas
+ * @returns El propio objeto Plantilla, para concatenar llamadas
  */
  Plantilla.habilitarDeshabilitarCamposEditablesNombre = function (deshabilitando) {
     deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
@@ -544,7 +544,7 @@ Plantilla.mostrarDeportista = function (idDeportista) {
 }
 /**
  * Establece disable = true en los campos editables
- * @returns El propio objeto Personas, para concatenar llamadas
+ * @returns El propio objeto Plantilla, para concatenar llamadas
  */
  Plantilla.deshabilitarCamposEditablesNombre = function () {
     Plantilla.habilitarDeshabilitarCamposEditablesNombre(true)
@@ -552,7 +552,7 @@ Plantilla.mostrarDeportista = function (idDeportista) {
 }
 /**
  * Establece disable = true en los campos editables
- * @returns El propio objeto Personas, para concatenar llamadas
+ * @returns El propio objeto Plantilla, para concatenar llamadas
  */
 Plantilla.habilitarCamposEditablesNombre = function () {
     Plantilla.habilitarDeshabilitarCamposEditablesNombre(false)
@@ -562,9 +562,9 @@ Plantilla.habilitarCamposEditablesNombre = function () {
  * Función que permite modificar los datos de una persona
  */
 Plantilla.editarNombre = function () {
-    this.habilitarCamposEditablesNombre()
-    
+    this.habilitarCamposEditablesNombre()   
 }
+
 /**
  * Función que permite cancelar la acción sobre los datos de una persona
  */
@@ -572,6 +572,7 @@ Plantilla.editarNombre = function () {
     this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
     this.deshabilitarCamposEditablesNombre()
 }
+
 /**
  * Función para guardar los nuevos datos de una persona
  */

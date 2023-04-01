@@ -49,29 +49,29 @@ describe('Servidor PLANTILLA:', () => {
    * Tests para acceso a la BBDD
    */
   describe('Acceso a BBDD:', () => {
-    it('Devuelve Juan al consultar mediante test_db', (done) => {
+    it('Devuelve Julia al consultar mediante test_db', (done) => {
       supertest(app)
         .get('/test_db')
         .expect(200)
         .expect('Content-Type', /json/)
         .expect(function (res) {
           //console.log( res.body ); // Para comprobar qué contiene exactamente res.body
-          assert(res.body.data[0].data.hasOwnProperty('nombre'));
-          assert(res.body.data[0].data.nombre === "Juan");
+          assert(res.body.data[1].data.hasOwnProperty('nombre'));
+          assert(res.body.data[1].data.nombre === "Julia");
 
         })
         .end((error) => { error ? done.fail(error) : done(); }
         );
     });
 
-    it ('Devuelve Luis al consultar el test mediante getNombres', (done) =>{
+    it ('Devuelve Anna al consultar el test mediante getNombres', (done) =>{
       supertest(app)
         .get('/getNombres')
         .expect(200)
         .expect('Content-Type', /json/)
         .expect(function (res) {
           // console.log( res.body ); // Para comprobar qué contiene exactamente res.body
-          assert(res.body.data[9] === "Luis");
+          assert(res.body.data[8] === "Anna");
 
         })
         .end((error) => { error ? done.fail(error) : done(); }
@@ -149,6 +149,25 @@ describe('Servidor PLANTILLA:', () => {
         );
     });
   })
+
+  it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setTodo', (done) => {
+    const NOMBRE_TEST= 'NOMBRE CAMBIADO'
+    const deportista = {
+      id_deportista: '359074418347999438',
+      nombre_deportista: NOMBRE_TEST
+      
+    };
+    supertest(app)
+    .post('/setNombre')
+    .send(deportista)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .expect(function (res) {
+      assert(res.body.data.nombre === NOMBRE_TEST);
+    })
+    .end((error) => { error ? done.fail(error) : done(); }
+    );
+});
   
 });
 
