@@ -95,7 +95,16 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
     }
 });
 
-
+/**
+ * Modifica el email de la persona con el id pasado
+ */
+ router.post("/setNombre", async (req, res) => {
+    try {
+        await callbacks.setNombre(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 

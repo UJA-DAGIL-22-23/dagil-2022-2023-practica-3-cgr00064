@@ -39,5 +39,31 @@ describe('Servidor FRONT-END:', () => {
           })
           .end((error) => { error ? done.fail(error) : done() })
       });
+      it('Cualquier otro acceso a html, como : /miperro.html devuelve también index.html', (done) => {
+        supertest(app)
+          .get('/miperro.html')
+          .expect(200)
+          .expect('Content-Type', /html/)
+          .expect(function (res) {
+            //console.log( res.text ); // Para comprobar qué contiene exactamente res.text
+            assert(res.hasOwnProperty('text'));
+            assert(res.text.search("Aplicación Microservicios Equitación. Práctica 3 Desarrollo Ágil.")>=0)
+  
+          })
+          .end((error) => { error ? done.fail(error) : done() })
+      });
+      it('Cualquier otro tipo de fichero, como : /assets/img.png devuelve también index.html', (done) => {
+        supertest(app)
+          .get('/assets/img.png')
+          .expect(200)
+          .expect('Content-Type', /html/)
+          .expect(function (res) {
+            //console.log( res.text ); // Para comprobar qué contiene exactamente res.text
+            assert(res.hasOwnProperty('text'));
+            assert(res.text.search("Aplicación Microservicios Equitación. Práctica 3 Desarrollo Ágil.")>=0)
+  
+          })
+          .end((error) => { error ? done.fail(error) : done() })
+      });  
   })
 })

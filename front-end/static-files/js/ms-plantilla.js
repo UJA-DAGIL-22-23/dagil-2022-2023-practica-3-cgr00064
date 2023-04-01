@@ -52,11 +52,11 @@ Plantilla.plantillaFormularioDeportista = {}
 //Cabecera del formulario.
 Plantilla.plantillaFormularioDeportista.formulario = `
 <form method='post' action=''>
-    <table width="100%" class="listado-plantilla">
+    <table class="listado-plantilla">
         <thead>
             <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
             <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
-            <th>Años de participación en los JJOO</th>
+            <th>Años de participación en los JJOO</th><th>Editar</th><th>Guardar</th><th>Cancelar</th>
         </thead>
         <tbody>
             <tr title ="${Plantilla.plantillaTags.ID}">
@@ -66,26 +66,35 @@ Plantilla.plantillaFormularioDeportista.formulario = `
                 <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nombre"
                         value="${Plantilla.plantillaTags.NOMBRE}" name="nombre_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-apellido"
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-apellido"
                         value="${Plantilla.plantillaTags.APELLIDO}" name="apellido_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-fechanac"
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-fechanac"
                         value="${Plantilla.plantillaTags.FECHANACIMIENTODia}/${Plantilla.plantillaTags.FECHANACIMIENTOMes}/${Plantilla.plantillaTags.FECHANACIMIENTOAnio}" name="fechaNac_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nacionalidad"
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nacionalidad"
                         value="${Plantilla.plantillaTags.NACIONALIDAD}" name="nacionalidad_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-edad"
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-edad"
                         value="${Plantilla.plantillaTags.EDAD}" name="edad_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nombre"
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-disciplinas"
                         value="${Plantilla.plantillaTags.DISCIPLINAS}" name="diciplinas_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nombre"
+                <td><input type="vector" class="form-deportista-elemento editable" disabled id="form-deportista-caballos"
                         value="${Plantilla.plantillaTags.CABALLOS}" name="caballos_deportista"/>
                 </td>
-                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-nombre"
+                <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-JJOO"
                         value="${Plantilla.plantillaTags.ANIOSPARTICPACIONJJOO}" name="JJOO_deportista"/>
+                </td>
+                <td>
+                    <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
+                </td>
+                <td>
+                    <div><a href="javascript:Plantilla.guardar()">Guardar</a></div>
+                </td>    
+                <td>    
+                    <div><a href="javascript:Plantilla.cancelar()">Cancelar</a></div>
                 </td>
             </tr>
         </tbody>
@@ -107,11 +116,15 @@ Plantilla.sustituyeTags = function (plantilla, deportista) {
         .replace(new RegExp(Plantilla.plantillaTags.CABALLOS, 'g'), deportista.data.caballos)
         .replace(new RegExp(Plantilla.plantillaTags.ANIOSPARTICPACIONJJOO, 'g'), deportista.data.aniosParticipacionJJOO)
 }
-
+//
+//*************************HACER TEST************************* */
+//
 Plantilla.plantillaFormularioDeportista.actualiza = function (deportista){
     return Plantilla.sustituyeTags(this.formulario, deportista)
 }
-
+//
+//*************************HACER TEST************************* */
+//
 Plantilla.deportistaComoFormulario = function (deportista){
     return Plantilla.plantillaFormularioDeportista.actualiza (deportista)
 }
@@ -121,25 +134,14 @@ Plantilla.deportistaComoFormulario = function (deportista){
 * @returns Cabecera de la tabla
 */
 Plantilla.cabeceraTable = function () {
-    return `<table class="listado-plantilla">
-        <thead>
-        <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
-        <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
-        <th>Años de participación en los JJOO</th><th>Opcion</th>
-        </thead>
-        <tbody>
-    `;
+    return `<table class="listado-plantilla"><thead><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th><th>Opcion</th></thead><tbody>`;
 }
 /**
 * Crea la cabecera para mostrar los nombres como tabla
 * @returns Cabecera de la tabla
 */
 Plantilla.cabeceraTableNombres = function () {
-    return `<table width="100%" class="listado-plantilla">
-        <thead>
-        <th width="20%">Nombre</th></thead>
-        <tbody>
-    `;
+    return `<table class="listado-plantilla"><thead><th>Nombre</th></thead><tbody>`;
 }
 /**
 * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD
@@ -148,22 +150,7 @@ Plantilla.cabeceraTableNombres = function () {
 */
 Plantilla.cuerpoTr = function (p) {
     const d = p.data
-
-    return `<tr>
-    <td>${p.ref['@ref'].id}</td>
-    <td>${d.nombre}</td>
-    <td>${d.apellido}</td>
-    <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
-    <td>${d.nacionalidad}</td>
-    <td>${d.edad}</td>
-    <td>${d.disciplinas.join( ", ")}</td>
-    <td>${d.caballos.join( ", ")}</td>
-    <td>${d.aniosParticipacionJJOO.join( ", ")}</td>
-    <td>
-    <div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div>
-    </td>
-    </tr>
-    `;
+    return `<tr><td>${p.ref['@ref'].id}</td><td>${d.nombre}</td><td>${d.apellido}</td><td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td><td>${d.nacionalidad}</td><td>${d.edad}</td><td>${d.disciplinas.join( ", ")}</td><td>${d.caballos.join( ", ")}</td><td>${d.aniosParticipacionJJOO.join( ", ")}</td><td><div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div></td></tr>`;
 } 
 /**
 * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD
@@ -171,10 +158,7 @@ Plantilla.cuerpoTr = function (p) {
 * @returns Cadena conteniendo todo el elemento TR que muestra el proyecto.
 */
 Plantilla.cuerpoTrNombres = function (nombre) {
-    return `<tr>
-    <td>${nombre}</td>
-    </tr>
-    `;
+    return `<tr><td>${nombre}</td></tr>`;
 }
 
 /**
@@ -237,7 +221,7 @@ Plantilla.formulario = function (){
     </div>
     <div id="div_resultados"></div>
     `
-    }
+}
 
 /**
 * Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
@@ -335,10 +319,12 @@ Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
     }
 }
 
+//
+//************************* HACER TEST ************************* */
+//
 Plantilla.deportistaComoFormulario = function (deportista) {
     return Plantilla.plantillaFormularioDeportista.actualiza( deportista );
 }
-
 
 /**
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
@@ -389,6 +375,9 @@ Plantilla.imprime = function (vector) {
  *Función para mostrar en pantalla un deportista de equitacion con su info que se ha recuperado de la BBDD.
  *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
+//
+//*************************HACER TEST************************* */
+//
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
 
@@ -402,8 +391,22 @@ Plantilla.almacenaDatos = function (deportista) {
 }
 
 /**
+ * Recupera los valores almacenados de la persona que se estaba mostrando
+ * @return Datos de la persona a almacenada
+ */
+//
+//*************************HACER TEST************************* */
+//
+Plantilla.recuperaDatosAlmacenados = function () {
+    return this.deportistaMostrado;
+}
+
+/**
 * Función para mostrar el formulario con el que se le pedira información al usuario.
 */
+//
+//*************************HACER TEST************************* */
+//
 Plantilla.imprimeformulario = function(){
     let msj ="";
     msj += Plantilla.formulario();
@@ -484,19 +487,6 @@ Plantilla.mostrarAcercaDe = function (datosDescargados) {
     Frontend.Article.actualizar("Plantilla Acerca de", mensajeAMostrar)
 }
  
-Plantilla.mostrar_nombres = function (nombres) {
-    if (nombres && nombres.length) { // Comprobamos que el objeto no es undefined y que contiene datos
-        let tabla = Plantilla.cabeceraTableNombres()
-        nombres.forEach((d) => {
-        tabla += Plantilla.cuerpoTrNombres(d)
-    })
-    tabla += Plantilla.pieTable()
-    document.getElementById("div-plantilla-nombres").innerHTML = tabla
-    } else {
-       console.error('El objeto "nombres" es undefined o no contiene datos válidos.')
-    }
-}
- 
 /**
 * Función principal para responder al evento de elegir la opción "Home"
 */
@@ -539,6 +529,77 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
 }
 
+//
+//*************************HACER TEST DE TODAS ESTAS************************* */
+//
+/**
+ * Establece disable = habilitando en los campos editables
+ * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
+ * @returns El propio objeto Personas, para concatenar llamadas
+ */
+ Plantilla.habilitarDeshabilitarCamposEditablesNombre = function (deshabilitando) {
+    deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
+    document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Personas, para concatenar llamadas
+ */
+ Plantilla.deshabilitarCamposEditablesNombre = function () {
+    Plantilla.habilitarDeshabilitarCamposEditablesNombre(true)
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Personas, para concatenar llamadas
+ */
+Plantilla.habilitarCamposEditablesNombre = function () {
+    Plantilla.habilitarDeshabilitarCamposEditablesNombre(false)
+    return this
+}
+/**
+ * Función que permite modificar los datos de una persona
+ */
+Plantilla.editarNombre = function () {
+    this.habilitarCamposEditablesNombre()
+    
+}
+/**
+ * Función que permite cancelar la acción sobre los datos de una persona
+ */
+ Plantilla.cancelar = function () {
+    this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
+    this.deshabilitarCamposEditablesNombre()
+}
+/**
+ * Función para guardar los nuevos datos de una persona
+ */
+ Plantilla.guardar = async function () {
+    try {
+        let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"
+        let id_deportista = document.getElementById("form-deportista-id").value
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'no-cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify({
+                "id_deportista": id_deportista,
+                "nombre_deportista": document.getElementById("form-deportista-nombre").value,
+            }), // body data type must match "Content-Type" header
+        })
+        Plantilla.mostrarDeportista(id_deportista)
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway " + error)
+        //console.error(error)
+    }
+}
 
 
 
@@ -548,16 +609,15 @@ Plantilla.mostrarDeportista = function (idDeportista) {
 
 
 
-
-
+//
+//*************************HACER TEST************************* */
+//
 Plantilla.mostrar = function () {
     this.imprimeformulario();
 }
-
 Plantilla.mostrarResultadosFormulario = function(nombre, nacionalidad, edad, disciplina) {
 
 }
-
 Plantilla.buscar = async function () {
     document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
         try {
