@@ -1111,5 +1111,8 @@ Se puede observar en la tabla de todos los deportistas que efecticamente el nomb
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H12.png'>
 
+## Segundo incremento realizado, para el siguiente incremento se van a realizar las siguientes HU, pero antes se van a realizar la mayoria de los test de las funciones en el CLIENTE
+<img src='./assets/img/Inicio3-Trello.png'>
 
-
+### Test en el CLIENTE
+<img src='./assets/img/Test_cliente-1.png'>

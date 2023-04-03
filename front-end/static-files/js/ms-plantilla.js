@@ -116,18 +116,15 @@ Plantilla.sustituyeTags = function (plantilla, deportista) {
         .replace(new RegExp(Plantilla.plantillaTags.CABALLOS, 'g'), deportista.data.caballos)
         .replace(new RegExp(Plantilla.plantillaTags.ANIOSPARTICPACIONJJOO, 'g'), deportista.data.aniosParticipacionJJOO)
 }
-//
-//*************************HACER TEST************************* */
-//
+
 Plantilla.plantillaFormularioDeportista.actualiza = function (deportista){
     return Plantilla.sustituyeTags(this.formulario, deportista)
 }
-//
-//*************************HACER TEST************************* */
-//
+
 Plantilla.deportistaComoFormulario = function (deportista){
     return Plantilla.plantillaFormularioDeportista.actualiza (deportista)
 }
+
 // Funciones para mostrar como TABLE
 /**
 * Crea la cabecera para mostrar la info como tabla
@@ -167,60 +164,6 @@ Plantilla.cuerpoTrNombres = function (nombre) {
 */
 Plantilla.pieTable = function () {
     return "</tbody></table>";
-}
-
-//Funciones para mostrar el formulario para preguntar al cliente.
-Plantilla.formulario = function (){
-    return`
-    <div id="div_formulario">
-        <form method='get' id="forulario">
-        <table class="listado-plantilla">
-        <thead>
-            <th>Nombre</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina</th><th>Opción</th>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre"><br><br>
-            </td> 
-            <td>
-            <label for="nacionalidad">Nacionalidad:</label>
-            <select id="nacionalidad" name="nacionalidad">
-                <option value="">Selecciona una opción</option>
-                <option value="Española">Española</option>
-                <option value="Argentina">Argentina</option>
-                <option value="Colombiana">Colombiana</option>
-                <option value="Francesa">Francesa</option>
-                <option value="Estadounidense">Estadounidense</option>
-                <option value="Mexicana">Mexicana</option>
-                <option value="Alemana">Alemana</option>
-            </select><br><br>
-            </td>
-            <td>
-                <label for="edad">Edad:</label>
-                <input type="number" id="edad" name="edad" min="25" max="43" value="25-43"><br><br>
-            </td>
-            <td>
-            <label for="disciplina">Disciplina:</label>
-            <select id="disciplina" name="disciplina">
-                <option value="">Selecciona una opción</option>
-                <option value="Salto">Salto</option>
-                <option value="Doma">Doma</option>
-                <option value="Vaquera">Vaquera</option>
-                <option value="Concurso completo">Concurso completo</option>
-            </select><br><br>
-            </td>
-            <td>
-            <div><a href="javascript:Plantilla.buscar()" class="boton_buscar">Buscar</a></div>
-            </td>
-        </tr>
-        </tbody>
-        </table>
-    </form> 
-    </div>
-    <div id="div_resultados"></div>
-    `
 }
 
 /**
@@ -319,13 +262,6 @@ Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
     }
 }
 
-//
-//************************* HACER TEST ************************* */
-//
-Plantilla.deportistaComoFormulario = function (deportista) {
-    return Plantilla.plantillaFormularioDeportista.actualiza( deportista );
-}
-
 /**
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
@@ -380,9 +316,7 @@ Plantilla.imprime = function (vector) {
 //
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
-
     Frontend.Article.actualizar("Mostrar una persona", msj)
-
     Plantilla.almacenaDatos(deportista)
 }
 
@@ -394,26 +328,9 @@ Plantilla.almacenaDatos = function (deportista) {
  * Recupera los valores almacenados de la persona que se estaba mostrando
  * @return Datos de la persona a almacenada
  */
-//
-//*************************HACER TEST************************* */
-//
 Plantilla.recuperaDatosAlmacenados = function () {
     return this.deportistaMostrado;
 }
-
-/**
-* Función para mostrar el formulario con el que se le pedira información al usuario.
-*/
-//
-//*************************HACER TEST************************* */
-//
-Plantilla.imprimeformulario = function(){
-    let msj ="";
-    msj += Plantilla.formulario();
-
-    Frontend.Article.actualizar( "Formulario", msj )
-}
-
 
 /**
 * Función que descarga la info MS Plantilla al llamar a una de sus rutas
@@ -529,9 +446,7 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
 }
 
-//
-//*************************HACER TEST DE TODAS ESTAS************************* */
-//
+
 /**
  * Establece disable = habilitando en los campos editables
  * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
@@ -542,11 +457,18 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
     return this
 }
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+//
+//    HABRIA QUE HACER TEST DE ESTAS FUNCIONES????? LLAMAN A LA DE ARRIBA        //
+//
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 /**
  * Establece disable = true en los campos editables
  * @returns El propio objeto Plantilla, para concatenar llamadas
  */
- Plantilla.deshabilitarCamposEditablesNombre = function () {
+Plantilla.deshabilitarCamposEditablesNombre = function () {
     Plantilla.habilitarDeshabilitarCamposEditablesNombre(true)
     return this
 }
@@ -559,24 +481,28 @@ Plantilla.habilitarCamposEditablesNombre = function () {
     return this
 }
 /**
- * Función que permite modificar los datos de una persona
+ * Función que permite modificar los datos de un deportista
  */
 Plantilla.editarNombre = function () {
     this.habilitarCamposEditablesNombre()   
 }
-
+//
+//*************************HACER TEST************************* */
+//
 /**
  * Función que permite cancelar la acción sobre los datos de una persona
  */
- Plantilla.cancelar = function () {
+Plantilla.cancelar = function () {
     this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
     this.deshabilitarCamposEditablesNombre()
 }
-
+//
+//*************************HACER TEST************************* */
+//
 /**
- * Función para guardar los nuevos datos de una persona
- */
- Plantilla.guardar = async function () {
+* Función para guardar los nuevos datos de una persona
+*/
+Plantilla.guardar = async function () {
     try {
         let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"
         let id_deportista = document.getElementById("form-deportista-id").value
@@ -610,9 +536,71 @@ Plantilla.editarNombre = function () {
 
 
 
+
+//Funciones para mostrar el formulario para preguntar al cliente.
+Plantilla.formulario = function (){
+    return`
+    <div id="div_formulario">
+        <form method='get' id="forulario">
+        <table class="listado-plantilla">
+        <thead>
+            <th>Nombre</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina</th><th>Opción</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"><br><br>
+            </td> 
+            <td>
+            <label for="nacionalidad">Nacionalidad:</label>
+            <select id="nacionalidad" name="nacionalidad">
+                <option value="">Selecciona una opción</option>
+                <option value="Española">Española</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Colombiana">Colombiana</option>
+                <option value="Francesa">Francesa</option>
+                <option value="Estadounidense">Estadounidense</option>
+                <option value="Mexicana">Mexicana</option>
+                <option value="Alemana">Alemana</option>
+            </select><br><br>
+            </td>
+            <td>
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" min="25" max="43" value="25-43"><br><br>
+            </td>
+            <td>
+            <label for="disciplina">Disciplina:</label>
+            <select id="disciplina" name="disciplina">
+                <option value="">Selecciona una opción</option>
+                <option value="Salto">Salto</option>
+                <option value="Doma">Doma</option>
+                <option value="Vaquera">Vaquera</option>
+                <option value="Concurso completo">Concurso completo</option>
+            </select><br><br>
+            </td>
+            <td>
+            <div><a href="javascript:Plantilla.buscar()" class="boton_buscar">Buscar</a></div>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </form> 
+    </div>
+    <div id="div_resultados"></div>
+    `
+}
 //
 //*************************HACER TEST************************* */
 //
+/**
+* Función para mostrar el formulario con el que se le pedira información al usuario.
+*/
+Plantilla.imprimeformulario = function(){
+    let msj ="";
+    msj += Plantilla.formulario();
+    Frontend.Article.actualizar( "Formulario", msj )
+}
 Plantilla.mostrar = function () {
     this.imprimeformulario();
 }

@@ -179,20 +179,134 @@ describe("Plantilla.sustituyeTags", function () {
       });
 
 });
+//Plantilla.plantillaFormularioDeportista.actualiza
+describe("Plantilla.plantillaFormularioDeportista.actualiza", () => {
+    it("Debe devolver el formulario con los valores del deportista actualizados", () => {
+      const plantilla = Plantilla.plantillaFormularioDeportista.formulario;
+      const deportista = {
+        ref: { "@ref": { id: "123" } },
+        data: {
+          nombre: "Juan",
+          apellido: "Pérez",
+          fechaNacimiento: { dia: "01", mes: "01", anio: "1990" },
+          nacionalidad: "Argentina",
+          edad: "32",
+          disciplinas: ["Natación", "Atletismo"],
+          caballos: ["Caballo 1", "Caballo 2"],
+          aniosParticipacionJJOO: "3"
+        }
+      };
+      const plantillaTags = Plantilla.plantillaTags;
+  
+      const resultado = Plantilla.plantillaFormularioDeportista.actualiza(deportista);
+  
+      expect(resultado).toBeDefined();
+      expect(resultado).not.toEqual(plantilla);
+      expect(resultado).toContain(deportista.ref["@ref"].id);
+      expect(resultado).toContain(deportista.data.nombre);
+      expect(resultado).toContain(deportista.data.apellido);
+      expect(resultado).toContain(`${deportista.data.fechaNacimiento.dia}/${deportista.data.fechaNacimiento.mes}/${deportista.data.fechaNacimiento.anio}`);
+      expect(resultado).toContain(deportista.data.nacionalidad);
+      expect(resultado).toContain(deportista.data.edad);
+      expect(resultado).toContain(deportista.data.disciplinas[0]);
+      expect(resultado).toContain(deportista.data.disciplinas[1]);
+      expect(resultado).toContain(deportista.data.caballos[0]);
+      expect(resultado).toContain(deportista.data.caballos[1]);
+      expect(resultado).toContain(deportista.data.aniosParticipacionJJOO);
+      expect(resultado).not.toContain(plantillaTags.ID);
+      expect(resultado).not.toContain(plantillaTags.NOMBRE);
+      expect(resultado).not.toContain(plantillaTags.APELLIDO);
+      expect(resultado).not.toContain(plantillaTags.FECHANACIMIENTODia);
+      expect(resultado).not.toContain(plantillaTags.FECHANACIMIENTOMes);
+      expect(resultado).not.toContain(plantillaTags.FECHANACIMIENTOAnio);
+      expect(resultado).not.toContain(plantillaTags.NACIONALIDAD);
+      expect(resultado).not.toContain(plantillaTags.EDAD);
+      expect(resultado).not.toContain(plantillaTags.DISCIPLINAS);
+      expect(resultado).not.toContain(plantillaTags.CABALLOS);
+      expect(resultado).not.toContain(plantillaTags.ANIOSPARTICPACIONJJOO);
+    });
+});
+
+describe("Plantilla.deportistaComoFormulario", function () {
+    it("Debería devolver un formulario con los datos de un deportista correctamente", function () {
+      const deportista = {
+        ref: { '@ref': { id: 'abc123' } },
+        data: {
+          nombre: 'Juan',
+          apellido: 'Pérez',
+          fechaNacimiento: { dia: '01', mes: '01', anio: '1990' },
+          nacionalidad: 'Argentina',
+          edad: 33,
+          disciplinas: ['Atletismo', 'Natación'],
+          caballos: ['Caballo1', 'Caballo2'],
+          aniosParticipacionJJOO: 3
+        }
+      };
+      const expected = `
+      <form method='post' action=''>
+        <table class="listado-plantilla">
+          <thead>
+            <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
+            <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
+            <th>Años de participación en los JJOO</th><th>Editar</th><th>Guardar</th><th>Cancelar</th>
+          </thead>
+          <tbody>
+            <tr title ="abc123">
+              <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-id"
+                  value="abc123" name="id_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nombre"
+                  value="Juan" name="nombre_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-apellido"
+                  value="Pérez" name="apellido_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-fechanac"
+                  value="01/01/1990" name="fechaNac_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nacionalidad"
+                  value="Argentina" name="nacionalidad_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-edad"
+                  value="33" name="edad_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-disciplinas"
+                  value="Atletismo, Natación" name="diciplinas_deportista"/>
+              </td>
+              <td><input type="vector" class="form-deportista-elemento editable" disabled id="form-deportista-caballos"
+                  value="Caballo1, Caballo2" name="caballos_deportista"/>
+              </td>
+              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-JJOO"
+                  value="3"name="JJOO_deportista"/>
+                  </td>
+                  <td>
+                      <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
+                  </td>
+                  <td>
+                      <div><a href="javascript:Plantilla.guardar()">Guardar</a></div>
+                  </td>    
+                  <td>    
+                      <div><a href="javascript:Plantilla.cancelar()">Cancelar</a></div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </form>
+  `
+});
+});
 
 
 
 //Tiene que estar todo en una misma linea no entiendo por que.
 //Plantilla.cabeceraTable()
-describe("Cabecera de tabla", function () {
+describe("Plantilla.cabeceraTable", function () {
     it("debería devolver las etiquetas HTML para la cabecera de tabla",
         function () {
             const expectedOutput = `<table class="listado-plantilla"><thead><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th><th>Opcion</th></thead><tbody>`;
             expect(Plantilla.cabeceraTable()).toBe(expectedOutput);
         });
-});
-describe("Cabecera de tabla", function () {
-    it("debería generar una tabla HTML con la cantidad de columnas esperada",
+        it("debería generar una tabla HTML con la cantidad de columnas esperada",
         function () {
             const expectedColumns = 10;
             const cabecera = Plantilla.cabeceraTable();
@@ -204,7 +318,7 @@ describe("Cabecera de tabla", function () {
 });
 
 //Plantilla.cabeceraTableNombres()
-describe("Cabecera de tabla para nombres", function () {
+describe("Plantilla.cabeceraTableNombres", function () {
     it("debería devolver las etiquetas HTML para la cabecera de tabla con una única columna para los nombres",
         function () {
             const expectedOutput = `<table class="listado-plantilla"><thead><th>Nombre</th></thead><tbody>`;
@@ -212,7 +326,7 @@ describe("Cabecera de tabla para nombres", function () {
         });
 });
 //Plantilla.cuerpoTr
-describe("cuerpo de tabla", function () {
+describe("Plantilla.cuerpoTr", function () {
     it("genera correctamente la plantilla HTML", function () {
         // Preparar datos de prueba
         let p = {
@@ -233,17 +347,15 @@ describe("cuerpo de tabla", function () {
             }
         };
 
-        // Ejecutar la función
         let resultado = Plantilla.cuerpoTr(p);
 
-        // Comprobar si el resultado es el esperado
         let esperado = `<tr><td>ref deportista 1</td><td>Nombre deportista 1</td><td>Apellido deportista 1</td><td>1/1/2000</td><td>Nacionalidad deportista 1</td><td>23</td><td>Disciplina 1, Disciplina 2</td><td>Caballo 1, Caballo 2</td><td>2016, 2020</td><td><div><a href="javascript:Plantilla.mostrarDeportista('ref deportista 1')"">Mostrar</a></div></td></tr>`;
         expect(resultado).toEqual(esperado);
     });
 });
 
 //Plantilla.cuerpoTrNombres()
-describe("cuerpo de tabla Nombres", function() {
+describe("Plantilla.cuerpoTrNombres", function() {
     it("debe generar un HTML con el nombre dado", function() {
       const nombre = "Paco";
       const htmlEsperado = `<tr><td>${nombre}</td></tr>`;
@@ -252,7 +364,7 @@ describe("cuerpo de tabla Nombres", function() {
 });
 
 //Plantilla.pieTable()
-describe("Pie de tabla", function () {
+describe("Plantilla.pieTable", function () {
     it("debería devolver las etiquetas HTML para el pie de tabla",
         function () {
             expect(Plantilla.pieTable()).toBe("</tbody></table>");
@@ -294,12 +406,11 @@ describe("Plantilla.imprime_nombres", function() {
 //Plantilla.imprime_alfabeticamente()
 describe("Plantilla.imprime_alfabeticamente", function() {
     it("debe generar una tabla con los nombres de los deportistas por orden alfabético", function() {
-      // Preparar datos de prueba
       let vector = [      
-        {nombre: "Lucía"},      
         {nombre: "Ana"},      
-        {nombre: "Pablo"},      
-        {nombre: "Berta"}    
+        {nombre: "Berta"},      
+        {nombre: "Lucía"},      
+        {nombre: "Pablo"}    
     ];
   
       // Configurar los espías para las funciones
@@ -310,22 +421,16 @@ describe("Plantilla.imprime_alfabeticamente", function() {
       spyOn(Plantilla, "pieTable").and.returnValue("</tbody></table>");
       spyOn(Frontend.Article, "actualizar");
   
-      // Ejecutar la función
       Plantilla.imprime_alfabeticamente(vector);
   
-      // Comprobar si el resultado es el esperado
-      const esperado = "<thead><tr><th>Nombre</th></tr></thead><tr><td>Lucía</td></tr><tr><td>Ana</td></tr><tr><td>Pablo</td></tr><tr><td>Berta</td></tr></tbody></table>";
+      const esperado = "<thead><tr><th>Nombre</th></tr></thead><tr><td>Ana</td></tr><tr><td>Berta</td></tr><tr><td>Lucía</td></tr><tr><td>Pablo</td></tr></tbody></table>";
       expect(Frontend.Article.actualizar).toHaveBeenCalledWith("Listado de los nombres de los deportistas de equitacion por orden alfabetico", esperado);
     });
   });
 
-
-
-
 //Plantilla.imprime()
 describe("Plantilla.imprime", function() {
     it("debe generar una tabla con la información de los deportistas dada", function() {
-    // Preparar datos de prueba
     let vector = [
         {ref: {
             "@ref": {
@@ -370,10 +475,8 @@ describe("Plantilla.imprime", function() {
     spyOn(Plantilla, "pieTable").and.returnValue("</tbody></table>");
     spyOn(Frontend.Article, "actualizar");
 
-    // Ejecutar la función
     Plantilla.imprime(vector);
 
-    // Comprobar si el resultado es el esperado
     const esperado = "<thead><tr><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th><th>Opcion</th></tr></thead><tr><td>ref deportista 1</td><td>Nombre deportista 1</td><td>Apellido deportista 1</td><td>1/1/2000</td><td>Nacionalidad deportista 1</td><td>23</td><td>Disciplina 1, Disciplina 2</td><td>Caballo 1, Caballo 2</td><td>2016, 2020</td><td><div><a href=\"javascript:Plantilla.mostrarDeportista('ref deportista 1')\">Mostrar</a></div></td></tr><tr><td>ref deportista 2</td><td>Nombre deportista 2</td><td>Apellido deportista 2</td><td>2/2/2001</td><td>Nacionalidad deportista 2</td><td>22</td><td>Disciplina 2, Disciplina 3</td><td>Caballo 2, Caballo 3</td><td>2020, 2024</td><td><div><a href=\"javascript:Plantilla.mostrarDeportista('ref deportista 2')\">Mostrar</a></div></td></tr></tbody></table>";
     expect(Frontend.Article.actualizar).toHaveBeenCalled();
     expect(Frontend.Article.actualizar.calls.mostRecent().args[0]).toBe("Listado de deportistas de equitacion con toda su información", esperado);
@@ -384,9 +487,8 @@ describe("Plantilla.imprime", function() {
 
 
 //Plantilla.almacenaDatos()
-describe('almacenaDatos', () => {
+describe('Plantilla.almacenaDatos', () => {
     it('debe almacenar correctamente los datos del deportista', () => {
-      // Arrange
       const deportista = {
         nombre: "Nombre deportista 2",
         apellido: "Apellido deportista 2",
@@ -398,10 +500,73 @@ describe('almacenaDatos', () => {
         aniosParticipacionJJOO: [2016, 2020, 2024]
         }
       
-      // Act
       Plantilla.almacenaDatos(deportista)
   
-      // Assert
       expect(Plantilla.deportistaMostrado).toEqual(deportista)
     })
   })
+
+//Plantilla.recuperaDatosAlmacenados
+describe("Plantilla.recuperaDatosAlmacenados", function() {
+    it("debe retornar null si no hay datos almacenados", function() {
+        Plantilla.deportistaMostrado = null;
+        expect(Plantilla.recuperaDatosAlmacenados()).toBeNull();
+    });
+    
+    it("debe retornar los datos almacenados", function() {
+        Plantilla.deportistaMostrado = {nombre: "Juan", edad: 25, deporte: "equitacion"};
+        expect(Plantilla.recuperaDatosAlmacenados()).toEqual({nombre: "Juan", edad: 25, deporte: "equitacion"});
+    });
+});
+
+//Plantilla.habilitarDeshabilitarCamposEditablesNombre
+describe("Plantilla.habilitarDeshabilitarCamposEditablesNombre", function() {
+    it("debería habilitar los campos editables cuando se le pasa 'false' como parámetro", function() {
+      const inputNombre = document.createElement('input');
+      inputNombre.setAttribute('id', Plantilla.form.NOMBRE);
+      inputNombre.setAttribute('disabled', 'true');
+      document.body.appendChild(inputNombre);
+      const deshabilitando = false;
+      
+      Plantilla.habilitarDeshabilitarCamposEditablesNombre(deshabilitando);
+  
+      expect(inputNombre.disabled).toBe(false);
+    });
+});
+
+//Plantilla.deshabilitarCamposEditablesNombre
+describe("Plantilla.deshabilitarCamposEditablesNombre", function() {
+    it("deshabilita el campo editable correspondiente al nombre del deportista", function() {
+      spyOn(Plantilla, "habilitarDeshabilitarCamposEditablesNombre");
+  
+      Plantilla.deshabilitarCamposEditablesNombre();
+  
+      expect(Plantilla.habilitarDeshabilitarCamposEditablesNombre).toHaveBeenCalledWith(true);
+    });
+});
+
+//Plantilla.habilitarCamposEditablesNombre
+describe("Plantilla.habilitarCamposEditablesNombre", function() {
+    it("habilita el campo editable correspondiente al nombre del deportista", function() {
+      spyOn(Plantilla, "habilitarDeshabilitarCamposEditablesNombre");
+  
+      Plantilla.habilitarCamposEditablesNombre();
+  
+      expect(Plantilla.habilitarDeshabilitarCamposEditablesNombre).toHaveBeenCalledWith(false);
+    });
+});
+
+//Plantilla.editarNombre
+describe("Plantilla.editarNombre", function() {
+    it("debe habilitar los campos editables de nombre", function() {
+        spyOn(Plantilla, "habilitarDeshabilitarCamposEditablesNombre");
+
+        Plantilla.editarNombre();
+
+        expect(Plantilla.habilitarDeshabilitarCamposEditablesNombre).toHaveBeenCalledWith(false);
+    });
+});
+
+//Plantilla.cancelar
+
+//Plantilla.guardar
