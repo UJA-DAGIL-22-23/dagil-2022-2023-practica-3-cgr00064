@@ -43,7 +43,7 @@ function CORS(res) {
  */
 const CB_MODEL_SELECTS = {
     /**
-     * Prueba de conexión a la BBDD: devuelve todas las personas que haya en la BBDD.
+     * Prueba de conexión a la BBDD: devuelve todas los deportistas que haya en la BBDD.
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
      * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
      */
@@ -128,17 +128,17 @@ const CB_MODEL_SELECTS = {
     },
 
     /**
-    * Método para obtener una persona de la BBDD a partir de su ID
+    * Método para obtener un deportista de la BBDD a partir de su ID
     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
     */
      getPorId: async (req, res) => {
         try {
-            // console.log( "getPorId req", req.params.idPersona ) // req.params contiene todos los parámetros de la llamada
+            // console.log( "getPorId req", req.params.idDeportista ) // req.params contiene todos los parámetros de la llamada
             let deportista = await client.query(
                 q.Get(q.Ref(q.Collection((COLLECTION)), req.params.idDeportista))
             )
-            // console.log( persona ) // Para comprobar qué se ha devuelto en persona
+            // console.log( eportista ) // Para comprobar qué se ha devuelto en deportista
             CORS(res)
                 .status(200)
                 .json(deportista)

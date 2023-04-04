@@ -450,7 +450,9 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
 }
 
-
+//
+//*************************HACER TESTS************************* */
+//
 /**
  * Establece disable = habilitando en los campos editables
  * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
@@ -461,6 +463,7 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
     return this
 }
+
 /**
  * Establece disable = true en los campos editables
  * @returns El propio objeto Plantilla, para concatenar llamadas
@@ -483,15 +486,12 @@ Plantilla.habilitarCamposEditablesNombre = function () {
 Plantilla.editarNombre = function () {
     this.habilitarCamposEditablesNombre()   
 }
-//
-//*************************HACER TESTS************************* */
-//
 /**
  * Establece disable = habilitando en los campos editables
  * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
  * @returns El propio objeto Plantilla, para concatenar llamadas
  */
- Plantilla.habilitarDeshabilitarCamposEditables = function (deshabilitando) {
+Plantilla.habilitarDeshabilitarCamposEditables = function (deshabilitando) {
     deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
     document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
     document.getElementById(Plantilla.form.APELLIDO).disabled = deshabilitando
@@ -503,7 +503,7 @@ Plantilla.editarNombre = function () {
  * Establece disable = true en los campos editables
  * @returns El propio objeto Plantilla, para concatenar llamadas
  */
- Plantilla.deshabilitarCamposEditables = function () {
+Plantilla.deshabilitarCamposEditables = function () {
     Plantilla.habilitarDeshabilitarCamposEditables(true)
     return this
 }
@@ -521,6 +521,10 @@ Plantilla.habilitarCamposEditables = function () {
 Plantilla.editar = function () {
     this.habilitarCamposEditables()   
 }
+
+//
+//*************************HACER TESTS************************* */
+//
 /**
  * Función que permite cancelar la acción sobre los datos de un deportista
  */

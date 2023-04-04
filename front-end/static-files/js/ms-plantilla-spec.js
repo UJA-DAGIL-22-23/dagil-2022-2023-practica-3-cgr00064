@@ -519,21 +519,6 @@ describe("Plantilla.recuperaDatosAlmacenados", function() {
     });
 });
 
-//Plantilla.habilitarDeshabilitarCamposEditablesNombre
-describe("Plantilla.habilitarDeshabilitarCamposEditablesNombre", function() {
-    it("debería habilitar los campos editables cuando se le pasa 'false' como parámetro", function() {
-      const inputNombre = document.createElement('input');
-      inputNombre.setAttribute('id', Plantilla.form.NOMBRE);
-      inputNombre.setAttribute('disabled', 'true');
-      document.body.appendChild(inputNombre);
-      const deshabilitando = false;
-      
-      Plantilla.habilitarDeshabilitarCamposEditablesNombre(deshabilitando);
-  
-      expect(inputNombre.disabled).toBe(false);
-    });
-});
-
 //Plantilla.deshabilitarCamposEditablesNombre
 describe("Plantilla.deshabilitarCamposEditablesNombre", function() {
     it("deshabilita el campo editable correspondiente al nombre del deportista", function() {
@@ -566,6 +551,73 @@ describe("Plantilla.editarNombre", function() {
         expect(Plantilla.habilitarDeshabilitarCamposEditablesNombre).toHaveBeenCalledWith(false);
     });
 });
+//Plantilla.habilitarDeshabilitarCamposEditables
+describe("Plantilla.habilitarDeshabilitarCamposEditables", function() {
+    it("debería deshabilitar todos los campos editables cuando se le pasa 'true' como parámetro", function() {
+      const inputNombre = document.createElement('input');
+      inputNombre.setAttribute('id', Plantilla.form.NOMBRE);
+      inputNombre.removeAttribute('disabled');
+      document.body.appendChild(inputNombre);
+
+      const inputApellido = document.createElement('input');
+      inputApellido.setAttribute('id', Plantilla.form.APELLIDO);
+      inputApellido.removeAttribute('disabled');
+      document.body.appendChild(inputApellido);
+
+      const inputCaballos = document.createElement('input');
+      inputCaballos.setAttribute('id', Plantilla.form.CABALLOS);
+      inputCaballos.removeAttribute('disabled');
+      document.body.appendChild(inputCaballos);
+
+      const inputAnios = document.createElement('input');
+      inputAnios.setAttribute('id', Plantilla.form.ANIOSPARTICPACIONJJOO);
+      inputAnios.removeAttribute('disabled');
+      document.body.appendChild(inputAnios);
+
+      const deshabilitando = true;
+      
+      Plantilla.habilitarDeshabilitarCamposEditables(deshabilitando);
+  
+      expect(inputNombre.disabled).toBe(true);
+      expect(inputApellido.disabled).toBe(true);
+      expect(inputCaballos.disabled).toBe(true);
+      expect(inputAnios.disabled).toBe(true);
+    });
+});
+
+//Plantilla.deshabilitarCamposEditables
+describe("Plantilla.deshabilitarCamposEditables", function() {
+    it("deshabilita los campos editable correspondientes del deportista", function() {
+      spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
+  
+      Plantilla.deshabilitarCamposEditables();
+  
+      expect(Plantilla.habilitarDeshabilitarCamposEditables).toHaveBeenCalledWith(true);
+    });
+});
+
+//Plantilla.habilitarCamposEditables
+describe("Plantilla.habilitarCamposEditables", function() {
+    it("habilita el campo editable correspondiente al nombre del deportista", function() {
+      spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
+  
+      Plantilla.habilitarCamposEditables();
+  
+      expect(Plantilla.habilitarDeshabilitarCamposEditables).toHaveBeenCalledWith(false);
+    });
+});
+
+//Plantilla.editarNombre
+describe("Plantilla.editar", function() {
+    it("debe habilitar los campos editables", function() {
+        spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
+
+        Plantilla.editar();
+
+        expect(Plantilla.habilitarDeshabilitarCamposEditables).toHaveBeenCalledWith(false);
+    });
+});
+
 
 //Plantilla.cancelar
 

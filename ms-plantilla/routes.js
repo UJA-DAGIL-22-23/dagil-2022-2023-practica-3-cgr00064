@@ -47,7 +47,7 @@ router.get("/test_db", async (req, res) => {
 });
 
 /**
- * Devuelve todos los nombres de las personas que hay en la BBDD
+ * Devuelve todos los nombres de los deportistas que hay en la BBDD
  */
 router.get("/getNombres", async (req, res) => {
     try {
@@ -58,7 +58,7 @@ router.get("/getNombres", async (req, res) => {
 });
 
 /**
- * Devuelve todos los nombres de las personas que hay en la BBDD en orden alfabetico
+ * Devuelve todos los nombres de los deportistas que hay en la BBDD en orden alfabetico
  */
 router.get("/getAlfabeticamente", async (req, res) => {
     try {
@@ -70,7 +70,7 @@ router.get("/getAlfabeticamente", async (req, res) => {
 
 
 /**
- * Devuelve todas las personas que hay en la BBDD
+ * Devuelve todos los deportistas que hay en la BBDD
  */
  router.get("/getTodosInfo", async (req, res) => {
     try {
@@ -96,7 +96,7 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
 });
 
 /**
- * Modifica el nombre de la persona con el id pasado
+ * Modifica el nombre del deportista con el id pasado
  */
  router.post("/setNombre", async (req, res) => {
     try {
@@ -122,7 +122,7 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
 
 
 /**
- * Devuelve todas las personas que hay en la BBDD
+ * Devuelve todos los deportistas que hay en la BBDD
  */
 router.get("/getBuscar", async (req, res) => {
     try {
