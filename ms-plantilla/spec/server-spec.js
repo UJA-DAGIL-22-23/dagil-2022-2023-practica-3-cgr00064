@@ -169,6 +169,28 @@ describe('Servidor PLANTILLA:', () => {
     );
   });
 
+  it('Devuelve NUEVO APELLIDO TEST al recuperar los datos del Deportista con id 359074418347999438 mediante setCuatroCampos', (done) => {
+    const APELLIDO_TEST= 'NUEVO APELLIDO TEST'
+    const deportista = {
+      id_deportista: '359074418347999438',
+      nombre_deportista: 'Juan',
+      apellido_deportista: APELLIDO_TEST,
+      caballos_deportista: 'Truenito',
+      JJOO_deportista: 2008
+    };
+    supertest(app)
+    .post('/setCuatroCampos')
+    .send(deportista)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .expect(function (res) {
+      assert(res.body.data.hasOwnProperty('apellido'));
+      assert(res.body.data.apellido === APELLIDO_TEST);
+    })
+    .end((error) => { error ? done.fail(error) : done(); }
+    );
+  });
+
   
 });
 
