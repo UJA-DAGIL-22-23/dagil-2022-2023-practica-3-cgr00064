@@ -266,7 +266,7 @@ it('Devuelve MS Plantilla Acerca De', (done) => {
 1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
 ```
 /**
- * Devuelve todos los nombres de las personas que hay en la BBDD
+ * Devuelve todos los nombres de los deportistas que hay en la BBDD
  */
 router.get("/getNombres", async (req, res) => {
     try {
@@ -324,7 +324,7 @@ Plantilla.listar_nombres = function () {
 Plantilla.recupera_nombres = async function (callBackFn) {
     let response = null
      
-    // Intento conectar con el microservicio personas
+    // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
         response = await fetch(url)
@@ -433,7 +433,7 @@ Randomized with seed 38712 (jasmine --random=true --seed=38712)
 1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
 ```
 /**
- * Devuelve todos los nombres de las personas que hay en la BBDD en orden alfabetico
+ * Devuelve todos los nombres de los deportistas que hay en la BBDD en orden alfabetico
  */
  router.get("/getAlfabeticamente", async (req, res) => {
     try {
@@ -492,7 +492,7 @@ Como se puede ver a continuacion se llama a la ruta */plantilla/getAlfab* creada
 Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     let response = null
      
-    // Intento conectar con el microservicio personas
+    // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
         response = await fetch(url)
@@ -588,7 +588,7 @@ Randomized with seed 25016 (jasmine --random=true --seed=25016)
 1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
 ```
 /**
-*Devuelve todas las personas que hay en la BBDD
+*Devuelve todas los deportistas que hay en la BBDD
 */
  router.get("/getTodosInfo", async (req, res) => {
     try {
@@ -647,7 +647,7 @@ Plantilla.listar = function () {
 Plantilla.recupera = async function (callBackFn) {
     let response = null
 
-    // Intento conectar con el microservicio personas
+    // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getTodosInfo"
         response = await fetch(url)
@@ -778,11 +778,10 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
 */
 getPorId: async (req, res) => {
     try {
-        // console.log( "getPorId req", req.params.idPersona ) // req.params contiene todos los parámetros de la llamada
+        // console.log( "getPorId req", req.params.idDeportista ) // req.params contiene todos los parámetros de la llamada
         let deportista = await client.query(
             q.Get(q.Ref(q.Collection((COLLECTION)), req.params.idDeportista))
         )
-        // console.log( persona ) // Para comprobar qué se ha devuelto en persona
         CORS(res)
             .status(200)
             .json(deportista)
@@ -792,16 +791,16 @@ getPorId: async (req, res) => {
 },
 ```
 
-3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*, en este caso muestra la persona con Id = *359074418347999438*:
+3. El siguiente paso ha sido añadir dentro del directorio *front-end* en el archivo **index.html** el boton correcpondiente para poder mostrar toda la información, se ha hecho de la siguiente manera dentro de la barra de navegación de la aplicacion *<nav>*, en este caso muestra el deportista con Id = *359074418347999438*:
 ```
 <a href="javascript:Plantilla.mostrarDeportista('359074418347999438')" class="opcion-principal mostrar"
-    title="Muestra los datos de un deportista como ejemplo">Mostrar una persona de ejemplo</a>
+    title="Muestra los datos de un deportista como ejemplo">Mostrar un deportista de ejemplo</a>
 ```
 
 4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder listar toda la información:
 ```
 /**
- *Función principal para responder al evento de elegir la opción "Mostrar una persona de ejemplo".
+ *Función principal para responder al evento de elegir la opción "Mostrar un deportista de ejemplo".
 */
 Plantilla.mostrarDeportista = function (idDeportista) {
     this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
@@ -835,7 +834,7 @@ Para imprimir un deportista lo que se ha hecho ha sido crear un formulario como 
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
 
-    Frontend.Article.actualizar("Mostrar una persona", msj)
+    Frontend.Article.actualizar("Mostrar/Editar un deportista", msj)
 
     Plantilla.almacenaDatos(deportista)
 }
@@ -852,9 +851,9 @@ Tambien se ha añadido un boton a la tabla de la Historia de Ususario 4, para mo
 
 El test que se ha realizado ha sido el siguiente:
 
-Devuelve la nacionalidad Española al recuperar los datos de la Persona con id 359074418347999438 mediante getPorId
+Devuelve la nacionalidad Española al recuperar los datos del deportista con id 359074418347999438 mediante getPorId
 ```
-it('Devuelve la nacionalidad Española al recuperar los datos de la Persona con id 359074418347999438 mediante getPorId', (done) => {
+it('Devuelve la nacionalidad Española al recuperar los datos del deportista con id 359074418347999438 mediante getPorId', (done) => {
     supertest(app)
         .get('/getPorId/359074418347999438')
         .expect(200)
@@ -905,7 +904,7 @@ Y al pulsar por ejemplo en el último de la tabla nos redirecciona a:
 1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
 ```
 /**
- * Modifica el nombre de la persona con el id pasado
+ * Modifica el nombre del deportista con el id pasado
  */
  router.post("/setNombre", async (req, res) => {
     try {
@@ -919,7 +918,7 @@ Y al pulsar por ejemplo en el último de la tabla nos redirecciona a:
 2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
 ```
 /**
-* Método para ocambiar los datos de una persona
+* Método para ocambiar los datos de un deportista
 * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
 * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
 */
@@ -951,7 +950,7 @@ setNombre: async (req, res) => {
     }
 },
 ```
-3. El siguiente paso ha sido añadir al formulario de mostrar una persona dado su id, 3 botones para editar, guardar los cambios y cancelar.
+3. El siguiente paso ha sido añadir al formulario de mostrar un deportista dado su id, 3 botones para editar, guardar los cambios y cancelar.
 ```
 <td>
     <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
@@ -996,7 +995,7 @@ Plantilla.habilitarCamposEditablesNombre = function () {
     return this
 }
 /**
- * Función que permite modificar los datos de una persona
+ * Función que permite modificar los datos de un deportista
  */
 Plantilla.editarNombre = function () {
     this.habilitarCamposEditablesNombre()   
@@ -1007,7 +1006,7 @@ CANCELAR lo que hace es volver al inicio de la funcion Plantilla.imprimeUnDeport
 
 ```
 /**
- * Función que permite cancelar la acción sobre los datos de una persona
+ * Función que permite cancelar la acción sobre los datos de un deportista
 */
 Plantilla.cancelar = function () {
     this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
@@ -1019,7 +1018,7 @@ GUARDAR lo que hace es actualizar el campo en la BBDD
 
 ```
 /**
- * Función para guardar los nuevos datos de una persona
+ * Función para guardar los nuevos datos de un deportista
  */
  Plantilla.guardar = async function () {
     try {
@@ -1116,3 +1115,234 @@ Se puede observar en la tabla de todos los deportistas que efecticamente el nomb
 
 ### Test en el CLIENTE
 <img src='./assets/img/Test_cliente-1.png'>
+
+## 13. Modificar varios de los datos a la vez de un jugador/equipo. Se deberán poder modificar al menos 3 campos además del nombre. (Puntuación 0.3)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H13.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. En el directorio *ms-plantilla*, en el archivo **routes.js** se ha añadido lo siguiente:
+```
+/**
+ * Modifica cuatro campos del deportista con el id pasado
+ */
+ router.post("/setCuatroCampos", async (req, res) => {
+    try {
+        await callbacks.setCuatroCampos(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
+```
+
+2. En el directorio *ms-plantilla*, en el archivo **callbacks.js** se ha añadido lo siguiente dentro de la funcion *CB_MODEL_SELECTS*:
+```
+/**
+* Método para cambiar cuatro campos de un deportista, nombre, apellido, caballos y años de participación en los JJOO
+* @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+* @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+*/
+setCuatroCampos: async (req, res) => {
+    try {
+        let valorDevuelto = {}
+        let data = (Object.values(req.body)[0] === '') ? JSON.parse(Object.keys(req.body)[0]) : req.body
+        //console.log("SETTODO data es", data)
+        let deportista = await client.query(
+            q.Update(
+                q.Ref(q.Collection(COLLECTION), data.id_deportista),
+                {
+                    data: {
+                        nombre: data.nombre_deportista,
+                        apellido: data.apellido_deportista,
+                        caballos: data.caballos_deportista,
+                        aniosParticipacionJJOO: data.JJOO_deportista,
+
+                    },
+                },
+            )
+        )
+            .then((ret) => {
+                valorDevuelto = ret
+                //console.log("Valor devuelto ", valorDevuelto)
+                CORS(res)
+                    .status(200)
+                    .header( 'Content-Type', 'application/json' )
+                    .json(valorDevuelto)
+            })
+    } catch (error) {
+        CORS(res).status(500).json({ error: error.description })
+    }
+},
+```
+3. El siguiente paso ha sido añadir al formulario de mostrar un deportista dado su id, un nuevo baton para editar los cuatro campos
+```
+<td>
+    <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
+</td>
+<td>
+    <div><a href="javascript:Plantilla.editar()">Editar</a></div>
+</td>
+<td>
+    <div><a href="javascript:Plantilla.guardar()">Guardar</a></div>
+</td>    
+<td>    
+    <div><a href="javascript:Plantilla.cancelar()">Cancelar</a></div>
+</td>
+```
+
+4. Por ultimo en el *front-end* tambien en el archivo **/static-files/js/ms-plantilla.js** se han implementado las funciones para poder editar, cancelar y guardar la modificacion del nombre:
+
+EDITAR lo que hace es habilitar el campo del nombre para que se pueda escribir en el, para ello se ha hecho lo siguiente: 
+
+```
+/**
+ * Establece disable = habilitando en los campos editables
+ * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+ Plantilla.habilitarDeshabilitarCamposEditables = function (deshabilitando) {
+    deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
+    document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
+    document.getElementById(Plantilla.form.APELLIDO).disabled = deshabilitando
+    document.getElementById(Plantilla.form.CABALLOS).disabled = deshabilitando
+    document.getElementById(Plantilla.form.ANIOSPARTICPACIONJJOO).disabled = deshabilitando
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+ Plantilla.deshabilitarCamposEditables = function () {
+    Plantilla.habilitarDeshabilitarCamposEditables(true)
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+Plantilla.habilitarCamposEditables = function () {
+    Plantilla.habilitarDeshabilitarCamposEditables(false)
+    return this
+}
+/**
+ * Función que permite modificar los datos de un deportista
+ */
+Plantilla.editar = function () {
+    this.habilitarCamposEditables()   
+}
+```
+
+CANCELAR es identico al cancelar utilizado par ala realizacion de la HU anterior.
+
+```
+/**
+ * Función que permite cancelar la acción sobre los datos de un deportista
+*/
+Plantilla.cancelar = function () {
+    this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
+    this.deshabilitarCamposEditables()
+}
+```
+
+GUARDAR lo que hace es actualizar los 4 campos en la BBDD en lugar de uno solo.
+
+```
+/**
+* Función para guardar los nuevos datos de un deportista
+*/
+Plantilla.guardar = async function () {
+    try {
+        //let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"
+        let url = Frontend.API_GATEWAY + "/plantilla/setCuatroCampos/"
+        let id_deportista = document.getElementById("form-deportista-id").value
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'no-cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify({
+                "id_deportista": id_deportista,
+                "nombre_deportista": document.getElementById("form-deportista-nombre").value,
+                "apellido_deportista": document.getElementById("form-deportista-apellido").value,
+                "caballos_deportista": document.getElementById("form-deportista-caballos").value,
+                "JJOO_deportista": document.getElementById("form-deportista-JJOO").value,
+            }), // body data type must match "Content-Type" header
+        })
+        Plantilla.mostrarDeportista(id_deportista)
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway " + error)
+        //console.error(error)
+    }
+}
+```
+
+### Test en el SERVIDOR
+<img src='./assets/img/Test-H13.png'>
+
+El test que se ha realizado ha sido el siguiente:
+
+```
+it('Devuelve NUEVO APELLIDO TEST al recuperar los datos del Deportista con id 359074418347999438 mediante setCuatroCampos', (done) => {
+    const APELLIDO_TEST= 'NUEVO APELLIDO TEST'
+    const deportista = {
+      id_deportista: '359074418347999438',
+      nombre_deportista: 'Juan',
+      apellido_deportista: APELLIDO_TEST,
+      caballos_deportista: 'Truenito',
+      JJOO_deportista: 2008
+    };
+    supertest(app)
+    .post('/setCuatroCampos')
+    .send(deportista)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .expect(function (res) {
+      assert(res.body.data.hasOwnProperty('apellido'));
+      assert(res.body.data.apellido === APELLIDO_TEST);
+    })
+    .end((error) => { error ? done.fail(error) : done(); }
+    );
+});
+```
++ Resultado final:
+```
+> ms-plantilla@1.0.0 test
+> jasmine
+
+Randomized with seed 19189
+Started
+Microservicio PLANTILLA ejecutándose en puerto 8002!
+...........
+
+
+11 specs, 0 failures
+Finished in 1.003 seconds
+Randomized with seed 19189 (jasmine --random=true --seed=19189)
+```
+
+
+<img src='./assets/img/Readme-H13.png'>
+
+### El resultado sería el siguiente:
+Al hacer click sobre el boton *Editar 4 campos* se habilita el campo nombre para ser modificado.
+<img src='./assets/img/HU_13-1.png'>
+
+Modificamos el apellido a Pérez Sánchez, el nombre del caballo a Truenito y añadimos un año mas de participación en los JJOO 2012.
+<img src='./assets/img/HU_13-2.png'>
+
+Al hacer click en *Guardar* se modifica la información.
+<img src='./assets/img/HU_13-3.png'>
+
+Se puede observar en la tabla de todos los deportistas que efecticamente los campos han sido cambiados.
+<img src='./assets/img/HU_13-4.png'>
+
+### Fin tablero de Trello:
+<img src='./assets/img/Final-H13.png'>
+
+

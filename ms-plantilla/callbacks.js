@@ -148,7 +148,7 @@ const CB_MODEL_SELECTS = {
     },
 
     /**
-    * Método para ocambiar los datos de una persona
+    * Método para cambiar el nombre de un deportista
     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
     */
@@ -185,6 +185,11 @@ const CB_MODEL_SELECTS = {
         }
     },
 
+    /**
+    * Método para cambiar cuatro campos de un deportista, nombre, apellido, caballos y años de participación en los JJOO
+    * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
+    * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
+    */
     setCuatroCampos: async (req, res) => {
         try {
             let valorDevuelto = {}

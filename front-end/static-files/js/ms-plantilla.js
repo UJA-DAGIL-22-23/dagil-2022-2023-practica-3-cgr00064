@@ -46,7 +46,7 @@ Plantilla.plantillaTags = {
     ANIOSPARTICPACIONJJOO: "### AÑOS DE PARTICIPACION EN LOS JJOO ###"
 }
 
-// Funciones para mostrar una persona como formulario.
+// Funciones para mostrar una deportista como formulario.
 Plantilla.plantillaFormularioDeportista = {}
 
 //Cabecera del formulario.
@@ -163,7 +163,7 @@ Plantilla.cuerpoTrNombres = function (nombre) {
 }
 
 /**
-* Pie de la tabla en la que se muestran las personas
+* Pie de la tabla en la que se muestran los deportistas
 * @returns Cadena con el pie de la tabla
 */
 Plantilla.pieTable = function () {
@@ -177,7 +177,7 @@ Plantilla.pieTable = function () {
 Plantilla.recupera_nombres = async function (callBackFn) {
     let response = null
      
-    // Intento conectar con el microservicio personas
+    // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
         response = await fetch(url)
@@ -203,7 +203,7 @@ Plantilla.recupera_nombres = async function (callBackFn) {
 Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     let response = null
      
-    // Intento conectar con el microservicio personas
+    // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
         response = await fetch(url)
@@ -229,7 +229,7 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
 Plantilla.recupera = async function (callBackFn) {
     let response = null
  
-    // Intento conectar con el microservicio personas
+    // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getTodosInfo"
         response = await fetch(url)
@@ -240,7 +240,7 @@ Plantilla.recupera = async function (callBackFn) {
         //throw error
     }
  
-    // Muestro todas las personas que se han descargado
+    // Muestro todas los deportistas que se han descargado
     let vectorPlantilla = null
     if (response) {
         vectorPlantilla = await response.json()
@@ -320,7 +320,7 @@ Plantilla.imprime = function (vector) {
 //
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
-    Frontend.Article.actualizar("Mostrar/Editar una persona", msj)
+    Frontend.Article.actualizar("Mostrar/Editar un deportista", msj)
     Plantilla.almacenaDatos(deportista)
 }
 
@@ -329,8 +329,8 @@ Plantilla.almacenaDatos = function (deportista) {
 }
 
 /**
- * Recupera los valores almacenados de la persona que se estaba mostrando
- * @return Datos de la persona a almacenada
+ * Recupera los valores almacenados del deportista que se estaba mostrando
+ * @return Datos del deportista a almacenada
  */
 Plantilla.recuperaDatosAlmacenados = function () {
     return this.deportistaMostrado;
@@ -444,7 +444,7 @@ Plantilla.listar = function () {
 }
 
 /**
- *Función principal para responder al evento de elegir la opción "Mostrar una persona de ejemplo".
+ *Función principal para responder al evento de elegir la opción "Mostrar un deportista de ejemplo".
 */
 Plantilla.mostrarDeportista = function (idDeportista) {
     this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
@@ -522,14 +522,14 @@ Plantilla.editar = function () {
     this.habilitarCamposEditables()   
 }
 /**
- * Función que permite cancelar la acción sobre los datos de una persona
+ * Función que permite cancelar la acción sobre los datos de un deportista
  */
 Plantilla.cancelar = function () {
     this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
     this.deshabilitarCamposEditables()
 }
 /**
-* Función para guardar los nuevos datos de una persona
+* Función para guardar los nuevos datos de un deportista
 */
 Plantilla.guardar = async function () {
     try {

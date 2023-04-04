@@ -107,7 +107,7 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
 });
 
 /**
- * Modifica el nombre de la persona con el id pasado
+ * Modifica cuatro campos del deportista con el id pasado
  */
  router.post("/setCuatroCampos", async (req, res) => {
     try {
