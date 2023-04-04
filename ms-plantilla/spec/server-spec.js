@@ -150,7 +150,7 @@ describe('Servidor PLANTILLA:', () => {
     });
   })
 
-  it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setTodo', (done) => {
+  it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setNombre', (done) => {
     const NOMBRE_TEST= 'NOMBRE CAMBIADO'
     const deportista = {
       id_deportista: '359074418347999438',
@@ -167,7 +167,8 @@ describe('Servidor PLANTILLA:', () => {
     })
     .end((error) => { error ? done.fail(error) : done(); }
     );
-});
+  });
+
   
 });
 

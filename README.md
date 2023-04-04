@@ -1054,7 +1054,7 @@ GUARDAR lo que hace es actualizar el campo en la BBDD
 El test que se ha realizado ha sido el siguiente:
 
 ```
-  it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setTodo', (done) => {
+  it('Devuelve NOMBRE CAMBIADO al recuperar los datos del Deportista con id 359074418347999438 mediante setNombre', (done) => {
     const NOMBRE_TEST= 'NOMBRE CAMBIADO'
     const deportista = {
         id_deportista: '359074418347999438',

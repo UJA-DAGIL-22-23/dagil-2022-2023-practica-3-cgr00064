@@ -106,7 +106,16 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
     }
 });
 
-
+/**
+ * Modifica el nombre de la persona con el id pasado
+ */
+ router.post("/setCuatroCampos", async (req, res) => {
+    try {
+        await callbacks.setCuatroCampos(req, res)
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 

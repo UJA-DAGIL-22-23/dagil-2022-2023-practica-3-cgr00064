@@ -349,7 +349,7 @@ describe("Plantilla.cuerpoTr", function () {
 
         let resultado = Plantilla.cuerpoTr(p);
 
-        let esperado = `<tr><td>ref deportista 1</td><td>Nombre deportista 1</td><td>Apellido deportista 1</td><td>1/1/2000</td><td>Nacionalidad deportista 1</td><td>23</td><td>Disciplina 1, Disciplina 2</td><td>Caballo 1, Caballo 2</td><td>2016, 2020</td><td><div><a href="javascript:Plantilla.mostrarDeportista('ref deportista 1')"">Mostrar</a></div></td></tr>`;
+        let esperado = `<tr><td>ref deportista 1</td><td>Nombre deportista 1</td><td>Apellido deportista 1</td><td>1/1/2000</td><td>Nacionalidad deportista 1</td><td>23</td><td>Disciplina 1, Disciplina 2</td><td>Caballo 1,Caballo 2</td><td>2016,2020</td><td><div><a href="javascript:Plantilla.mostrarDeportista('ref deportista 1')"">Mostrar</a></div></td></tr>`;
         expect(resultado).toEqual(esperado);
     });
 });

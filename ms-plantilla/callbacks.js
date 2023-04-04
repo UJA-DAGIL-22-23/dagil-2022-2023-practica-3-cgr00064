@@ -152,8 +152,8 @@ const CB_MODEL_SELECTS = {
     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
     */
-     setNombre: async (req, res) => {
-        //console.log("setTodo req.body", req) // req.body contiene todos los parámetros de la llamada
+    setNombre: async (req, res) => {
+        //console.log("setNombre req.body", req) // req.body contiene todos los parámetros de la llamada
         try {
             let valorDevuelto = {}
             // Hay que comprobar Object.keys(req.body).length para saber si req.body es objeto "normal" o con problemas
@@ -167,6 +167,39 @@ const CB_MODEL_SELECTS = {
                     {
                         data: {
                             nombre: data.nombre_deportista,
+                        },
+                    },
+                )
+            )
+                .then((ret) => {
+                    valorDevuelto = ret
+                    //console.log("Valor devuelto ", valorDevuelto)
+                    CORS(res)
+                        .status(200)
+                        .header( 'Content-Type', 'application/json' )
+                        .json(valorDevuelto)
+                })
+
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+        }
+    },
+
+    setCuatroCampos: async (req, res) => {
+        try {
+            let valorDevuelto = {}
+            let data = (Object.values(req.body)[0] === '') ? JSON.parse(Object.keys(req.body)[0]) : req.body
+            //console.log("SETTODO data es", data)
+            let deportista = await client.query(
+                q.Update(
+                    q.Ref(q.Collection(COLLECTION), data.id_deportista),
+                    {
+                        data: {
+                            nombre: data.nombre_deportista,
+                            apellido: data.apellido_deportista,
+                            caballos: data.caballos_deportista,
+                            aniosParticipacionJJOO: data.JJOO_deportista,
+
                         },
                     },
                 )

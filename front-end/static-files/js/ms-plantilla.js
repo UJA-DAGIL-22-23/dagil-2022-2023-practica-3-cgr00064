@@ -56,7 +56,7 @@ Plantilla.plantillaFormularioDeportista.formulario = `
         <thead>
             <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
             <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
-            <th>Años de participación en los JJOO</th><th>Editar</th><th>Guardar</th><th>Cancelar</th>
+            <th>Años de participación en los JJOO</th><th>Editar Nombre</th><th>Editar</th><th>Guardar</th><th>Cancelar</th>
         </thead>
         <tbody>
             <tr title ="${Plantilla.plantillaTags.ID}">
@@ -91,6 +91,9 @@ Plantilla.plantillaFormularioDeportista.formulario = `
                     <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
                 </td>
                 <td>
+                    <div><a href="javascript:Plantilla.editar()">Editar 4 campos</a></div>
+                </td>
+                <td>
                     <div><a href="javascript:Plantilla.guardar()">Guardar</a></div>
                 </td>    
                 <td>    
@@ -118,7 +121,7 @@ Plantilla.sustituyeTags = function (plantilla, deportista) {
 }
 
 Plantilla.plantillaFormularioDeportista.actualiza = function (deportista){
-    return Plantilla.sustituyeTags(this.formulario, deportista)
+    return Plantilla.sustituyeTags(this.formulario, deportista);
 }
 
 Plantilla.deportistaComoFormulario = function (deportista){
@@ -147,8 +150,9 @@ Plantilla.cabeceraTableNombres = function () {
 */
 Plantilla.cuerpoTr = function (p) {
     const d = p.data
-    return `<tr><td>${p.ref['@ref'].id}</td><td>${d.nombre}</td><td>${d.apellido}</td><td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td><td>${d.nacionalidad}</td><td>${d.edad}</td><td>${d.disciplinas.join( ", ")}</td><td>${d.caballos.join( ", ")}</td><td>${d.aniosParticipacionJJOO.join( ", ")}</td><td><div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div></td></tr>`;
+    return `<tr><td>${p.ref['@ref'].id}</td><td>${d.nombre}</td><td>${d.apellido}</td><td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td><td>${d.nacionalidad}</td><td>${d.edad}</td><td>${d.disciplinas.join( ", ")}</td><td>${d.caballos}</td><td>${d.aniosParticipacionJJOO}</td><td><div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div></td></tr>`;
 } 
+
 /**
 * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD
 * @param {proyecto} p Datos del proyecto a mostrar
@@ -316,7 +320,7 @@ Plantilla.imprime = function (vector) {
 //
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
-    Frontend.Article.actualizar("Mostrar una persona", msj)
+    Frontend.Article.actualizar("Mostrar/Editar una persona", msj)
     Plantilla.almacenaDatos(deportista)
 }
 
@@ -457,13 +461,6 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
     return this
 }
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-//
-//    HABRIA QUE HACER TEST DE ESTAS FUNCIONES????? LLAMAN A LA DE ARRIBA        //
-//
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
 /**
  * Establece disable = true en los campos editables
  * @returns El propio objeto Plantilla, para concatenar llamadas
@@ -487,24 +484,57 @@ Plantilla.editarNombre = function () {
     this.habilitarCamposEditablesNombre()   
 }
 //
-//*************************HACER TEST************************* */
+//*************************HACER TESTS************************* */
 //
+/**
+ * Establece disable = habilitando en los campos editables
+ * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+ Plantilla.habilitarDeshabilitarCamposEditables = function (deshabilitando) {
+    deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
+    document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
+    document.getElementById(Plantilla.form.APELLIDO).disabled = deshabilitando
+    document.getElementById(Plantilla.form.CABALLOS).disabled = deshabilitando
+    document.getElementById(Plantilla.form.ANIOSPARTICPACIONJJOO).disabled = deshabilitando
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+ Plantilla.deshabilitarCamposEditables = function () {
+    Plantilla.habilitarDeshabilitarCamposEditables(true)
+    return this
+}
+/**
+ * Establece disable = true en los campos editables
+ * @returns El propio objeto Plantilla, para concatenar llamadas
+ */
+Plantilla.habilitarCamposEditables = function () {
+    Plantilla.habilitarDeshabilitarCamposEditables(false)
+    return this
+}
+/**
+ * Función que permite modificar los datos de un deportista
+ */
+Plantilla.editar = function () {
+    this.habilitarCamposEditables()   
+}
 /**
  * Función que permite cancelar la acción sobre los datos de una persona
  */
 Plantilla.cancelar = function () {
     this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
-    this.deshabilitarCamposEditablesNombre()
+    this.deshabilitarCamposEditables()
 }
-//
-//*************************HACER TEST************************* */
-//
 /**
 * Función para guardar los nuevos datos de una persona
 */
 Plantilla.guardar = async function () {
     try {
-        let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"
+        //let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"
+        let url = Frontend.API_GATEWAY + "/plantilla/setCuatroCampos/"
         let id_deportista = document.getElementById("form-deportista-id").value
         const response = await fetch(url, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -519,6 +549,9 @@ Plantilla.guardar = async function () {
             body: JSON.stringify({
                 "id_deportista": id_deportista,
                 "nombre_deportista": document.getElementById("form-deportista-nombre").value,
+                "apellido_deportista": document.getElementById("form-deportista-apellido").value,
+                "caballos_deportista": document.getElementById("form-deportista-caballos").value,
+                "JJOO_deportista": document.getElementById("form-deportista-JJOO").value,
             }), // body data type must match "Content-Type" header
         })
         Plantilla.mostrarDeportista(id_deportista)
