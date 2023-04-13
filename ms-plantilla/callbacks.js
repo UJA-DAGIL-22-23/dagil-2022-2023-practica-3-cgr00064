@@ -222,11 +222,6 @@ const CB_MODEL_SELECTS = {
             CORS(res).status(500).json({ error: error.description })
         }
     },
-
-    getBuscar: async (req, res) => {
-
-    },
-
 }
 
 // CALLBACKS ADICIONALES

@@ -118,19 +118,5 @@ router.get("/getPorId/:idDeportista", async (req, res) => {
 });
 
 
-
-
-
-/**
- * Devuelve todos los deportistas que hay en la BBDD
- */
-router.get("/getBuscar", async (req, res) => {
-    try {
-        await callbacks.getBuscar(req, res)
-    } catch (error) {
-        console.log(error);
-    }
-});
-
 // Exporto el módulo para poder usarlo en server
 module.exports = router;
