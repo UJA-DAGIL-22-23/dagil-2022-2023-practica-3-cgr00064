@@ -179,6 +179,7 @@ describe("Plantilla.sustituyeTags", function () {
       });
 
 });
+
 //Plantilla.plantillaFormularioDeportista.actualiza
 describe("Plantilla.plantillaFormularioDeportista.actualiza", () => {
     it("Debe devolver el formulario con los valores del deportista actualizados", () => {
@@ -227,76 +228,35 @@ describe("Plantilla.plantillaFormularioDeportista.actualiza", () => {
     });
 });
 
+//Plantilla.deportistaComoFormulario
 describe("Plantilla.deportistaComoFormulario", function () {
-    it("Debería devolver un formulario con los datos de un deportista correctamente", function () {
-      const deportista = {
-        ref: { '@ref': { id: 'abc123' } },
-        data: {
-          nombre: 'Juan',
-          apellido: 'Pérez',
-          fechaNacimiento: { dia: '01', mes: '01', anio: '1990' },
-          nacionalidad: 'Argentina',
-          edad: 33,
-          disciplinas: ['Atletismo', 'Natación'],
-          caballos: ['Caballo1', 'Caballo2'],
-          aniosParticipacionJJOO: 3
-        }
-      };
-      const expected = `
-      <form method='post' action=''>
-        <table class="listado-plantilla">
-          <thead>
+    it("Debería contenr la cabecera del formulario correctamente y el primer campo el id", function () {
+        const deportista = {
+            ref: { "@ref": { id: "123" } },
+            data: {
+              nombre: "Juan",
+              apellido: "Pérez",
+              fechaNacimiento: { dia: "01", mes: "01", anio: "1990" },
+              nacionalidad: "Argentina",
+              edad: "32",
+              disciplinas: ["Natación", "Atletismo"],
+              caballos: ["Caballo 1", "Caballo 2"],
+              aniosParticipacionJJOO: "3"
+            }
+          };
+        const contain = 
+       `<thead>
             <th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th>
             <th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th>
-            <th>Años de participación en los JJOO</th><th>Editar</th><th>Guardar</th><th>Cancelar</th>
-          </thead>
-          <tbody>
-            <tr title ="abc123">
-              <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-id"
-                  value="abc123" name="id_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nombre"
-                  value="Juan" name="nombre_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-apellido"
-                  value="Pérez" name="apellido_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-fechanac"
-                  value="01/01/1990" name="fechaNac_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-nacionalidad"
-                  value="Argentina" name="nacionalidad_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-edad"
-                  value="33" name="edad_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-disciplinas"
-                  value="Atletismo, Natación" name="diciplinas_deportista"/>
-              </td>
-              <td><input type="vector" class="form-deportista-elemento editable" disabled id="form-deportista-caballos"
-                  value="Caballo1, Caballo2" name="caballos_deportista"/>
-              </td>
-              <td><input type="text" class="form-deportista-elemento editable" disabled id="form-deportista-JJOO"
-                  value="3"name="JJOO_deportista"/>
-                  </td>
-                  <td>
-                      <div><a href="javascript:Plantilla.editarNombre()">Editar Nombre</a></div>
-                  </td>
-                  <td>
-                      <div><a href="javascript:Plantilla.guardar()">Guardar</a></div>
-                  </td>    
-                  <td>    
-                      <div><a href="javascript:Plantilla.cancelar()">Cancelar</a></div>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
-  </form>
-  `
+            <th>Años de participación en los JJOO</th><th>Editar Nombre</th><th>Editar</th><th>Guardar</th><th>Cancelar</th>
+        </thead>
+        <tbody>
+            <tr title ="123">
+                <td><input type="text" class="form-deportista-elemento" disabled id="form-deportista-id"`
+        const result = Plantilla.deportistaComoFormulario(deportista);
+        expect(result).toContain(contain);
+    });
 });
-});
-
-
 
 //Tiene que estar todo en una misma linea no entiendo por que.
 //Plantilla.cabeceraTable()
@@ -325,6 +285,16 @@ describe("Plantilla.cabeceraTableNombres", function () {
             expect(Plantilla.cabeceraTableNombres()).toBe(expectedOutput);
         });
 });
+
+//Plantilla.cabeceraTableResultadosFormulario
+describe("Plantilla.cabeceraTableResultadosFormulario", function () {
+    it("Debería devolver una cadena que no contiene 'Opcion' pero sí contiene 'nombre'", function () {
+      const cabecera = Plantilla.cabeceraTableResultadosFormulario();
+      expect(cabecera).not.toContain("Opcion");
+      expect(cabecera).toContain("Nombre");
+    });
+  });
+
 //Plantilla.cuerpoTr
 describe("Plantilla.cuerpoTr", function () {
     it("genera correctamente la plantilla HTML", function () {
@@ -354,6 +324,38 @@ describe("Plantilla.cuerpoTr", function () {
     });
 });
 
+//Plantilla.cuerpoTrResultadosFormulario
+describe("Plantilla.cuerpoTrResultadosFormulario", function () {
+    it("Debería devolver un tr con los datos del deportista correctamente", function () {
+      const deportista = {
+        ref: { '@ref': { id: 'abc123' } },
+        data: {
+          nombre: 'Juan',
+          apellido: 'Pérez',
+          fechaNacimiento: { dia: '01', mes: '01', anio: '1990' },
+          nacionalidad: 'Argentina',
+          edad: 33,
+          disciplinas: ['Atletismo', 'Natación'],
+          caballos: ['Caballo1', 'Caballo2'],
+          aniosParticipacionJJOO: 3
+        }
+      };
+      const expected = 
+           `<tr><td>abc123</td>
+    <td>Juan</td>
+    <td>Pérez</td>
+    <td>01/01/1990</td>
+    <td>Argentina</td>
+    <td>33</td>
+    <td>Atletismo, Natación</td>
+    <td>Caballo1,Caballo2</td>
+    <td>3</td>
+    </tr>`;
+      const result = Plantilla.cuerpoTrResultadosFormulario(deportista);
+      expect(result).toEqual(expected);
+    });
+  });
+
 //Plantilla.cuerpoTrNombres()
 describe("Plantilla.cuerpoTrNombres", function() {
     it("debe generar un HTML con el nombre dado", function() {
@@ -375,6 +377,31 @@ describe("Plantilla.pieTable", function () {
 describe('Plantilla.formulario', function () {
     it('La función debe devolver una cadena de texto', function() {
         expect(typeof Plantilla.formulario()).toBe('string');
+    });
+    it("Devuelve un string que contiene el formulario de búsqueda por nombre", function(){
+        const expected =
+          `<div id="div_formulario">
+        <form method='get' id="forulario">
+        <table class="listado-plantilla">
+        <thead>
+            <th>Nombre</th><th>Opcion</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"><br><br>
+            </td> 
+            <td>
+            <div><a href="javascript:Plantilla.buscar_nombre()" class="boton_buscar">Buscar</a></div>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </form> 
+    </div>
+    <div id="div_resultados"></div>`
+    expect(Plantilla.formulario()).toContain(expected);
     });
 });
 
@@ -483,9 +510,6 @@ describe("Plantilla.imprime", function() {
     });
 });
 
-//Plantilla.imprimeUnDeportista()
-
-
 //Plantilla.almacenaDatos()
 describe('Plantilla.almacenaDatos', () => {
     it('debe almacenar correctamente los datos del deportista', () => {
@@ -518,6 +542,10 @@ describe("Plantilla.recuperaDatosAlmacenados", function() {
         expect(Plantilla.recuperaDatosAlmacenados()).toEqual({nombre: "Juan", edad: 25, deporte: "equitacion"});
     });
 });
+
+//Plantilla.imprimeformulario
+
+//Plantilla.mostrar
 
 //Plantilla.deshabilitarCamposEditablesNombre
 describe("Plantilla.deshabilitarCamposEditablesNombre", function() {
@@ -607,7 +635,7 @@ describe("Plantilla.habilitarCamposEditables", function() {
     });
 });
 
-//Plantilla.editarNombre
+//Plantilla.editar
 describe("Plantilla.editar", function() {
     it("debe habilitar los campos editables", function() {
         spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
@@ -617,8 +645,3 @@ describe("Plantilla.editar", function() {
         expect(Plantilla.habilitarDeshabilitarCamposEditables).toHaveBeenCalledWith(false);
     });
 });
-
-
-//Plantilla.cancelar
-
-//Plantilla.guardar

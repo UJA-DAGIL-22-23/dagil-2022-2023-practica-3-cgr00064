@@ -50,7 +50,8 @@ Plantilla.plantillaTags = {
 Plantilla.plantillaFormularioDeportista = {}
 
 //Cabecera del formulario.
-Plantilla.plantillaFormularioDeportista.formulario = `
+Plantilla.plantillaFormularioDeportista.formulario = 
+`
 <form method='post' action=''>
     <table class="listado-plantilla">
         <thead>
@@ -141,9 +142,8 @@ Plantilla.cabeceraTable = function () {
  * Crea la cabecera para mostrar la info del deportista una vez se busca en el domulario
  * @returns Cabecera de la tabla
  */
- Plantilla.cabeceraTableResultadosFormulario = function () {
+Plantilla.cabeceraTableResultadosFormulario = function () {
     return `<table class="listado-plantilla"><thead><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th></thead><tbody>`;
-
 }
 
 /**
@@ -169,7 +169,7 @@ Plantilla.cuerpoTr = function (p) {
  * @param {proyecto} p Datos del proyecto a mostrar
  * @returns Cadena conteniendo todo el elemento TR que muestra el proyecto.
  */
- Plantilla.cuerpoTrResultadosFormulario = function (p) {
+Plantilla.cuerpoTrResultadosFormulario = function (p) {
     const d = p.data;
     return `<tr><td>${p.ref["@ref"].id}</td>
     <td>${d.nombre}</td>
@@ -202,8 +202,7 @@ Plantilla.pieTable = function () {
 
 //Funciones para mostrar el formulario para preguntar al cliente.
 Plantilla.formulario = function (){
-    return`
-    <div id="div_formulario">
+    return`<div id="div_formulario">
         <form method='get' id="forulario">
         <table class="listado-plantilla">
         <thead>
@@ -215,7 +214,6 @@ Plantilla.formulario = function (){
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre"><br><br>
             </td> 
-           
             <td>
             <div><a href="javascript:Plantilla.buscar_nombre()" class="boton_buscar">Buscar</a></div>
             </td>
@@ -224,8 +222,7 @@ Plantilla.formulario = function (){
         </table>
     </form> 
     </div>
-    <div id="div_resultados"></div>
-    `
+    <div id="div_resultados"></div>`
 }
 
 /**
@@ -327,9 +324,8 @@ Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
 /**
 * Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla y busca los que se corresponden con el formulario de busqueda
 * En este caso solo el nombre
-* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
 */
-Plantilla.buscar_nombre = async function (callBackFn) {
+Plantilla.buscar_nombre = async function () {
     let response = null   
         try {
             var nuevoVector = [];
@@ -415,6 +411,7 @@ Plantilla.imprime = function (array) {
     Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
 }
 
+///////////////////////TEST////////////////////////
 Plantilla.imprimeResultadosFormulario = function (array) {
     let msj = "";
     msj += Plantilla.cabeceraTableResultadosFormulario();
@@ -427,6 +424,7 @@ Plantilla.imprimeResultadosFormulario = function (array) {
  *Función para mostrar en pantalla un deportista de equitacion con su info que se ha recuperado de la BBDD.
  *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
+///////////////////////TEST////////////////////////
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
     Frontend.Article.actualizar("Mostrar/Editar un deportista", msj)
@@ -553,19 +551,6 @@ Plantilla.listar = function () {
 }
 
 /**
-* Funciónes para mostrar los formularios con el que se le pedira información al usuario.
-*/
-Plantilla.imprimeformulario = function(){
-    let msj ="";
-    msj += Plantilla.formulario();
-    Frontend.Article.actualizar( "Formulario", msj )
-}
-
-Plantilla.mostrar = function () {
-    this.imprimeformulario();
-}
-
-/**
  *Función principal para responder al evento de elegir la opción "Mostrar un deportista de ejemplo".
 */
 Plantilla.mostrarDeportista = function (idDeportista) {
@@ -573,10 +558,25 @@ Plantilla.mostrarDeportista = function (idDeportista) {
 }
 
 /**
+* Funciónes para mostrar los formularios con el que se le pedira información al usuario.
+*/
+///////////////////////TEST////////////////////////
+Plantilla.imprimeformulario = function(){
+    let msj ="";
+    msj += Plantilla.formulario();
+    Frontend.Article.actualizar( "Formulario", msj )
+}
+///////////////////////TEST////////////////////////
+Plantilla.mostrar = function () {
+    this.imprimeformulario();
+}
+
+/**
  * Establece disable = habilitando en los campos editables
  * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
  * @returns El propio objeto Plantilla, para concatenar llamadas
  */
+///////////////////////TEST////////////////////////
  Plantilla.habilitarDeshabilitarCamposEditablesNombre = function (deshabilitando) {
     deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
     document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
@@ -644,6 +644,7 @@ Plantilla.editar = function () {
 /**
  * Función que permite cancelar la acción sobre los datos de un deportista
  */
+///////////////////////TEST////////////////////////
 Plantilla.cancelar = function () {
     this.imprimeUnDeportista(this.recuperaDatosAlmacenados())
     this.deshabilitarCamposEditables()
@@ -651,6 +652,7 @@ Plantilla.cancelar = function () {
 /**
 * Función para guardar los nuevos datos de un deportista
 */
+///////////////////////TEST////////////////////////
 Plantilla.guardar = async function () {
     try {
         //let url = Frontend.API_GATEWAY + "/plantilla/setNombre/"

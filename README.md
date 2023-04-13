@@ -1403,6 +1403,7 @@ Plantilla.buscar_nombre = async function (callBackFn) {
 4. Si el nombre no se encuentra en la base de datos muestra lo siguiente:
 <img src='./assets/img/HU_08-2.png'>
 
-
+<img src='./assets/img/Readme-H08.png'>
+<img src='./assets/img/Final-H08.png'>
 
 
