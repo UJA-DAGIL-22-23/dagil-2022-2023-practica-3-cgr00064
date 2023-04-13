@@ -1406,4 +1406,7 @@ Plantilla.buscar_nombre = async function (callBackFn) {
 <img src='./assets/img/Readme-H08.png'>
 <img src='./assets/img/Final-H08.png'>
 
+### Se han realizado mas test en el CLIENTE
+<img src='./assets/img/Test_cliente-2.png'>
 
+## 10. Ver un listado de todos los datos de jugadores/equipos que cumplen simultáneamente con varios criterios de búsqueda indicados por el usuario para algunos de sus campos. Se deberá poder buscar al menos por 3 campos distintos (además del nombre). (Puntuación 0.7)
