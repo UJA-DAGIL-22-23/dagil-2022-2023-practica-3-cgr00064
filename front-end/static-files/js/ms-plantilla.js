@@ -136,6 +136,16 @@ Plantilla.deportistaComoFormulario = function (deportista){
 Plantilla.cabeceraTable = function () {
     return `<table class="listado-plantilla"><thead><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th><th>Opcion</th></thead><tbody>`;
 }
+
+/**
+ * Crea la cabecera para mostrar la info del deportista una vez se busca en el domulario
+ * @returns Cabecera de la tabla
+ */
+ Plantilla.cabeceraTableResultadosFormulario = function () {
+    return `<table class="listado-plantilla"><thead><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th></thead><tbody>`;
+
+}
+
 /**
 * Crea la cabecera para mostrar los nombres como tabla
 * @returns Cabecera de la tabla
@@ -143,6 +153,7 @@ Plantilla.cabeceraTable = function () {
 Plantilla.cabeceraTableNombres = function () {
     return `<table class="listado-plantilla"><thead><th>Nombre</th></thead><tbody>`;
 }
+
 /**
 * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD
 * @param {proyecto} p Datos del proyecto a mostrar
@@ -152,6 +163,25 @@ Plantilla.cuerpoTr = function (p) {
     const d = p.data
     return `<tr><td>${p.ref['@ref'].id}</td><td>${d.nombre}</td><td>${d.apellido}</td><td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td><td>${d.nacionalidad}</td><td>${d.edad}</td><td>${d.disciplinas.join( ", ")}</td><td>${d.caballos}</td><td>${d.aniosParticipacionJJOO}</td><td><div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div></td></tr>`;
 } 
+
+/**
+ * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD para los deportistas que se buscan en el formulario
+ * @param {proyecto} p Datos del proyecto a mostrar
+ * @returns Cadena conteniendo todo el elemento TR que muestra el proyecto.
+ */
+ Plantilla.cuerpoTrResultadosFormulario = function (p) {
+    const d = p.data;
+    return `<tr><td>${p.ref["@ref"].id}</td>
+    <td>${d.nombre}</td>
+    <td>${d.apellido}</td>
+    <td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td>
+    <td>${d.nacionalidad}</td>
+    <td>${d.edad}</td>
+    <td>${d.disciplinas.join(", ")}</td>
+    <td>${d.caballos}</td>
+    <td>${d.aniosParticipacionJJOO}</td>
+    </tr>`;
+  };
 
 /**
 * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD
@@ -168,6 +198,34 @@ Plantilla.cuerpoTrNombres = function (nombre) {
 */
 Plantilla.pieTable = function () {
     return "</tbody></table>";
+}
+
+//Funciones para mostrar el formulario para preguntar al cliente.
+Plantilla.formulario = function (){
+    return`
+    <div id="div_formulario">
+        <form method='get' id="forulario">
+        <table class="listado-plantilla">
+        <thead>
+            <th>Nombre</th><th>Opcion</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"><br><br>
+            </td> 
+           
+            <td>
+            <div><a href="javascript:Plantilla.buscar_nombre()" class="boton_buscar">Buscar</a></div>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </form> 
+    </div>
+    <div id="div_resultados"></div>
+    `
 }
 
 /**
@@ -267,11 +325,55 @@ Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
 }
 
 /**
+* Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla y busca los que se corresponden con el formulario de busqueda
+* En este caso solo el nombre
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.buscar_nombre = async function (callBackFn) {
+    let response = null   
+        try {
+            var nuevoVector = [];
+            document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+            // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
+            let url = new URL( Frontend.API_GATEWAY + "/plantilla/getTodosInfo") 
+            const params = {}
+            if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
+            
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+            const dataRequest = {
+               method: 'GET'
+            };
+            response = await fetch(url, dataRequest);
+            
+            // Muestro todas los deportistas que se han descargado
+            let vectorPlantilla = null;
+            if (response) {
+              vectorPlantilla = await response.json();
+              nuevoVector = [];
+              for (var i = 0; i < vectorPlantilla.data.length; i++) {
+                if (vectorPlantilla.data[i].data.nombre === params.nombre) {
+                  nuevoVector.push(vectorPlantilla.data[i]);
+                }
+              }
+              if (nuevoVector.length === 0) {
+                document.getElementById("div_resultados").innerHTML =
+                  "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1><h3>Ningun deportista cumple las condiciones de busqueda</h3>";
+              } else {
+                document.getElementById("div_resultados").innerHTML =
+                "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"+Plantilla.imprimeResultadosFormulario(nuevoVector);
+              }
+            }   
+        } catch (error) {
+            alert("Error: No se han podido acceder al API Gateway " + error)
+            //console.error(error)
+        }
+}
+
+/**
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
 Plantilla.imprime_nombres = function (vector) {
-    //console.log( vector ) // Para comprobar lo que hay en vector
     let msj = "";
     msj += Plantilla.cabeceraTableNombres();
     vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
@@ -286,7 +388,6 @@ Plantilla.imprime_nombres = function (vector) {
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
 Plantilla.imprime_alfabeticamente = function (vector) {
-    //console.log( vector ) // Para comprobar lo que hay en vector
     let msj = "";
     msj += Plantilla.cabeceraTableNombres();
     vector.forEach(o => msj += Plantilla.cuerpoTrNombres(o))
@@ -300,24 +401,32 @@ Plantilla.imprime_alfabeticamente = function (vector) {
 * Función para mostrar en pantalla todos los deportistas de equitacion con su info que se han recuperado de la BBDD.
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
-Plantilla.imprime = function (vector) {
-    //console.log( vector ) // Para comprobar lo que hay en vector
+Plantilla.imprime = function (array) {
+    var nuevovectornombres = [];
+    for (var i = 0; i < array.length; i++) {
+        nuevovectornombres.push(array[i].data.nombre);
+    } // Para comprobar lo que hay en vector
     let msj = "";
     msj += Plantilla.cabeceraTable();
-    vector.forEach(e => msj += Plantilla.cuerpoTr(e))
+    array.forEach(e => msj += Plantilla.cuerpoTr(e))
     msj += Plantilla.pieTable();
 
     // Borro toda la info de Article y la sustituyo por la que me interesa
     Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
 }
 
+Plantilla.imprimeResultadosFormulario = function (array) {
+    let msj = "";
+    msj += Plantilla.cabeceraTableResultadosFormulario();
+    array.forEach((e) => (msj += Plantilla.cuerpoTrResultadosFormulario(e)));
+    msj += Plantilla.pieTable();
+    Frontend.Article.resultados(msj)
+};
+
 /**
  *Función para mostrar en pantalla un deportista de equitacion con su info que se ha recuperado de la BBDD.
  *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
-//
-//*************************HACER TEST************************* */
-//
 Plantilla.imprimeUnDeportista = function (deportista){
     let msj = Plantilla.deportistaComoFormulario(deportista);
     Frontend.Article.actualizar("Mostrar/Editar un deportista", msj)
@@ -440,7 +549,20 @@ Plantilla.listar_alfabeticamente = function () {
 * Función principal para responder al evento de elegir la opción "Listar informacion completa"
 */
 Plantilla.listar = function () {
-    this.recupera(this.imprime);
+    this.recupera(this.imprime); 
+}
+
+/**
+* Funciónes para mostrar los formularios con el que se le pedira información al usuario.
+*/
+Plantilla.imprimeformulario = function(){
+    let msj ="";
+    msj += Plantilla.formulario();
+    Frontend.Article.actualizar( "Formulario", msj )
+}
+
+Plantilla.mostrar = function () {
+    this.imprimeformulario();
 }
 
 /**
@@ -450,9 +572,6 @@ Plantilla.mostrarDeportista = function (idDeportista) {
     this.recuperaUnDeportista(idDeportista, this.imprimeUnDeportista)
 }
 
-//
-//*************************HACER TESTS************************* */
-//
 /**
  * Establece disable = habilitando en los campos editables
  * @param {boolean} Deshabilitando Indica si queremos deshabilitar o habilitar los campos
@@ -522,9 +641,6 @@ Plantilla.editar = function () {
     this.habilitarCamposEditables()   
 }
 
-//
-//*************************HACER TESTS************************* */
-//
 /**
  * Función que permite cancelar la acción sobre los datos de un deportista
  */
@@ -564,116 +680,4 @@ Plantilla.guardar = async function () {
         //console.error(error)
     }
 }
-
-
-
-
-
-
-
-
-
-
-//Funciones para mostrar el formulario para preguntar al cliente.
-Plantilla.formulario = function (){
-    return`
-    <div id="div_formulario">
-        <form method='get' id="forulario">
-        <table class="listado-plantilla">
-        <thead>
-            <th>Nombre</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina</th><th>Opción</th>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre"><br><br>
-            </td> 
-            <td>
-            <label for="nacionalidad">Nacionalidad:</label>
-            <select id="nacionalidad" name="nacionalidad">
-                <option value="">Selecciona una opción</option>
-                <option value="Española">Española</option>
-                <option value="Argentina">Argentina</option>
-                <option value="Colombiana">Colombiana</option>
-                <option value="Francesa">Francesa</option>
-                <option value="Estadounidense">Estadounidense</option>
-                <option value="Mexicana">Mexicana</option>
-                <option value="Alemana">Alemana</option>
-            </select><br><br>
-            </td>
-            <td>
-                <label for="edad">Edad:</label>
-                <input type="number" id="edad" name="edad" min="25" max="43" value="25-43"><br><br>
-            </td>
-            <td>
-            <label for="disciplina">Disciplina:</label>
-            <select id="disciplina" name="disciplina">
-                <option value="">Selecciona una opción</option>
-                <option value="Salto">Salto</option>
-                <option value="Doma">Doma</option>
-                <option value="Vaquera">Vaquera</option>
-                <option value="Concurso completo">Concurso completo</option>
-            </select><br><br>
-            </td>
-            <td>
-            <div><a href="javascript:Plantilla.buscar()" class="boton_buscar">Buscar</a></div>
-            </td>
-        </tr>
-        </tbody>
-        </table>
-    </form> 
-    </div>
-    <div id="div_resultados"></div>
-    `
-}
-//
-//*************************HACER TEST************************* */
-//
-/**
-* Función para mostrar el formulario con el que se le pedira información al usuario.
-*/
-Plantilla.imprimeformulario = function(){
-    let msj ="";
-    msj += Plantilla.formulario();
-    Frontend.Article.actualizar( "Formulario", msj )
-}
-Plantilla.mostrar = function () {
-    this.imprimeformulario();
-}
-Plantilla.mostrarResultadosFormulario = function(nombre, nacionalidad, edad, disciplina) {
-
-}
-Plantilla.buscar = async function () {
-    document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
-        try {
-            // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
-            let url = new URL( Frontend.API_GATEWAY + "/plantilla/getBuscar") 
-            const params = {}
-            if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
-            // Otra opción: 
-            //         params.nombre = document.getElementById("nombre").value?document.getElementById("nombre").value:"*"
-            if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
-            if( document.getElementById("edad").value ) params.edad = document.getElementById("edad").value
-            if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
-            
-            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-            const dataRequest = {
-               method: 'GET'
-            };
-            let response = await fetch(url, dataRequest);
-
-            // Mostrar los resultados dado el id
-            //Como llego de los datos del formulario que son nombre nacionalidad edad y disciplina a ese id???
-            Plantilla.mostrarResultadosFormulario(params.nombre, params.nacionalidad, params.edad, params.disciplina)
-            
-
-        } catch (error) {
-            alert("Error: No se han podido acceder al API Gateway " + error)
-            //console.error(error)
-        }
-}
-
-
-
 

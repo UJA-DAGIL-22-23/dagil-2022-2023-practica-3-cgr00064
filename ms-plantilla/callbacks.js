@@ -67,26 +67,26 @@ const CB_MODEL_SELECTS = {
      * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
      */
     getNombres: async (req, res) => {
-    try {
-        let deportistas = await client.query(
-            q.Map(
-                q.Paginate(q.Documents(q.Collection(COLLECTION))),
-                q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+        try {
+            let deportistas = await client.query(
+                q.Map(
+                    q.Paginate(q.Documents(q.Collection(COLLECTION))),
+                    q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
+                )
             )
-        )
-        CORS(res)
-            .status(200)
-            .json(deportistas)
-    } catch (error) {
-        CORS(res).status(500).json({ error: error.description })
-    }
+            CORS(res)
+                .status(200)
+                .json(deportistas)
+        } catch (error) {
+            CORS(res).status(500).json({ error: error.description })
+        }
     },
 
     /**
      * Método para obtener solo los nombres de los deportistas de la BBDD.
      * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
      * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
-     */
+    */
     getAlfabeticamente: async (req, res) => {
         try {
             let deportistas = await client.query(
@@ -95,14 +95,14 @@ const CB_MODEL_SELECTS = {
                     q.Lambda("X", q.Select(["data", "nombre"], q.Get(q.Var("X"))))
                 )
             )
-            deportistas.data=deportistas.data.sort()
+            deportistas.data = deportistas.data.sort()
             CORS(res)
                 .status(200)
                 .json(deportistas)
         } catch (error) {
             CORS(res).status(500).json({ error: error.description })
         }
-        
+
     },
 
     /**
@@ -132,7 +132,7 @@ const CB_MODEL_SELECTS = {
     * @param {*} req Objeto con los parámetros que se han pasado en la llamada a esta URL 
     * @param {*} res Objeto Response con las respuesta que se va a dar a la petición recibida
     */
-     getPorId: async (req, res) => {
+    getPorId: async (req, res) => {
         try {
             // console.log( "getPorId req", req.params.idDeportista ) // req.params contiene todos los parámetros de la llamada
             let deportista = await client.query(
@@ -176,7 +176,7 @@ const CB_MODEL_SELECTS = {
                     //console.log("Valor devuelto ", valorDevuelto)
                     CORS(res)
                         .status(200)
-                        .header( 'Content-Type', 'application/json' )
+                        .header('Content-Type', 'application/json')
                         .json(valorDevuelto)
                 })
 
@@ -214,7 +214,7 @@ const CB_MODEL_SELECTS = {
                     //console.log("Valor devuelto ", valorDevuelto)
                     CORS(res)
                         .status(200)
-                        .header( 'Content-Type', 'application/json' )
+                        .header('Content-Type', 'application/json')
                         .json(valorDevuelto)
                 })
 
@@ -224,7 +224,7 @@ const CB_MODEL_SELECTS = {
     },
 
     getBuscar: async (req, res) => {
-    
+
     },
 
 }

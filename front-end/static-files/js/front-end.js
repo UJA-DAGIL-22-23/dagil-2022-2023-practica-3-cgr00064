@@ -16,7 +16,7 @@ Frontend.API_GATEWAY = "http://localhost:8001"
 Frontend.ID_SECCION_PRINCIPAL = "seccion-principal"
 Frontend.ID_SECCION_PRINCIPAL_TITULO = "seccion-principal-titulo"
 Frontend.ID_SECCION_PRINCIPAL_CONTENIDO = "seccion-principal-contenido"
-
+Frontend.ID_SECCION_PRINCIPAL_RESULTADOS = "seccion-principal-resultados"
 
 /// Objeto Article dentro Frontend para tratar con el contenido del elemento Article del DOM
 Frontend.Article = {}
@@ -35,5 +35,11 @@ Frontend.Article.actualizar = function (titulo, contenido) {
     // Sustituyo el título y el contenido del articulo
     document.getElementById( Frontend.ID_SECCION_PRINCIPAL_TITULO ).innerHTML = titulo
     document.getElementById( Frontend.ID_SECCION_PRINCIPAL_CONTENIDO ).innerHTML = contenido
+    return this;
+}
+
+Frontend.Article.resultados = function (resultados) {
+    resultados = resultados || ""
+    document.getElementById( Frontend.ID_SECCION_PRINCIPAL_RESULTADOS ).innerHTML = resultados
     return this;
 }
