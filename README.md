@@ -1327,7 +1327,6 @@ Finished in 1.003 seconds
 Randomized with seed 19189 (jasmine --random=true --seed=19189)
 ```
 
-
 <img src='./assets/img/Readme-H13.png'>
 
 ### El resultado sería el siguiente:
@@ -1345,5 +1344,65 @@ Se puede observar en la tabla de todos los deportistas que efecticamente los cam
 
 ### Fin tablero de Trello:
 <img src='./assets/img/Final-H13.png'>
+
+## 08. Ver un listado de todos los datos de jugadores/equipos cuyo nombre cumple con un criterio de búsqueda indicado por el usuario.(Puntuación 0.5)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H08.png'>
+
+### Para la realización de esta HU se han seguido los siguientes pasos:
+
+1. Se ha creado un formulario para preguntar al usuario por el nombre, por el que quiere buscar:
+<img src='./assets/img/Formulario-nombre.png'>
+
+2. Se ha implementado la funcion *Plantilla.buscar_nombre* en el **front-end** esta funcion es la encargada de traer la informacion de la base de datos y guardarla en el array *vectorPlantilla* y una vez la tenemos en ese array comprobamos que el nombre por el que quiere buscar el usuario *params.nombre* se encuentra en la base de datos. 
+```
+Plantilla.buscar_nombre = async function (callBackFn) {
+    let response = null   
+        try {
+            var nuevoVector = [];
+            document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+            // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
+            let url = new URL( Frontend.API_GATEWAY + "/plantilla/getTodosInfo") 
+            const params = {}
+            if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
+            
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+            const dataRequest = {
+               method: 'GET'
+            };
+            response = await fetch(url, dataRequest);
+            
+            // Muestro todas los deportistas que se han descargado
+            let vectorPlantilla = null;
+            if (response) {
+              vectorPlantilla = await response.json();
+              nuevoVector = [];
+              for (var i = 0; i < vectorPlantilla.data.length; i++) {
+                if (vectorPlantilla.data[i].data.nombre === params.nombre) {
+                  nuevoVector.push(vectorPlantilla.data[i]);
+                }
+              }
+              if (nuevoVector.length === 0) {
+                document.getElementById("div_resultados").innerHTML =
+                  "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1><h3>Ningun deportista cumple las condiciones de busqueda</h3>";
+              } else {
+                document.getElementById("div_resultados").innerHTML =
+                "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"+Plantilla.imprimeResultadosFormulario(nuevoVector);
+              }
+            }   
+        } catch (error) {
+            alert("Error: No se han podido acceder al API Gateway " + error)
+            //console.error(error)
+        }
+}
+```
+
+3. Si encuentra el nombre en la base de datos finalmente lo muestra y este es el resultado:
+<img src='./assets/img/HU_08-1.png'>
+
+4. Si el nombre no se encuentra en la base de datos muestra lo siguiente:
+<img src='./assets/img/HU_08-2.png'>
+
+
 
 
