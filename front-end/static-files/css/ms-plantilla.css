@@ -64,7 +64,6 @@ table.listado-deportistas tbody tr {
     background-color: rgba(0, 0, 100, 0.1)
 }
 
-
 .form-deportista-elemento:disabled {
     color: black;
     background-color: inherit;

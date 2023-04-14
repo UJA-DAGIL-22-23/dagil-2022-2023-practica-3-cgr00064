@@ -288,12 +288,12 @@ describe("Plantilla.cabeceraTableNombres", function () {
 
 //Plantilla.cabeceraTableResultadosFormulario
 describe("Plantilla.cabeceraTableResultadosFormulario", function () {
-    it("Debería devolver una cadena que no contiene 'Opcion' pero sí contiene 'nombre'", function () {
+    it("Debería devolver una cadena que no contiene 'Opcion' pero sí contiene 'Nombre'", function () {
       const cabecera = Plantilla.cabeceraTableResultadosFormulario();
       expect(cabecera).not.toContain("Opcion");
       expect(cabecera).toContain("Nombre");
     });
-  });
+});
 
 //Plantilla.cuerpoTr
 describe("Plantilla.cuerpoTr", function () {

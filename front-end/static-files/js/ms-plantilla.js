@@ -353,7 +353,6 @@ Plantilla.buscar_nombre = async function () {
             }
 
             Plantilla.imprimeResultadosFormulario(nuevoVector)
-
         }
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway " + error)
@@ -394,10 +393,6 @@ Plantilla.imprime_alfabeticamente = function (vector) {
 * @param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
 Plantilla.imprime = function (array) {
-    var nuevovectornombres = [];
-    for (var i = 0; i < array.length; i++) {
-        nuevovectornombres.push(array[i].data.nombre);
-    } // Para comprobar lo que hay en vector
     let msj = "";
     msj += Plantilla.cabeceraTable();
     array.forEach(e => msj += Plantilla.cuerpoTr(e))
