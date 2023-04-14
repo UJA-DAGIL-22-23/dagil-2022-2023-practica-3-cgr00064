@@ -261,12 +261,12 @@ describe("Plantilla.deportistaComoFormulario", function () {
 //Tiene que estar todo en una misma linea no entiendo por que.
 //Plantilla.cabeceraTable()
 describe("Plantilla.cabeceraTable", function () {
-    it("debería devolver las etiquetas HTML para la cabecera de tabla",
+    it("Debería devolver las etiquetas HTML para la cabecera de tabla",
         function () {
             const expectedOutput = `<table class="listado-plantilla"><thead><th>Id</th><th>Nombre</th><th>Apellido</th><th>Fecha de nacimiento</th><th>Nacionalidad</th><th>Edad</th><th>Disciplina/s</th><th>Caballos</th><th>Años de participación en los JJOO</th><th>Opcion</th></thead><tbody>`;
             expect(Plantilla.cabeceraTable()).toBe(expectedOutput);
         });
-        it("debería generar una tabla HTML con la cantidad de columnas esperada",
+        it("Debería generar una tabla HTML con la cantidad de columnas esperada",
         function () {
             const expectedColumns = 10;
             const cabecera = Plantilla.cabeceraTable();
@@ -279,7 +279,7 @@ describe("Plantilla.cabeceraTable", function () {
 
 //Plantilla.cabeceraTableNombres()
 describe("Plantilla.cabeceraTableNombres", function () {
-    it("debería devolver las etiquetas HTML para la cabecera de tabla con una única columna para los nombres",
+    it("Debería devolver las etiquetas HTML para la cabecera de tabla con una única columna para los nombres",
         function () {
             const expectedOutput = `<table class="listado-plantilla"><thead><th>Nombre</th></thead><tbody>`;
             expect(Plantilla.cabeceraTableNombres()).toBe(expectedOutput);
@@ -297,7 +297,7 @@ describe("Plantilla.cabeceraTableResultadosFormulario", function () {
 
 //Plantilla.cuerpoTr
 describe("Plantilla.cuerpoTr", function () {
-    it("genera correctamente la plantilla HTML", function () {
+    it("Genera correctamente la plantilla HTML", function () {
         // Preparar datos de prueba
         let p = {
             ref: {
@@ -358,7 +358,7 @@ describe("Plantilla.cuerpoTrResultadosFormulario", function () {
 
 //Plantilla.cuerpoTrNombres()
 describe("Plantilla.cuerpoTrNombres", function() {
-    it("debe generar un HTML con el nombre dado", function() {
+    it("Debe generar un HTML con el nombre dado", function() {
       const nombre = "Paco";
       const htmlEsperado = `<tr><td>${nombre}</td></tr>`;
       expect(Plantilla.cuerpoTrNombres(nombre)).toEqual(htmlEsperado);
@@ -367,7 +367,7 @@ describe("Plantilla.cuerpoTrNombres", function() {
 
 //Plantilla.pieTable()
 describe("Plantilla.pieTable", function () {
-    it("debería devolver las etiquetas HTML para el pie de tabla",
+    it("Debería devolver las etiquetas HTML para el pie de tabla",
         function () {
             expect(Plantilla.pieTable()).toBe("</tbody></table>");
         });
@@ -405,10 +405,28 @@ describe('Plantilla.formulario', function () {
     });
 });
 
+//Plantilla.formulario_dos
+describe("Plantilla.formulario_dos", function() {
+  it("Debe contener una tabla con 1 fila y 5 columnas", function() {
+    // Crear el elemento div y añadir el formulario dentro
+    const div = document.createElement("div");
+    div.innerHTML = Plantilla.formulario_dos();
+
+    // Verificar que la tabla tenga 1 fila y 5 columnas
+    const table = div.querySelector("table.listado-plantilla");
+    const rows = table.querySelectorAll("tbody tr");
+    expect(rows.length).toEqual(1);
+    rows.forEach(function(row) {
+      const cells = row.querySelectorAll("td");
+      expect(cells.length).toEqual(5);
+    });
+  });
+});
+
 
 //Plantilla.imprime_nombres
 describe("Plantilla.imprime_nombres", function() {
-    it("debe generar una tabla con los nombres dados", function() {
+    it("Debe generar una tabla con los nombres dados", function() {
       const nombres = ["John Doe", "Jane Smith", "Mark Johnson"];
       spyOn(Plantilla, "cabeceraTableNombres").and.returnValue("<thead><tr><th>Nombres</th></tr></thead>");
       spyOn(Plantilla, "pieTable").and.returnValue("</table>");
@@ -432,7 +450,7 @@ describe("Plantilla.imprime_nombres", function() {
 
 //Plantilla.imprime_alfabeticamente()
 describe("Plantilla.imprime_alfabeticamente", function() {
-    it("debe generar una tabla con los nombres de los deportistas por orden alfabético", function() {
+    it("Debe generar una tabla con los nombres de los deportistas por orden alfabético", function() {
       let vector = [      
         {nombre: "Ana"},      
         {nombre: "Berta"},      
@@ -457,7 +475,7 @@ describe("Plantilla.imprime_alfabeticamente", function() {
 
 //Plantilla.imprime()
 describe("Plantilla.imprime", function() {
-    it("debe generar una tabla con la información de los deportistas dada", function() {
+    it("Debe generar una tabla con la información de los deportistas dados", function() {
     let vector = [
         {ref: {
             "@ref": {
@@ -512,7 +530,7 @@ describe("Plantilla.imprime", function() {
 
 //Plantilla.almacenaDatos()
 describe('Plantilla.almacenaDatos', () => {
-    it('debe almacenar correctamente los datos del deportista', () => {
+    it('Debe almacenar correctamente los datos del deportista', () => {
       const deportista = {
         nombre: "Nombre deportista 2",
         apellido: "Apellido deportista 2",
@@ -532,12 +550,12 @@ describe('Plantilla.almacenaDatos', () => {
 
 //Plantilla.recuperaDatosAlmacenados
 describe("Plantilla.recuperaDatosAlmacenados", function() {
-    it("debe retornar null si no hay datos almacenados", function() {
+    it("Debe retornar null si no hay datos almacenados", function() {
         Plantilla.deportistaMostrado = null;
         expect(Plantilla.recuperaDatosAlmacenados()).toBeNull();
     });
     
-    it("debe retornar los datos almacenados", function() {
+    it("Debe retornar los datos almacenados", function() {
         Plantilla.deportistaMostrado = {nombre: "Juan", edad: 25, deporte: "equitacion"};
         expect(Plantilla.recuperaDatosAlmacenados()).toEqual({nombre: "Juan", edad: 25, deporte: "equitacion"});
     });
@@ -549,7 +567,7 @@ describe("Plantilla.recuperaDatosAlmacenados", function() {
 
 //Plantilla.deshabilitarCamposEditablesNombre
 describe("Plantilla.deshabilitarCamposEditablesNombre", function() {
-    it("deshabilita el campo editable correspondiente al nombre del deportista", function() {
+    it("Deshabilita el campo editable correspondiente al nombre del deportista", function() {
       spyOn(Plantilla, "habilitarDeshabilitarCamposEditablesNombre");
   
       Plantilla.deshabilitarCamposEditablesNombre();
@@ -560,7 +578,7 @@ describe("Plantilla.deshabilitarCamposEditablesNombre", function() {
 
 //Plantilla.habilitarCamposEditablesNombre
 describe("Plantilla.habilitarCamposEditablesNombre", function() {
-    it("habilita el campo editable correspondiente al nombre del deportista", function() {
+    it("Habilita el campo editable correspondiente al nombre del deportista", function() {
       spyOn(Plantilla, "habilitarDeshabilitarCamposEditablesNombre");
   
       Plantilla.habilitarCamposEditablesNombre();
@@ -571,7 +589,7 @@ describe("Plantilla.habilitarCamposEditablesNombre", function() {
 
 //Plantilla.editarNombre
 describe("Plantilla.editarNombre", function() {
-    it("debe habilitar los campos editables de nombre", function() {
+    it("Debe habilitar los campos editables de nombre", function() {
         spyOn(Plantilla, "habilitarDeshabilitarCamposEditablesNombre");
 
         Plantilla.editarNombre();
@@ -581,7 +599,7 @@ describe("Plantilla.editarNombre", function() {
 });
 //Plantilla.habilitarDeshabilitarCamposEditables
 describe("Plantilla.habilitarDeshabilitarCamposEditables", function() {
-    it("debería deshabilitar todos los campos editables cuando se le pasa 'true' como parámetro", function() {
+    it("Debería deshabilitar todos los campos editables cuando se le pasa 'true' como parámetro", function() {
       const inputNombre = document.createElement('input');
       inputNombre.setAttribute('id', Plantilla.form.NOMBRE);
       inputNombre.removeAttribute('disabled');
@@ -615,7 +633,7 @@ describe("Plantilla.habilitarDeshabilitarCamposEditables", function() {
 
 //Plantilla.deshabilitarCamposEditables
 describe("Plantilla.deshabilitarCamposEditables", function() {
-    it("deshabilita los campos editable correspondientes del deportista", function() {
+    it("Deshabilita los campos editable correspondientes del deportista", function() {
       spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
   
       Plantilla.deshabilitarCamposEditables();
@@ -626,7 +644,7 @@ describe("Plantilla.deshabilitarCamposEditables", function() {
 
 //Plantilla.habilitarCamposEditables
 describe("Plantilla.habilitarCamposEditables", function() {
-    it("habilita el campo editable correspondiente al nombre del deportista", function() {
+    it("Habilita el campo editable correspondiente al nombre del deportista", function() {
       spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
   
       Plantilla.habilitarCamposEditables();
@@ -637,7 +655,7 @@ describe("Plantilla.habilitarCamposEditables", function() {
 
 //Plantilla.editar
 describe("Plantilla.editar", function() {
-    it("debe habilitar los campos editables", function() {
+    it("Debe habilitar los campos editables", function() {
         spyOn(Plantilla, "habilitarDeshabilitarCamposEditables");
 
         Plantilla.editar();
