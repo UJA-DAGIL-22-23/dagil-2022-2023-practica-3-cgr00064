@@ -9,7 +9,7 @@
 
 /// Creo el espacio de nombres
 let Plantilla = {};
- 
+
 // Plantilla de datosDescargados vacíos
 Plantilla.datosDescargadosNulos = {
     mensaje: "Datos Descargados No válidos",
@@ -50,8 +50,8 @@ Plantilla.plantillaTags = {
 Plantilla.plantillaFormularioDeportista = {}
 
 //Cabecera del formulario.
-Plantilla.plantillaFormularioDeportista.formulario = 
-`
+Plantilla.plantillaFormularioDeportista.formulario =
+    `
 <form method='post' action=''>
     <table class="listado-plantilla">
         <thead>
@@ -121,12 +121,12 @@ Plantilla.sustituyeTags = function (plantilla, deportista) {
         .replace(new RegExp(Plantilla.plantillaTags.ANIOSPARTICPACIONJJOO, 'g'), deportista.data.aniosParticipacionJJOO)
 }
 
-Plantilla.plantillaFormularioDeportista.actualiza = function (deportista){
+Plantilla.plantillaFormularioDeportista.actualiza = function (deportista) {
     return Plantilla.sustituyeTags(this.formulario, deportista);
 }
 
-Plantilla.deportistaComoFormulario = function (deportista){
-    return Plantilla.plantillaFormularioDeportista.actualiza (deportista)
+Plantilla.deportistaComoFormulario = function (deportista) {
+    return Plantilla.plantillaFormularioDeportista.actualiza(deportista)
 }
 
 // Funciones para mostrar como TABLE
@@ -161,8 +161,8 @@ Plantilla.cabeceraTableNombres = function () {
 */
 Plantilla.cuerpoTr = function (p) {
     const d = p.data
-    return `<tr><td>${p.ref['@ref'].id}</td><td>${d.nombre}</td><td>${d.apellido}</td><td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td><td>${d.nacionalidad}</td><td>${d.edad}</td><td>${d.disciplinas.join( ", ")}</td><td>${d.caballos}</td><td>${d.aniosParticipacionJJOO}</td><td><div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div></td></tr>`;
-} 
+    return `<tr><td>${p.ref['@ref'].id}</td><td>${d.nombre}</td><td>${d.apellido}</td><td>${d.fechaNacimiento.dia}/${d.fechaNacimiento.mes}/${d.fechaNacimiento.anio}</td><td>${d.nacionalidad}</td><td>${d.edad}</td><td>${d.disciplinas.join(", ")}</td><td>${d.caballos}</td><td>${d.aniosParticipacionJJOO}</td><td><div><a href="javascript:Plantilla.mostrarDeportista('${p.ref['@ref'].id}')"">Mostrar</a></div></td></tr>`;
+}
 
 /**
  * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD para los deportistas que se buscan en el formulario
@@ -181,7 +181,7 @@ Plantilla.cuerpoTrResultadosFormulario = function (p) {
     <td>${d.caballos}</td>
     <td>${d.aniosParticipacionJJOO}</td>
     </tr>`;
-  };
+};
 
 /**
 * Muestra la información de cada deportista en un elemento TR con sus correspondientes TD
@@ -201,8 +201,8 @@ Plantilla.pieTable = function () {
 }
 
 //Funciones para mostrar el formulario para preguntar al cliente.
-Plantilla.formulario = function (){
-    return`<div id="div_formulario">
+Plantilla.formulario = function () {
+    return `<div id="div_formulario">
         <form method='get' id="forulario">
         <table class="listado-plantilla">
         <thead>
@@ -231,23 +231,23 @@ Plantilla.formulario = function (){
 */
 Plantilla.recupera_nombres = async function (callBackFn) {
     let response = null
-     
+
     // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getNombres"
         response = await fetch(url)
-     
+
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway")
         console.error(error)
         //throw error
     }
-    
+
     // Muestro todos los nombres que se han descargado
     let vectorNombres = null
     if (response) {
         vectorNombres = await response.json()
-    callBackFn(vectorNombres.data)
+        callBackFn(vectorNombres.data)
     }
 }
 
@@ -257,23 +257,23 @@ Plantilla.recupera_nombres = async function (callBackFn) {
 */
 Plantilla.recupera_alfabeticamente = async function (callBackFn) {
     let response = null
-     
+
     // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getAlfabeticamente"
         response = await fetch(url)
-     
+
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway")
         console.error(error)
         //throw error
     }
-    
+
     // Muestro todos los nombres que se han descargado
     let vectorAlfabeticamente = null
     if (response) {
         vectorAlfabeticamente = await response.json()
-    callBackFn(vectorAlfabeticamente.data)
+        callBackFn(vectorAlfabeticamente.data)
     }
 }
 
@@ -283,18 +283,18 @@ Plantilla.recupera_alfabeticamente = async function (callBackFn) {
 */
 Plantilla.recupera = async function (callBackFn) {
     let response = null
- 
+
     // Intento conectar con el microservicio plantilla
     try {
         const url = Frontend.API_GATEWAY + "/plantilla/getTodosInfo"
         response = await fetch(url)
- 
+
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway")
         console.error(error)
         //throw error
     }
- 
+
     // Muestro todas los deportistas que se han descargado
     let vectorPlantilla = null
     if (response) {
@@ -326,43 +326,39 @@ Plantilla.recuperaUnDeportista = async function (idDeportista, callBackFn) {
 * En este caso solo el nombre
 */
 Plantilla.buscar_nombre = async function () {
-    let response = null   
-        try {
-            var nuevoVector = [];
-            document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
-            // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
-            let url = new URL( Frontend.API_GATEWAY + "/plantilla/getTodosInfo") 
-            const params = {}
-            if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
-            
-            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-            const dataRequest = {
-               method: 'GET'
-            };
-            response = await fetch(url, dataRequest);
-            
-            // Muestro todas los deportistas que se han descargado
-            let vectorPlantilla = null;
-            if (response) {
-              vectorPlantilla = await response.json();
-              nuevoVector = [];
-              for (var i = 0; i < vectorPlantilla.data.length; i++) {
+    let response = null
+    try {
+        var nuevoVector = [];
+        document.getElementById("div_resultados").innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+        // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
+        let url = new URL(Frontend.API_GATEWAY + "/plantilla/getTodosInfo")
+        const params = {}
+        if (document.getElementById("nombre").value) params.nombre = document.getElementById("nombre").value
+
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        const dataRequest = {
+            method: 'GET'
+        };
+        response = await fetch(url, dataRequest);
+
+        // Muestro todas los deportistas que se han descargado
+        let vectorPlantilla = null;
+        if (response) {
+            vectorPlantilla = await response.json();
+            nuevoVector = [];
+            for (var i = 0; i < vectorPlantilla.data.length; i++) {
                 if (vectorPlantilla.data[i].data.nombre === params.nombre) {
-                  nuevoVector.push(vectorPlantilla.data[i]);
+                    nuevoVector.push(vectorPlantilla.data[i]);
                 }
-              }
-              if (nuevoVector.length === 0) {
-                document.getElementById("div_resultados").innerHTML =
-                  "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1><h3>Ningun deportista cumple las condiciones de busqueda</h3>";
-              } else {
-                document.getElementById("div_resultados").innerHTML =
-                "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"+Plantilla.imprimeResultadosFormulario(nuevoVector);
-              }
-            }   
-        } catch (error) {
-            alert("Error: No se han podido acceder al API Gateway " + error)
-            //console.error(error)
+            }
+
+            Plantilla.imprimeResultadosFormulario(nuevoVector)
+
         }
+    } catch (error) {
+        alert("Error: No se han podido acceder al API Gateway " + error)
+        //console.error(error)
+    }
 }
 
 /**
@@ -376,7 +372,7 @@ Plantilla.imprime_nombres = function (vector) {
     msj += Plantilla.pieTable();
 
     // Borro toda la info de Article y la sustituyo por la que me interesa
-    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion", msj )
+    Frontend.Article.actualizar("Listado de los nombres de los deportistas de equitacion", msj)
 }
 
 /**
@@ -390,7 +386,7 @@ Plantilla.imprime_alfabeticamente = function (vector) {
     msj += Plantilla.pieTable();
 
     // Borro toda la info de Article y la sustituyo por la que me interesa
-    Frontend.Article.actualizar( "Listado de los nombres de los deportistas de equitacion por orden alfabetico", msj )
+    Frontend.Article.actualizar("Listado de los nombres de los deportistas de equitacion por orden alfabetico", msj)
 }
 
 /**
@@ -408,15 +404,25 @@ Plantilla.imprime = function (array) {
     msj += Plantilla.pieTable();
 
     // Borro toda la info de Article y la sustituyo por la que me interesa
-    Frontend.Article.actualizar( "Listado de deportistas de equitacion con toda su información", msj )
+    Frontend.Article.actualizar("Listado de deportistas de equitacion con toda su información", msj)
 }
 
 ///////////////////////TEST////////////////////////
+/**
+ * Imprime en una tabla los datos de los deportistas devueltos por una búsqueda.
+ * Si no hay ningún deportista, muuestra un mensaje indicándolo.
+ * @param {Vector_de_deportistas} array Conjunto de deportistas devueltos por una búsqueda 
+ */
 Plantilla.imprimeResultadosFormulario = function (array) {
     let msj = "";
-    msj += Plantilla.cabeceraTableResultadosFormulario();
-    array.forEach((e) => (msj += Plantilla.cuerpoTrResultadosFormulario(e)));
-    msj += Plantilla.pieTable();
+    if (array.length > 0) {
+        msj += Plantilla.cabeceraTableResultadosFormulario();
+        array.forEach((e) => (msj += Plantilla.cuerpoTrResultadosFormulario(e)));
+        msj += Plantilla.pieTable();
+    } else {
+        msj = "<h3>Ningun deportista cumple las condiciones de busqueda</h3>"
+    }
+
     Frontend.Article.resultados(msj)
 };
 
@@ -425,7 +431,7 @@ Plantilla.imprimeResultadosFormulario = function (array) {
  *@param {Vector_de_deportistas} vector Vector con los datos de los deportistas a mostrar
 */
 ///////////////////////TEST////////////////////////
-Plantilla.imprimeUnDeportista = function (deportista){
+Plantilla.imprimeUnDeportista = function (deportista) {
     let msj = Plantilla.deportistaComoFormulario(deportista);
     Frontend.Article.actualizar("Mostrar/Editar un deportista", msj)
     Plantilla.almacenaDatos(deportista)
@@ -450,18 +456,18 @@ Plantilla.recuperaDatosAlmacenados = function () {
 */
 Plantilla.descargarRuta = async function (ruta, callBackFn) {
     let response = null
- 
+
     // Intento conectar con el microservicio Plantilla
     try {
         const url = Frontend.API_GATEWAY + ruta
         response = await fetch(url)
- 
+
     } catch (error) {
         alert("Error: No se han podido acceder al API Gateway")
         console.error(error)
         //throw error
     }
- 
+
     // Muestro la info que se han descargado
     let datosDescargados = null
     if (response) {
@@ -469,40 +475,40 @@ Plantilla.descargarRuta = async function (ruta, callBackFn) {
         callBackFn(datosDescargados)
     }
 }
- 
+
 /**
 * Función principal para mostrar los datos enviados por la ruta "home" de MS Plantilla
 */
 Plantilla.mostrarHome = function (datosDescargados) {
     // Si no se ha proporcionado valor para datosDescargados
     datosDescargados = datosDescargados || this.datosDescargadosNulos
- 
+
     // Si datos descargados NO es un objeto 
     if (typeof datosDescargados !== "object") datosDescargados = this.datosDescargadosNulos
- 
+
     // Si datos descargados NO contiene el campo mensaje
     if (typeof datosDescargados.mensaje === "undefined") datosDescargados = this.datosDescargadosNulos
- 
+
     Frontend.Article.actualizar("Plantilla Home", datosDescargados.mensaje)
 }
- 
+
 /**
 * Función principal para mostrar los datos enviados por la ruta "acerca de" de MS Plantilla
 */
 Plantilla.mostrarAcercaDe = function (datosDescargados) {
     // Si no se ha proporcionado valor para datosDescargados
     datosDescargados = datosDescargados || this.datosDescargadosNulos
- 
+
     // Si datos descargados NO es un objeto 
     if (typeof datosDescargados !== "object") datosDescargados = this.datosDescargadosNulos
- 
+
     // Si datos descargados NO contiene los campos mensaje, autor, o email
     if (typeof datosDescargados.mensaje === "undefined" ||
         typeof datosDescargados.autor === "undefined" ||
         typeof datosDescargados.email === "undefined" ||
         typeof datosDescargados.fecha === "undefined"
     ) datosDescargados = this.datosDescargadosNulos
- 
+
     const mensajeAMostrar = `<div>
     <p>${datosDescargados.mensaje}</p>
     <ul>
@@ -514,14 +520,14 @@ Plantilla.mostrarAcercaDe = function (datosDescargados) {
     `;
     Frontend.Article.actualizar("Plantilla Acerca de", mensajeAMostrar)
 }
- 
+
 /**
 * Función principal para responder al evento de elegir la opción "Home"
 */
 Plantilla.procesarHome = function () {
     this.descargarRuta("/plantilla/", this.mostrarHome);
 }
- 
+
 /**
 * Función principal para responder al evento de elegir la opción "Acerca de"
 */
@@ -547,7 +553,7 @@ Plantilla.listar_alfabeticamente = function () {
 * Función principal para responder al evento de elegir la opción "Listar informacion completa"
 */
 Plantilla.listar = function () {
-    this.recupera(this.imprime); 
+    this.recupera(this.imprime);
 }
 
 /**
@@ -561,10 +567,10 @@ Plantilla.mostrarDeportista = function (idDeportista) {
 * Funciónes para mostrar los formularios con el que se le pedira información al usuario.
 */
 ///////////////////////TEST////////////////////////
-Plantilla.imprimeformulario = function(){
-    let msj ="";
+Plantilla.imprimeformulario = function () {
+    let msj = "";
     msj += Plantilla.formulario();
-    Frontend.Article.actualizar( "Formulario", msj )
+    Frontend.Article.actualizar("Formulario", msj)
 }
 ///////////////////////TEST////////////////////////
 Plantilla.mostrar = function () {
@@ -577,7 +583,7 @@ Plantilla.mostrar = function () {
  * @returns El propio objeto Plantilla, para concatenar llamadas
  */
 ///////////////////////TEST////////////////////////
- Plantilla.habilitarDeshabilitarCamposEditablesNombre = function (deshabilitando) {
+Plantilla.habilitarDeshabilitarCamposEditablesNombre = function (deshabilitando) {
     deshabilitando = (typeof deshabilitando === "undefined" || deshabilitando === null) ? true : deshabilitando
     document.getElementById(Plantilla.form.NOMBRE).disabled = deshabilitando
     return this
@@ -603,7 +609,7 @@ Plantilla.habilitarCamposEditablesNombre = function () {
  * Función que permite modificar los datos de un deportista
  */
 Plantilla.editarNombre = function () {
-    this.habilitarCamposEditablesNombre()   
+    this.habilitarCamposEditablesNombre()
 }
 /**
  * Establece disable = habilitando en los campos editables
@@ -638,7 +644,7 @@ Plantilla.habilitarCamposEditables = function () {
  * Función que permite modificar los datos de un deportista
  */
 Plantilla.editar = function () {
-    this.habilitarCamposEditables()   
+    this.habilitarCamposEditables()
 }
 
 /**
