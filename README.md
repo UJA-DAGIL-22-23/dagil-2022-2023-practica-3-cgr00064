@@ -1448,6 +1448,7 @@ vectorPlantilla.data[i].data.disciplinas.includes(params.disciplina)
 4. Si no se cumple alguno de los resultados, muestra un mensaje de error al usuario.
 <img src='./assets/img/HU_10-2.png'>
 
+### BONUS.
 5. **HU-11** Destacar que si en el if en lugar de usar la condicion *&&* se usara **||** para nuestro ejemplo de base de datos seria mas interesante ya que se muestra una tabla con muchas mas opciones (HU 11) y el resultado sería el siguiente:
 ```
 if (vectorPlantilla.data[i].data.nombre === params.nombre || vectorPlantilla.data[i].data.apellido === params.apellido || 
