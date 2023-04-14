@@ -1462,3 +1462,6 @@ if (vectorPlantilla.data[i].data.nombre === params.nombre || vectorPlantilla.dat
 
 ### Tablero al final.
 <img src='./assets/img/Final-H10.png'>
+
+### Resultado tests.
+<img src='./assets/img/Test-Final.png'>
