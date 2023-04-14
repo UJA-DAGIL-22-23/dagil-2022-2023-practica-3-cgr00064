@@ -225,6 +225,60 @@ Plantilla.formulario = function () {
     <div id="div_resultados"></div>`
 }
 
+///////////////////////TEST////////////////////////
+Plantilla.formulario_dos = function (){
+    return`
+    <div id="div_formulario">
+        <form method='get' id="forulario">
+        <table class="listado-plantilla">
+        <thead>
+            <th>Nombre</th><th>Apellido</th><th>Nacionalidad</th><th>Disciplina</th><th>Opción</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"><br><br>
+            </td>
+            <td>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido"><br><br>
+            </td> 
+            <td>
+            <label for="nacionalidad">Nacionalidad:</label>
+            <select id="nacionalidad" name="nacionalidad">
+                <option value="">Selecciona una opción</option>
+                <option value="Española">Española</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Colombiana">Colombiana</option>
+                <option value="Francesa">Francesa</option>
+                <option value="Estadounidense">Estadounidense</option>
+                <option value="Mexicana">Mexicana</option>
+                <option value="Alemana">Alemana</option>
+            </select><br><br>
+            </td>
+            <td>
+            <label for="disciplina">Disciplina:</label>
+            <select id="disciplina" name="disciplina">
+                <option value="">Selecciona una opción</option>
+                <option value="Salto">Salto</option>
+                <option value="Doma">Doma</option>
+                <option value="Vaquera">Vaquera</option>
+                <option value="Concurso completo">Concurso completo</option>
+            </select><br><br>
+            </td>
+            <td>
+            <div><a href="javascript:Plantilla.buscar()" class="boton_buscar">Buscar</a></div>
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </form> 
+    </div>
+    <div id="div_resultados"></div>
+    `
+}
+
 /**
 * Función que recupera todos los nombres de los deportistas de equitación llamando al MS Plantilla
 * @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
@@ -358,6 +412,50 @@ Plantilla.buscar_nombre = async function () {
         alert("Error: No se han podido acceder al API Gateway " + error)
         //console.error(error)
     }
+}
+
+/**
+* Función que recuperar todos los datos de los deportistas de equitaciom  llamando al MS Plantilla y busca los que se corresponden con el formulario de busqueda
+* @param {función} callBackFn Función a la que se llamará una vez recibidos los datos.
+*/
+Plantilla.buscar = async function () {
+    let response = null   
+        try {
+            document.getElementById( "div_resultados" ).innerHTML = "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"
+            // Código copiado y adaptado de https://es.stackoverflow.com/questions/202409/hacer-una-peticion-get-con-fetch
+            let url = new URL( Frontend.API_GATEWAY + "/plantilla/getTodosInfo") 
+            const params = {}
+            if( document.getElementById("nombre").value ) params.nombre = document.getElementById("nombre").value
+            if( document.getElementById("apellido").value ) params.apellido = document.getElementById("apellido").value
+            // Otra opción: 
+            //         params.nombre = document.getElementById("nombre").value?document.getElementById("nombre").value:"*"
+            if( document.getElementById("nacionalidad").value ) params.nacionalidad = document.getElementById("nacionalidad").value
+            
+            if( document.getElementById("disciplina").value ) params.disciplina = document.getElementById("disciplina").value
+            
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+            const dataRequest = {
+               method: 'GET'
+            };
+            response = await fetch(url, dataRequest);
+            
+            // Muestro todas los deportistas que se han descargado
+            let vectorPlantilla = null;
+            if (response) {
+                vectorPlantilla = await response.json();
+                var nuevoVector = [];
+                for (var i = 0; i < vectorPlantilla.data.length; i++) {
+                    if (vectorPlantilla.data[i].data.nombre === params.nombre && vectorPlantilla.data[i].data.apellido === params.apellido && 
+                        vectorPlantilla.data[i].data.nacionalidad === params.nacionalidad && vectorPlantilla.data[i].data.disciplinas.includes(params.disciplina)) {
+                        nuevoVector.push(vectorPlantilla.data[i]);
+                    } 
+                }
+                Plantilla.imprimeResultadosFormulario(nuevoVector);
+            }   
+        } catch (error) {
+            alert("Error: No se han podido acceder al API Gateway " + error)
+            //console.error(error)
+        }
 }
 
 /**
@@ -571,6 +669,20 @@ Plantilla.imprimeformulario = function () {
 Plantilla.mostrar = function () {
     this.imprimeformulario();
 }
+
+///////////////////////TEST////////////////////////
+Plantilla.imprimeformulario_dos = function(){
+    let msj ="";
+    msj += Plantilla.formulario_dos();
+    Frontend.Article.actualizar( "Formulario", msj )
+}
+
+///////////////////////TEST////////////////////////
+Plantilla.mostrar_dos = function () {
+    this.imprimeformulario_dos();
+}
+
+
 
 /**
  * Establece disable = habilitando en los campos editables
