@@ -64,6 +64,17 @@ table.listado-deportistas tbody tr {
     background-color: rgba(0, 0, 100, 0.1)
 }
 
+.listado-plantilla {
+    max-width: 100%;
+    overflow-x: auto;
+}
+  
+.form-deportista-elemento {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+}
+
 .form-deportista-elemento:disabled {
     color: black;
     background-color: inherit;
