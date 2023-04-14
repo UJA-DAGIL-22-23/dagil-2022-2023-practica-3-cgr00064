@@ -1356,7 +1356,7 @@ Se puede observar en la tabla de todos los deportistas que efecticamente los cam
 
 2. Se ha implementado la funcion *Plantilla.buscar_nombre* en el **front-end** esta funcion es la encargada de traer la informacion de la base de datos y guardarla en el array *vectorPlantilla* y una vez la tenemos en ese array comprobamos que el nombre por el que quiere buscar el usuario *params.nombre* se encuentra en la base de datos. 
 ```
-Plantilla.buscar_nombre = async function (callBackFn) {
+Plantilla.buscar_nombre = async function () {
     let response = null   
         try {
             var nuevoVector = [];
@@ -1382,13 +1382,7 @@ Plantilla.buscar_nombre = async function (callBackFn) {
                   nuevoVector.push(vectorPlantilla.data[i]);
                 }
               }
-              if (nuevoVector.length === 0) {
-                document.getElementById("div_resultados").innerHTML =
-                  "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1><h3>Ningun deportista cumple las condiciones de busqueda</h3>";
-              } else {
-                document.getElementById("div_resultados").innerHTML =
-                "<br><h1>Los resultados de la busqueda de arriba es/son los siguientes:</h1>"+Plantilla.imprimeResultadosFormulario(nuevoVector);
-              }
+              Plantilla.imprimeResultadosFormulario(nuevoVector);
             }   
         } catch (error) {
             alert("Error: No se han podido acceder al API Gateway " + error)
@@ -1396,11 +1390,26 @@ Plantilla.buscar_nombre = async function (callBackFn) {
         }
 }
 ```
+3. En la funcion *Plantilla.imprimeResultadosFormulario(Array)* se hce una comprobacion por si el usuario introduce un nombre que no se encuentra en la base de datos.
+```
+Plantilla.imprimeResultadosFormulario = function (array) {
+    let msj = "";
+    if (array.length > 0) {
+        msj += Plantilla.cabeceraTableResultadosFormulario();
+        array.forEach((e) => (msj += Plantilla.cuerpoTrResultadosFormulario(e)));
+        msj += Plantilla.pieTable();
+    } else {
+        msj = "<h3>Ningun deportista cumple las condiciones de busqueda</h3>"
+    }
 
-3. Si encuentra el nombre en la base de datos finalmente lo muestra y este es el resultado:
+    Frontend.Article.resultados(msj)
+};
+```
+
+4. Si encuentra el nombre en la base de datos finalmente lo muestra y este es el resultado:
 <img src='./assets/img/HU_08-1.png'>
 
-4. Si el nombre no se encuentra en la base de datos muestra lo siguiente:
+5. Si el nombre no se encuentra en la base de datos muestra lo siguiente:
 <img src='./assets/img/HU_08-2.png'>
 
 <img src='./assets/img/Readme-H08.png'>
@@ -1410,3 +1419,45 @@ Plantilla.buscar_nombre = async function (callBackFn) {
 <img src='./assets/img/Test_cliente-2.png'>
 
 ## 10. Ver un listado de todos los datos de jugadores/equipos que cumplen simultáneamente con varios criterios de búsqueda indicados por el usuario para algunos de sus campos. Se deberá poder buscar al menos por 3 campos distintos (además del nombre). (Puntuación 0.7)
+### Inicio tablero de Trello:
+<img src='./assets/img/Inicio-H10.png'>
+
+### Para la realización de esta HU se han seguido unos pasos muy parecidos a la HU anterior:
+1. Se ha creado un formulario para preguntar al usuario por el nombre, apellido, nacionalidad y disciplina por los que quiere buscar:
+<img src='./assets/img/Formulario.png'>
+
+Cabe destacar que las opciones nacionalidad y disciplina son desplegables, con las unicas nacionalidades y disciplinas que hay en la base de datos para intentar evitar que el usuario escriba nacionalidades o disciplinas que no se encuentran en la base de datos.
+<img src='./assets/img/Formulario-nacionalidad.png'>
+<img src='./assets/img/Formulario-diciplina.png'>
+
+2. Se ha implementado la funcion *Plantilla.buscar_nombre* en el **front-end** esta funcion es la encargada de traer la informacion de la base de datos y guardarla en el array *vectorPlantilla* y una vez la tenemos en ese array comprobamos que los campos por los que quiere buscar el usuario se encuentran en la BBDD y se cumplen todas los campos simultaneamente, es una funcion muy similar a *Plantilla.buscar_nombre()* la unica diferencia esta en el if de comprobacion que es el siguiente:
+```
+if (vectorPlantilla.data[i].data.nombre === params.nombre && vectorPlantilla.data[i].data.apellido === params.apellido && 
+    vectorPlantilla.data[i].data.nacionalidad === params.nacionalidad && vectorPlantilla.data[i].data.disciplinas.includes(params.disciplina)) {
+        nuevoVector.push(vectorPlantilla.data[i]);
+} 
+```
+Destacar que como en la base de datos disicplinas es un vector para acceder a las disciplinas hay que hacerlo de la siguiente manera:
+```
+vectorPlantilla.data[i].data.disciplinas.includes(params.disciplina)
+```
+
+3. Si se cumplen los 4 resultados de busqueda los muestra, en una tabla de la siguiente manera.
+<img src='./assets/img/HU_10-1.png'>
+
+4. Si no se cumple alguno de los resultados, muestra un mensaje de error al usuario.
+<img src='./assets/img/HU_10-2.png'>
+
+5. **HU-11** Destacar que si en el if en lugar de usar la condicion *&&* se usara **||** para nuestro ejemplo de base de datos seria mas interesante ya que se muestra una tabla con muchas mas opciones (HU 11) y el resultado sería el siguiente:
+```
+if (vectorPlantilla.data[i].data.nombre === params.nombre || vectorPlantilla.data[i].data.apellido === params.apellido || 
+    vectorPlantilla.data[i].data.nacionalidad === params.nacionalidad || vectorPlantilla.data[i].data.disciplinas.includes(params.disciplina)) {
+        nuevoVector.push(vectorPlantilla.data[i]);
+} 
+```
+<img src='./assets/img/HU_11.png'>
+
+<img src='./assets/img/Readme-H10.png'>
+
+### Tablero al final.
+<img src='./assets/img/Final-H10.png'>
